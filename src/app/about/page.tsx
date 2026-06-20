@@ -34,12 +34,100 @@ export default function About() {
                             We partner with businesses to elevate their operations, build robust cloud infrastructures, and craft interfaces that delight.
                         </p>
                     </div>
-                    <div className="reveal-right visible zoom-on-hover" style={{ borderRadius: 'var(--radius-image)', overflow: 'hidden', height: '380px', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-soft)', position: 'relative' }}>
-                        <img 
-                            src="/clownbros_about.png" 
-                            alt="ClownBros Serene Architecture" 
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                        />
+                    <div className="reveal-right visible float-element" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '380px', position: 'relative' }}>
+                        <svg viewBox="0 0 500 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style={{ maxWidth: '100%', maxHeight: '100%' }}>
+                          <defs>
+                            <linearGradient id="aboutGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.9" />
+                              <stop offset="60%" stopColor="#DCC7A1" stopOpacity="0.8" />
+                              <stop offset="100%" stopColor="#C8AF7E" stopOpacity="0.9" />
+                            </linearGradient>
+                            <linearGradient id="aboutCharcoalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stopColor="#3A3631" />
+                              <stop offset="100%" stopColor="#26231F" />
+                            </linearGradient>
+                            <linearGradient id="aboutGlassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.75" />
+                              <stop offset="100%" stopColor="#F3EEE5" stopOpacity="0.3" />
+                            </linearGradient>
+                            <radialGradient id="aboutGlowRad" cx="50%" cy="50%" r="50%">
+                              <stop offset="0%" stopColor="#DCC7A1" stopOpacity="0.6" />
+                              <stop offset="100%" stopColor="#DCC7A1" stopOpacity="0" />
+                            </radialGradient>
+                            <radialGradient id="aboutSphereGrad" cx="35%" cy="35%" r="65%">
+                              <stop offset="0%" stopColor="#FFFFFF" />
+                              <stop offset="40%" stopColor="#DCC7A1" />
+                              <stop offset="100%" stopColor="#C8AF7E" />
+                            </radialGradient>
+                            <filter id="aboutShadowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                              <feDropShadow dx="0" dy="16" stdDeviation="12" floodColor="#26231F" floodOpacity="0.08" />
+                            </filter>
+                          </defs>
+
+                          {/* Ambient Ground Shadow */}
+                          <ellipse cx="250" cy="330" rx="140" ry="25" fill="#26231F" opacity="0.05" filter="blur(8px)" />
+
+                          <g filter="url(#aboutShadowFilter)">
+                            {/* Base Isometric Grid / Ring */}
+                            <path d="M 120 240 L 250 175 L 380 240 L 250 305 Z" fill="url(#aboutGlassGrad)" stroke="#E6DED2" strokeWidth="1.5" opacity="0.6" />
+                            
+                            {/* Inner rings */}
+                            <ellipse cx="250" cy="240" rx="90" ry="45" fill="none" stroke="#DCC7A1" strokeWidth="1" strokeDasharray="4,4" opacity="0.8" />
+                            <ellipse cx="250" cy="240" rx="50" ry="25" fill="none" stroke="#C8AF7E" strokeWidth="1.5" opacity="0.5" />
+
+                            {/* Isometric Pillar 1 (Left) */}
+                            <g transform="translate(-10, -10)">
+                              <path d="M 150 240 L 180 255 L 180 215 L 150 200 Z" fill="#E6DED2" />
+                              <path d="M 180 255 L 210 240 L 210 200 L 180 215 Z" fill="#F3EEE5" />
+                              <path d="M 150 200 L 180 215 L 210 200 L 180 185 Z" fill="url(#aboutGlassGrad)" stroke="#E6DED2" strokeWidth="1" />
+                            </g>
+
+                            {/* Isometric Pillar 2 (Right/Back) */}
+                            <g transform="translate(110, -50)">
+                              <path d="M 150 240 L 180 255 L 180 185 L 150 170 Z" fill="#DCC7A1" opacity="0.9" />
+                              <path d="M 180 255 L 210 240 L 210 170 L 180 185 Z" fill="#C8AF7E" opacity="0.9" />
+                              <path d="M 150 170 L 180 185 L 210 170 L 180 155 Z" fill="url(#aboutGlassGrad)" stroke="#DCC7A1" strokeWidth="1" />
+                            </g>
+
+                            {/* Floating central glass plate */}
+                            <path d="M 170 190 L 250 150 L 330 190 L 250 230 Z" fill="url(#aboutGlassGrad)" stroke="#FFFFFF" strokeWidth="1.5" opacity="0.95" />
+                            
+                            {/* Connection lines */}
+                            <path d="M 250 190 L 160 140 M 250 190 L 340 140 M 250 190 L 250 80" stroke="#DCC7A1" strokeWidth="2" strokeDasharray="3,3" />
+
+                            {/* Central Floating Glow & Spheres */}
+                            <circle cx="250" cy="190" r="18" fill="url(#aboutSphereGrad)" />
+                            <ellipse cx="250" cy="190" rx="36" ry="18" fill="none" stroke="#DCC7A1" strokeWidth="1.5" opacity="0.7" />
+                            
+                            {/* Floating Node Left */}
+                            <g transform="translate(-90, -50)">
+                              <circle cx="250" cy="190" r="10" fill="url(#aboutCharcoalGrad)" />
+                              <circle cx="250" cy="190" r="10" fill="none" stroke="#DCC7A1" strokeWidth="1" strokeDasharray="" />
+                              <circle cx="250" cy="170" r="4" fill="#DCC7A1" />
+                              <line x1="250" y1="190" x2="250" y2="170" stroke="#DCC7A1" strokeWidth="1" />
+                            </g>
+
+                            {/* Floating Node Right */}
+                            <g transform="translate(90, -50)">
+                              <circle cx="250" cy="190" r="10" fill="url(#aboutSphereGrad)" />
+                              <circle cx="250" cy="190" r="18" fill="url(#aboutGlowRad)" />
+                            </g>
+
+                            {/* Top floating abstract shapes */}
+                            <g transform="translate(0, -110)">
+                              <ellipse cx="250" cy="190" rx="15" ry="5" fill="#DCC7A1" opacity="0.4" />
+                              <path d="M 250 165 L 265 178 L 250 191 L 235 178 Z" fill="url(#aboutGoldGrad)" />
+                              <path d="M 250 165 L 250 191 L 235 178 Z" fill="#C8AF7E" opacity="0.3" />
+                            </g>
+
+                            {/* Floating ring element */}
+                            <g transform="translate(-40, -130)">
+                              <ellipse cx="250" cy="190" rx="25" ry="12" fill="none" stroke="#DCC7A1" strokeWidth="2" />
+                              <circle cx="230" cy="185" r="3" fill="#26231F" />
+                              <circle cx="270" cy="195" r="3" fill="#26231F" />
+                            </g>
+                          </g>
+                        </svg>
                     </div>
                 </div>
             </section>

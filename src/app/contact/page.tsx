@@ -58,12 +58,76 @@ export default function Contact() {
                             </p>
 
                             {/* Contact Visual Asset */}
-                            <div className="zoom-on-hover" style={{ width: '100%', height: '240px', borderRadius: 'var(--radius-image)', overflow: 'hidden', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-soft)', margin: '16px 0' }}>
-                                <img 
-                                    src="/clownbros_contact.png" 
-                                    alt="ClownBros Minimalist Workspace Detail" 
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                />
+                            <div className="float-element" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '240px', margin: '16px 0', position: 'relative' }}>
+                                <svg viewBox="0 0 500 350" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style={{ maxWidth: '100%', maxHeight: '100%' }}>
+                                  <defs>
+                                    <linearGradient id="contactGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                      <stop offset="0%" stopColor="#FFFFFF" />
+                                      <stop offset="60%" stopColor="#DCC7A1" />
+                                      <stop offset="100%" stopColor="#C8AF7E" />
+                                    </linearGradient>
+                                    <linearGradient id="contactGlassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                      <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.8" />
+                                      <stop offset="100%" stopColor="#F3EEE5" stopOpacity="0.25" />
+                                    </linearGradient>
+                                    <linearGradient id="contactDarkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                      <stop offset="0%" stopColor="#3A3631" />
+                                      <stop offset="100%" stopColor="#26231F" />
+                                    </linearGradient>
+                                    <filter id="contactShadow" x="-20%" y="-20%" width="140%" height="140%">
+                                      <feDropShadow dx="0" dy="16" stdDeviation="12" floodColor="#26231F" floodOpacity="0.08" />
+                                    </filter>
+                                  </defs>
+
+                                  {/* Ground shadow */}
+                                  <ellipse cx="250" cy="270" rx="120" ry="20" fill="#26231F" opacity="0.04" filter="blur(6px)" />
+
+                                  <g filter="url(#contactShadow)">
+                                    {/* Base Ring / Platform */}
+                                    <path d="M 140 200 L 250 145 L 360 200 L 250 255 Z" fill="none" stroke="#E6DED2" strokeWidth="1.5" opacity="0.8" />
+                                    <path d="M 170 200 L 250 160 L 330 200 L 250 240 Z" fill="none" stroke="#DCC7A1" strokeWidth="1" strokeDasharray="4,4" opacity="0.6" />
+
+                                    {/* Floating Onboarding Checklist Document */}
+                                    <g transform="translate(40, -40)">
+                                      <path d="M 210 190 L 260 165 L 260 225 L 210 250 Z" fill="#26231F" opacity="0.05" filter="blur(3px)" />
+                                      <path d="M 210 170 L 260 145 L 260 215 L 210 240 Z" fill="#FFFFFF" stroke="#E6DED2" strokeWidth="1" />
+                                      <path d="M 210 170 L 210 240 L 212 241 Z" fill="#E6DED2" />
+                                      <line x1="220" y1="172.5" x2="250" y2="157.5" stroke="#26231F" strokeWidth="1.5" opacity="0.3" />
+                                      <line x1="220" y1="187.5" x2="250" y2="172.5" stroke="#26231F" strokeWidth="1.5" opacity="0.3" />
+                                      <line x1="220" y1="202.5" x2="250" y2="187.5" stroke="#26231F" strokeWidth="1.5" opacity="0.3" />
+                                      <circle cx="216" cy="172.5" r="2.5" fill="#DCC7A1" />
+                                      <circle cx="216" cy="187.5" r="2.5" fill="#DCC7A1" />
+                                      <circle cx="216" cy="202.5" r="2.5" fill="#C8AF7E" />
+                                    </g>
+
+                                    {/* Floating Mailbox / Inbox Organiser */}
+                                    <g transform="translate(-40, -10)">
+                                      <ellipse cx="230" cy="210" rx="35" ry="15" fill="#26231F" opacity="0.08" filter="blur(3px)" />
+                                      <path d="M 180 160 L 220 180 L 220 210 L 180 190 Z" fill="url(#contactDarkGrad)" stroke="#26231F" strokeWidth="0.5" />
+                                      <path d="M 220 180 L 260 160 L 260 190 L 220 210 Z" fill="url(#contactGlassGrad)" stroke="#E6DED2" strokeWidth="1.5" />
+                                      <path d="M 180 160 L 220 140 L 260 160 L 220 180 Z" fill="url(#contactGlassGrad)" stroke="#FFFFFF" strokeWidth="1.5" />
+
+                                      {/* Emerging Envelope */}
+                                      <g transform="translate(10, -25)">
+                                        <path d="M 195 167.5 L 225 152.5 L 225 177.5 L 195 192.5 Z" fill="url(#contactGoldGrad)" stroke="#C8AF7E" strokeWidth="1" />
+                                        <path d="M 195 167.5 L 210 180 L 225 172.5" fill="none" stroke="#FFFFFF" strokeWidth="1.2" />
+                                      </g>
+                                    </g>
+
+                                    {/* Send Arrow / Flying Node */}
+                                    <g transform="translate(0, -90)">
+                                      <ellipse cx="250" cy="180" rx="20" ry="8" fill="#26231F" opacity="0.06" filter="blur(3px)" />
+                                      <path d="M 240 160 L 260 145 L 260 152 L 270 147 L 270 157 L 255 163 L 255 158 Z" fill="url(#contactGoldGrad)" stroke="#C8AF7E" strokeWidth="1" />
+                                      <path d="M 240 160 L 255 158 L 260 145 Z" fill="#C8AF7E" opacity="0.3" />
+                                      <path d="M 225 195 L 245 165" stroke="#DCC7A1" strokeWidth="1.5" strokeDasharray="3,3" opacity="0.7" />
+                                    </g>
+
+                                    {/* Small decorative circles/sparkles */}
+                                    <circle cx="150" cy="130" r="3" fill="#DCC7A1" />
+                                    <circle cx="330" cy="110" r="4" fill="#C8AF7E" />
+                                    <circle cx="320" cy="220" r="2.5" fill="#26231F" opacity="0.4" />
+                                  </g>
+                                </svg>
                             </div>
                             
                             <div className="contact-details" style={{ borderTop: '1px solid var(--border-color)', paddingTop: '24px' }}>

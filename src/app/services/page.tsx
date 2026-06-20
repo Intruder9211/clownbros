@@ -92,12 +92,89 @@ export default function Services() {
                             End-to-end digital frameworks combining design excellence, robust code, cloud scalability, and business growth engines under one roof.
                         </p>
                     </div>
-                    <div className="reveal-right visible zoom-on-hover" style={{ borderRadius: 'var(--radius-image)', overflow: 'hidden', height: '320px', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-soft)', position: 'relative' }}>
-                        <img 
-                            src="/clownbros_services.png" 
-                            alt="ClownBros Capabilities Ecosystem" 
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                        />
+                    <div className="reveal-right visible float-element" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '320px', position: 'relative' }}>
+                        <svg viewBox="0 0 500 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style={{ maxWidth: '100%', maxHeight: '100%' }}>
+                          <defs>
+                            <linearGradient id="servicesGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.95" />
+                              <stop offset="60%" stopColor="#DCC7A1" stopOpacity="0.85" />
+                              <stop offset="100%" stopColor="#C8AF7E" stopOpacity="0.95" />
+                            </linearGradient>
+                            <linearGradient id="servicesGlassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.8" />
+                              <stop offset="100%" stopColor="#F3EEE5" stopOpacity="0.25" />
+                            </linearGradient>
+                            <linearGradient id="servicesDarkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stopColor="#3A3631" />
+                              <stop offset="100%" stopColor="#26231F" />
+                            </linearGradient>
+                            <radialGradient id="servicesGlow" cx="50%" cy="50%" r="50%">
+                              <stop offset="0%" stopColor="#DCC7A1" stopOpacity="0.5" />
+                              <stop offset="100%" stopColor="#DCC7A1" stopOpacity="0" />
+                            </radialGradient>
+                          </defs>
+
+                          {/* Ground shadow */}
+                          <ellipse cx="250" cy="310" rx="130" ry="25" fill="#26231F" opacity="0.05" filter="blur(8px)" />
+
+                          <g>
+                            {/* Floating base disc */}
+                            <ellipse cx="250" cy="220" rx="140" ry="70" fill="url(#servicesGlassGrad)" stroke="#E6DED2" strokeWidth="1.5" opacity="0.75" />
+                            <ellipse cx="250" cy="220" rx="110" ry="55" fill="none" stroke="#DCC7A1" strokeWidth="1" strokeDasharray="6,4" opacity="0.6" />
+
+                            {/* Center 3D Cylinder / Cloud Core */}
+                            <g transform="translate(0, -10)">
+                              <ellipse cx="250" cy="220" rx="30" ry="15" fill="#26231F" opacity="0.1" />
+                              <path d="M 220 190 A 30 15 0 0 0 280 190 L 280 215 A 30 15 0 0 1 220 215 Z" fill="#E6DED2" />
+                              <ellipse cx="250" cy="190" rx="30" ry="15" fill="url(#servicesGlassGrad)" stroke="#E6DED2" strokeWidth="1" />
+                              <line x1="250" y1="175" x2="250" y2="190" stroke="#DCC7A1" strokeWidth="2" />
+                              <path d="M 220 150 A 30 15 0 0 0 280 150 L 280 175 A 30 15 0 0 1 220 175 Z" fill="url(#servicesDarkGrad)" />
+                              <ellipse cx="250" cy="150" rx="30" ry="15" fill="url(#servicesGoldGrad)" stroke="#C8AF7E" strokeWidth="1.5" />
+                              <circle cx="250" cy="150" r="4" fill="#FFFFFF" />
+                              <circle cx="250" cy="150" r="10" fill="url(#servicesGlow)" />
+                            </g>
+
+                            {/* Web Platform Screen (Left) */}
+                            <g transform="translate(-100, -30)">
+                              <ellipse cx="250" cy="220" rx="20" ry="10" fill="#26231F" opacity="0.05" filter="blur(2px)" />
+                              <path d="M 220 170 L 260 150 L 260 195 L 220 215 Z" fill="url(#servicesGlassGrad)" stroke="#DCC7A1" strokeWidth="1.5" />
+                              <path d="M 220 170 L 260 150 L 260 160 L 220 180 Z" fill="#E6DED2" />
+                              <circle cx="228" cy="173" r="1.5" fill="#C75B56" />
+                              <circle cx="233" cy="170.5" r="1.5" fill="#D49B34" />
+                              <circle cx="238" cy="168" r="1.5" fill="#4A8F63" />
+                              <line x1="228" y1="184" x2="252" y2="172" stroke="#DCC7A1" strokeWidth="2" />
+                              <line x1="228" y1="194" x2="245" y2="185.5" stroke="#C8AF7E" strokeWidth="1.5" />
+                              <line x1="228" y1="204" x2="252" y2="192" stroke="#26231F" strokeWidth="1" opacity="0.4" />
+                            </g>
+
+                            {/* Mobile UI Screen (Right/Front) */}
+                            <g transform="translate(80, 0)">
+                              <ellipse cx="250" cy="220" rx="15" ry="8" fill="#26231F" opacity="0.05" filter="blur(2px)" />
+                              <path d="M 235 180 L 260 192.5 L 260 235 L 235 222.5 Z" fill="url(#servicesDarkGrad)" stroke="#E6DED2" strokeWidth="1" />
+                              <path d="M 237 183 L 258 193.5 L 258 231 L 237 220.5 Z" fill="url(#servicesGlassGrad)" stroke="#FFFFFF" strokeWidth="0.75" />
+                              <path d="M 243 194 L 252 198.5 L 252 210 L 243 205.5 Z" fill="url(#servicesGoldGrad)" opacity="0.8" />
+                              <circle cx="248.5" cy="220" r="2" fill="#DCC7A1" />
+                            </g>
+
+                            {/* Marketing/Growth Node (Back/Right) */}
+                            <g transform="translate(60, -80)">
+                              <ellipse cx="250" cy="220" rx="15" ry="8" fill="#26231F" opacity="0.05" filter="blur(2px)" />
+                              <path d="M 245 220 L 245 190 L 235 190 L 250 170 L 265 190 L 255 190 L 255 220 Z" fill="url(#servicesGoldGrad)" stroke="#C8AF7E" strokeWidth="1" />
+                              <path d="M 245 220 L 245 190 L 235 190 L 250 170 Z" fill="#C8AF7E" opacity="0.3" />
+                            </g>
+
+                            {/* Connection lines */}
+                            <path d="M 220 200 L 170 190" stroke="#DCC7A1" strokeWidth="1.5" strokeDasharray="3,3" />
+                            <path d="M 270 210 L 315 210" stroke="#DCC7A1" strokeWidth="1.5" strokeDasharray="3,3" />
+                            <path d="M 265 180 L 300 150" stroke="#DCC7A1" strokeWidth="1.5" strokeDasharray="3,3" />
+
+                            {/* Floating Sparkles / Spheres */}
+                            <circle cx="160" cy="140" r="3" fill="#DCC7A1" />
+                            <circle cx="340" cy="250" r="4" fill="#C8AF7E" />
+                            <circle cx="320" cy="120" r="3" fill="#26231F" opacity="0.3" />
+                            <circle cx="180" cy="260" r="5" fill="url(#servicesGlassGrad)" stroke="#DCC7A1" strokeWidth="1" />
+                          </g>
+                        </svg>
                     </div>
                 </div>
             </section>
@@ -198,7 +275,7 @@ export default function Services() {
                     <div className="tech-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
                         {filteredTech.map((tech, i) => (
                             <div 
-                                className="tech-card scroll-reveal" 
+                                className="tech-card" 
                                 key={tech.name} 
                                 style={{ 
                                     backgroundColor: '#FFFFFF', 
