@@ -82,17 +82,17 @@ export default function Services() {
         <main style={{ paddingTop: '120px' }}>
             {/* Services Page Header */}
             <section className="scroll-reveal" style={{ paddingBottom: '64px' }}>
-                <div className="container" style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '64px', alignItems: 'center' }}>
+                <div className="container about-hero-grid">
                     <div className="reveal-left visible">
                         <span className="section-tagline">Capabilities</span>
-                        <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '52px', fontWeight: 500, lineHeight: 1.2, marginBottom: '24px' }}>
+                        <h1 className="editorial-hero-title" style={{ marginBottom: '24px' }}>
                             What We Do
                         </h1>
                         <p style={{ maxWidth: '640px', color: 'var(--text-body)', fontSize: '20px', lineHeight: 1.6 }}>
                             End-to-end digital frameworks combining design excellence, robust code, cloud scalability, and business growth engines under one roof.
                         </p>
                     </div>
-                    <div className="reveal-right visible float-element" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '320px', position: 'relative' }}>
+                    <div className="reveal-right visible float-element svg-wrap-services-hero">
                         <svg viewBox="0 0 500 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style={{ maxWidth: '100%', maxHeight: '100%' }}>
                           <defs>
                             <linearGradient id="servicesGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -192,13 +192,6 @@ export default function Services() {
                                 <div 
                                     className="service-header" 
                                     onClick={() => setActiveService(activeService === idx ? null : idx)}
-                                    style={{
-                                        padding: '32px 0',
-                                        display: 'grid',
-                                        gridTemplateColumns: '80px 1fr auto',
-                                        alignItems: 'center',
-                                        cursor: 'pointer'
-                                    }}
                                 >
                                     <span className="service-num" style={{ fontSize: '16px', fontWeight: 600, color: 'var(--text-muted)' }}>{service.num}</span>
                                     <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', fontWeight: 500 }}>{service.title}</h3>
@@ -226,7 +219,7 @@ export default function Services() {
                                         transition: 'max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1)'
                                     }}
                                 >
-                                    <div className="service-content-grid" style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '48px', paddingBottom: '40px', paddingLeft: '80px' }}>
+                                    <div className="service-content-grid" style={{ paddingBottom: '40px' }}>
                                         <div className="service-left">
                                             <p style={{ fontSize: '18px', color: 'var(--text-body)', lineHeight: 1.7 }}>
                                                 {service.desc}
@@ -249,11 +242,11 @@ export default function Services() {
                     </div>
                 </div>
             </section>
-
+ 
             {/* Tech Stack Section */}
             <section className="scroll-reveal" id="tech-stack" style={{ padding: '96px 0' }}>
                 <div className="container">
-                    <div className="section-header flex-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '32px', marginBottom: '64px' }}>
+                    <div className="section-header flex-header" style={{ marginBottom: '64px' }}>
                         <div>
                             <span className="section-tagline">Technologies</span>
                             <h2 className="section-title" style={{ margin: 0 }}>Our Development Stack</h2>
@@ -271,19 +264,13 @@ export default function Services() {
                             ))}
                         </div>
                     </div>
-
-                    <div className="tech-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+ 
+                    <div className="tech-grid">
                         {filteredTech.map((tech, i) => (
                             <div 
                                 className="tech-card" 
                                 key={tech.name} 
                                 style={{ 
-                                    backgroundColor: '#FFFFFF', 
-                                    border: '1px solid var(--border-color)', 
-                                    borderRadius: 'var(--radius-card)', 
-                                    padding: '32px', 
-                                    boxShadow: 'var(--shadow-soft)',
-                                    transition: 'var(--transition-editorial)',
                                     transitionDelay: `${(i % 3) * 0.1}s`
                                 }}
                             >

@@ -45,11 +45,11 @@ export default function Contact() {
             {/* Contact Section */}
             <section className="scroll-reveal" style={{ paddingBottom: '96px' }}>
                 <div className="container">
-                    <div className="contact-grid" style={{ display: 'grid', gridTemplateColumns: '0.8fr 1.2fr', gap: '64px' }}>
+                    <div className="contact-grid">
                         {/* Left Info Panel */}
                         <div className="contact-info reveal-left visible" style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignSelf: 'start' }}>
                             <span className="section-tagline">Onboarding</span>
-                            <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '52px', fontWeight: 500, lineHeight: 1.15, color: 'var(--text-heading)' }}>
+                            <h1 className="editorial-hero-title">
                                 Have an idea? <br />
                                 <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>Let&apos;s make impact.</span>
                             </h1>
@@ -58,7 +58,7 @@ export default function Contact() {
                             </p>
 
                             {/* Contact Visual Asset */}
-                            <div className="float-element" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '240px', margin: '16px 0', position: 'relative' }}>
+                            <div className="float-element svg-wrap-contact" style={{ margin: '16px 0' }}>
                                 <svg viewBox="0 0 500 350" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style={{ maxWidth: '100%', maxHeight: '100%' }}>
                                   <defs>
                                     <linearGradient id="contactGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -133,7 +133,7 @@ export default function Contact() {
                             <div className="contact-details" style={{ borderTop: '1px solid var(--border-color)', paddingTop: '24px' }}>
                                 <div style={{ marginBottom: '24px' }}>
                                     <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '8px' }}>Direct Email</span>
-                                    <a href="mailto:hello@clownbros.com" style={{ fontSize: '20px', fontWeight: 500, color: 'var(--text-heading)', textDecoration: 'none' }}>
+                                    <a href="mailto:hello@clownbros.com" className="editorial-h4" style={{ textDecoration: 'none' }}>
                                         hello@clownbros.com
                                     </a>
                                 </div>

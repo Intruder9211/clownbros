@@ -180,7 +180,7 @@ export default function Navigation() {
 
                     {/* Right: Action CTA & Burger Toggle */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-                        <Link href="/contact" className="btn btn-primary" style={{ padding: '10px 22px', fontSize: '14px', borderRadius: '8px' }}>
+                        <Link href="/contact" className="btn btn-primary header-cta-btn" style={{ padding: '10px 22px', fontSize: '14px', borderRadius: '8px' }}>
                             Get in Touch
                         </Link>
                         
@@ -196,7 +196,7 @@ export default function Navigation() {
                     </div>
                 </div>
             </header>
-
+ 
             {/* Slide-out Navigation Drawer */}
             <div className={`nav-drawer ${isOpen ? 'open' : ''}`} aria-hidden={!isOpen}>
                 <div className="drawer-overlay" onClick={closeMenu}></div>
@@ -224,6 +224,12 @@ export default function Navigation() {
                                 ))}
                             </ul>
                         </nav>
+                        
+                        <div style={{ marginTop: '8px' }} className="mobile-only-cta">
+                            <Link href="/contact" className="btn btn-primary" onClick={closeMenu} style={{ display: 'flex', width: '100%', padding: '14px' }}>
+                                Get in Touch
+                            </Link>
+                        </div>
                     </div>
 
                     <div className="drawer-footer">
