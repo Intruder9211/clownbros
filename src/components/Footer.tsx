@@ -104,6 +104,7 @@ export default function Footer() {
                             <ul>
                                 <li><Link href="/about">Vision & Mission</Link></li>
                                 <li><Link href="/about">Core Values</Link></li>
+                                <li><Link href="/portfolio">Our Portfolio</Link></li>
                                 <li><Link href="/services">Technology Stack</Link></li>
                                 <li><Link href="/services#faqs">Common FAQs</Link></li>
                             </ul>

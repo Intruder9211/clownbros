@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import Chatbot from "@/components/Chatbot";
 
 export const metadata: Metadata = {
   title: "ClownBros | Digital Transformation & Technology Agency",
@@ -25,6 +26,7 @@ export default function RootLayout({
       <body>
         <Navigation />
         {children}
+        <Chatbot />
         <Footer />
       </body>
     </html>

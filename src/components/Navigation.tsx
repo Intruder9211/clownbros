@@ -139,6 +139,7 @@ export default function Navigation() {
         { path: '/', label: 'Home' },
         { path: '/about', label: 'Vision & Values' },
         { path: '/services', label: 'What We Do' },
+        { path: '/portfolio', label: 'Portfolio' },
         { path: '/contact', label: 'Start a Project' }
     ];
 
@@ -234,8 +235,11 @@ export default function Navigation() {
 
                     <div className="drawer-footer">
                         <p className="drawer-label">Get in Touch</p>
-                        <a href="mailto:hello@clownbros.com" className="drawer-email" style={{ display: 'block', marginBottom: '24px' }}>
-                            hello@clownbros.com
+                        <a href="mailto:singhmohit101103@gmail.com" className="drawer-email" style={{ display: 'block', marginBottom: '8px' }}>
+                            singhmohit101103@gmail.com
+                        </a>
+                        <a href="tel:7303061282" className="drawer-email" style={{ display: 'block', marginBottom: '24px' }}>
+                            +91 73030 61282
                         </a>
                         <div className="drawer-socials" style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
                             <a href="https://instagram.com/clownbros" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="Instagram" style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>

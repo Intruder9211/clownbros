@@ -131,10 +131,16 @@ export default function Contact() {
                             </div>
                             
                             <div className="contact-details" style={{ borderTop: '1px solid var(--border-color)', paddingTop: '24px' }}>
-                                <div style={{ marginBottom: '24px' }}>
-                                    <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '8px' }}>Direct Email</span>
-                                    <a href="mailto:hello@clownbros.com" className="editorial-h4" style={{ textDecoration: 'none' }}>
-                                        hello@clownbros.com
+                                <div style={{ marginBottom: '20px' }}>
+                                    <span style={{ fontSize: '12px', fontWeight: 600, color: '#dcc7a1', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '8px' }}>Direct Email</span>
+                                    <a href="mailto:singhmohit101103@gmail.com" className="editorial-h4" style={{ textDecoration: 'none', color: 'var(--text-heading)' }}>
+                                        singhmohit101103@gmail.com
+                                    </a>
+                                </div>
+                                <div style={{ marginBottom: '20px' }}>
+                                    <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '8px' }}>Call / WhatsApp</span>
+                                    <a href="tel:7303061282" className="editorial-h4" style={{ textDecoration: 'none', color: 'var(--text-heading)' }}>
+                                        +91 73030 61282
                                     </a>
                                 </div>
                                 <div>
