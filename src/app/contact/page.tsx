@@ -29,15 +29,30 @@ export default function Contact() {
         setIsSubmitting(true);
         setFormStatus({ type: 'idle', message: '' });
 
+        const { name, email, details, budget } = formData;
+        const typesStr = projectTypes.length > 0 ? projectTypes.join(', ') : 'None selected';
+
+        // Construct mailto link
+        const subject = encodeURIComponent(`Project Brief from ${name}`);
+        const body = encodeURIComponent(
+            `Name: ${name}\n` +
+            `Client Email: ${email}\n` +
+            `Project Types: ${typesStr}\n` +
+            `Estimated Budget: ${budget.replace('_', ' – ')}\n\n` +
+            `Project Details:\n${details}`
+        );
+        const mailtoUrl = `mailto:singhmohit101103@gmail.com?subject=${subject}&body=${body}`;
+
         setTimeout(() => {
             setIsSubmitting(false);
             setFormStatus({
                 type: 'success',
-                message: 'Your project brief was submitted successfully. Our lead developer will review details and email you in 24 hours.'
+                message: 'Thank you for your interest! We have received your email details. We will review your project brief and call or email you back shortly.'
             });
+            window.location.href = mailtoUrl;
             setFormData({ name: '', email: '', details: '', budget: '10k_25k' });
             setProjectTypes([]);
-        }, 1500);
+        }, 1200);
     };
 
     return (

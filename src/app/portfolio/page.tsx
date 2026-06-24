@@ -1,7 +1,17 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ExternalLink, X, ArrowRight, CheckCircle, Info } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Lenis from 'lenis';
+
+const Hero3D = dynamic(() => import('@/components/Hero3D'), { ssr: false });
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface Project {
   id: string;
@@ -100,19 +110,133 @@ export default function Portfolio() {
       if (e.key === 'Escape') setSelectedProject(null);
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+
+    // Initialize Lenis smooth scroll synced with GSAP ticker
+    const lenis = new Lenis({
+      autoRaf: false,
+      lerp: 0.1,
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      infinite: false,
+      syncTouch: true
+    });
+
+    lenis.on('scroll', () => {
+      ScrollTrigger.update();
+    });
+
+    const updateTicker = (time: number) => {
+      lenis.raf(time * 1000);
+    };
+    gsap.ticker.add(updateTicker);
+    gsap.ticker.lagSmoothing(0);
+
+    // GSAP ScrollTrigger stagger fade + translateY on sections
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+
+      mm.add("(min-width: 769px)", () => {
+        const sections = gsap.utils.toArray('main > section');
+        sections.forEach((sec: any) => {
+          // Stagger direct elements inside sections
+          const targets = sec.querySelectorAll('.reveal-left, .portfolio-filters, .portfolio-card');
+          if (targets.length > 0) {
+            gsap.fromTo(targets,
+              { opacity: 0, y: 40 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 1.0,
+                stagger: 0.12,
+                ease: 'power2.out',
+                scrollTrigger: {
+                  trigger: sec,
+                  start: 'top 85%',
+                  toggleActions: 'play none none none',
+                }
+              }
+            );
+          } else {
+            gsap.fromTo(sec,
+              { opacity: 0, y: 40 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 1.0,
+                ease: 'power2.out',
+                scrollTrigger: {
+                  trigger: sec,
+                  start: 'top 85%',
+                  toggleActions: 'play none none none',
+                }
+              }
+            );
+          }
+        });
+      });
+    });
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      lenis.destroy();
+      gsap.ticker.remove(updateTicker);
+      ctx.revert();
+    };
   }, []);
+
+  // CSS 3D Tilt Effect on project cards
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (window.innerWidth <= 768) return;
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const width = rect.width;
+    const height = rect.height;
+
+    // Calculate rotate values: Max 15deg
+    const rotateX = ((height / 2 - y) / (height / 2)) * 15;
+    const rotateY = ((x - width / 2) / (width / 2)) * 15;
+
+    gsap.to(card, {
+      transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`,
+      duration: 0.3,
+      ease: 'power2.out',
+      overwrite: 'auto'
+    });
+  };
+
+  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    gsap.to(card, {
+      transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)',
+      duration: 0.5,
+      ease: 'power2.out',
+      overwrite: 'auto'
+    });
+  };
 
   const filteredProjects = PROJECTS_DATA.filter(
     (project) => filter === 'all' || project.category === filter
   );
 
   return (
-    <main style={{ paddingTop: '120px' }}>
-      {/* Hero Section */}
-      <section className="scroll-reveal" style={{ paddingBottom: '48px' }}>
-        <div className="container">
-          <div className="reveal-left visible" style={{ maxWidth: '800px' }}>
+    <main className="portfolio-page-smooth" style={{ paddingTop: '120px' }}>
+      <section 
+        className="scroll-reveal" 
+        style={{ 
+          paddingTop: '64px',
+          paddingBottom: '128px', 
+          position: 'relative', 
+          overflow: 'hidden',
+          display: 'flex',
+          alignItems: 'center',
+          minHeight: '450px'
+        }}
+      >
+        <Hero3D />
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+          <div className="reveal-left" style={{ maxWidth: '800px' }}>
             <span className="section-tagline">Bespoke Implementations</span>
             <h1 className="editorial-hero-title" style={{ marginBottom: '24px' }}>
               Selected Works
@@ -125,7 +249,7 @@ export default function Portfolio() {
       </section>
 
       {/* Filters Section */}
-      <section style={{ padding: '0 0 48px 0' }}>
+      <section style={{ padding: '64px 0 48px 0' }}>
         <div className="container">
           <div 
             className="portfolio-filters"
@@ -182,6 +306,8 @@ export default function Portfolio() {
               <div 
                 key={project.id}
                 className="portfolio-card scroll-reveal visible"
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
@@ -190,7 +316,7 @@ export default function Portfolio() {
                   borderRadius: 'var(--radius-card)',
                   overflow: 'hidden',
                   boxShadow: 'var(--shadow-soft)',
-                  transition: 'var(--transition-editorial)',
+                  transformStyle: 'preserve-3d',
                   animationDelay: `${index * 0.1}s`
                 }}
               >

@@ -1899,13 +1899,18 @@ section.dark-bg .btn-secondary:hover {
 }
 
 .portfolio-card {
-    transition: var(--transition-editorial) !important;
+    transition: border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .portfolio-card:hover {
-    transform: translateY(-8px);
     box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08) !important;
     border-color: var(--primary) !important;
+}
+
+@media (max-width: 768px) {
+    .portfolio-card:hover {
+        transform: translateY(-8px);
+    }
 }
 
 .portfolio-card-art-wrap svg {
@@ -1961,6 +1966,25 @@ section.dark-bg .btn-secondary:hover {
 }
 
 
+/* Lenis smooth scrolling compatibility */
+html.lenis, html.lenis body {
+    height: auto;
+}
+.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+.lenis-stopped {
+    overflow: hidden;
+}
 
-
-
+/* Disable default CSS transition on portfolio page elements so GSAP can animate them smoothly */
+.portfolio-page-smooth .scroll-reveal,
+.portfolio-page-smooth .reveal-left,
+.portfolio-page-smooth .portfolio-card {
+    transition: none !important;
+    opacity: unset;
+    transform: unset;
+}
