@@ -92,29 +92,31 @@ export default function Footer() {
                         <div className="footer-nav-col">
                             <h4>Services</h4>
                             <ul>
-                                <li><Link href="/services">Website Development</Link></li>
-                                <li><Link href="/services">Mobile App Development</Link></li>
-                                <li><Link href="/services">UI/UX Interface Design</Link></li>
-                                <li><Link href="/services">Cloud Integrations</Link></li>
-                                <li><Link href="/services">Digital Marketing & SEO</Link></li>
+                                <li><Link href="/services/web-development">Web & Web3 Platforms</Link></li>
+                                <li><Link href="/services/mobile-apps">Mobile App Development</Link></li>
+                                <li><Link href="/services/ui-ux-design">UI/UX Interface Design</Link></li>
+                                <li><Link href="/services/cloud-devops">Cloud Infrastructure & DevOps</Link></li>
+                                <li><Link href="/services/ai-solutions">AI & Machine Learning</Link></li>
+                                <li><Link href="/services/seo-growth">SEO & Growth</Link></li>
                             </ul>
                         </div>
                         <div className="footer-nav-col">
-                            <h4>Company</h4>
+                            <h4>Company & Trust</h4>
                             <ul>
-                                <li><Link href="/about">Vision & Mission</Link></li>
-                                <li><Link href="/about">Core Values</Link></li>
-                                <li><Link href="/portfolio">Our Portfolio</Link></li>
-                                <li><Link href="/services">Technology Stack</Link></li>
-                                <li><Link href="/services#faqs">Common FAQs</Link></li>
+                                <li><Link href="/about">Vision & Values</Link></li>
+                                <li><Link href="/process">How We Work (Process)</Link></li>
+                                <li><Link href="/trust">Trust & Security Center</Link></li>
+                                <li><Link href="/case-studies">Client Case Studies</Link></li>
+                                <li><Link href="/contact">Start a Project</Link></li>
                             </ul>
                         </div>
                         <div className="footer-nav-col">
-                            <h4>Legal</h4>
+                            <h4>Careers & Legal</h4>
                             <ul>
-                                <li><Link href="#">Privacy Policy</Link></li>
-                                <li><Link href="#">Terms of Service</Link></li>
-                                <li><Link href="#">Cookie Settings</Link></li>
+                                <li><Link href="/careers">Freelancer Portal</Link></li>
+                                <li><Link href="/careers#gigs">Open Freelance Gigs</Link></li>
+                                <li><Link href="/trust">Privacy & NDAs</Link></li>
+                                <li><Link href="/trust">Terms & SLA</Link></li>
                             </ul>
                         </div>
                     </div>

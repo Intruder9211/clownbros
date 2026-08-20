@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     }
 
     const typesStr = projectTypes && projectTypes.length > 0 ? projectTypes.join(', ') : 'None selected';
-    const budgetStr = budget ? budget.replace('_', ' – ') : 'Not specified';
+    const budgetStr = budget ? budget : null;
 
     // Retrieve environment variables
     const smtpHost = process.env.SMTP_HOST;
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       console.log('=== Mock Email Submission ===');
       console.log(`To: singhmohit101103@gmail.com`);
       console.log(`Subject: New Contact Form Submission - ${name}`);
-      console.log(`Body:\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nProject Types: ${typesStr}\nBudget: ${budgetStr}\nDetails: ${details}`);
+      console.log(`Body:\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nProject Types: ${typesStr}${budgetStr ? `\nBudget: ${budgetStr}` : ''}\nDetails: ${details}`);
       console.log('-----------------------------');
 
       return NextResponse.json({
@@ -58,8 +58,7 @@ You have received a new contact form submission:
 Name: ${name}
 Email: ${email}
 Phone: ${phone}
-Project Types: ${typesStr}
-Estimated Budget: ${budgetStr}
+Project Types: ${typesStr}${budgetStr ? `\nEstimated Budget: ${budgetStr}` : ''}
 
 Project Details:
 ${details}

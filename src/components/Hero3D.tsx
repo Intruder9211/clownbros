@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -9,15 +9,23 @@ function TorusKnotMesh() {
   const mouse = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+
+    let rafId: number | null = null;
     const handleMouseMove = (event: MouseEvent) => {
-      // Normalize mouse coordinates to [-1, 1] range
-      mouse.current.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      if (!rafId) {
+        rafId = requestAnimationFrame(() => {
+          mouse.current.x = (event.clientX / window.innerWidth) * 2 - 1;
+          mouse.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+          rafId = null;
+        });
+      }
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
 
@@ -44,7 +52,7 @@ function TorusKnotMesh() {
 
   return (
     <mesh ref={meshRef}>
-      <torusKnotGeometry args={[1.5, 0.45, 120, 16]} />
+      <torusKnotGeometry args={[1.5, 0.45, 80, 12]} />
       <meshBasicMaterial
         color="#DCC7A1"
         wireframe
@@ -56,8 +64,27 @@ function TorusKnotMesh() {
 }
 
 export default function Hero3D() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.05 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div
+      ref={containerRef}
       style={{
         position: 'absolute',
         top: 0,
@@ -69,13 +96,16 @@ export default function Hero3D() {
         overflow: 'hidden',
       }}
     >
-      <Canvas
-        camera={{ position: [0, 0, 5], fov: 60 }}
-        gl={{ antialias: true, alpha: true }}
-      >
-        <ambientLight intensity={0.5} />
-        <TorusKnotMesh />
-      </Canvas>
+      {isVisible && (
+        <Canvas
+          camera={{ position: [0, 0, 5], fov: 60 }}
+          gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+          dpr={[1, 1.5]}
+        >
+          <ambientLight intensity={0.5} />
+          <TorusKnotMesh />
+        </Canvas>
+      )}
     </div>
   );
 }

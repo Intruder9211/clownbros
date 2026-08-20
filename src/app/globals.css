@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap');
-
 /* Reset and Core Variables */
 :root {
     --primary: #DCC7A1;
@@ -24,8 +22,8 @@
     --error: #C75B56;
     --warning: #D49B34;
     
-    --font-heading: 'Fraunces', Georgia, serif;
-    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --font-heading: var(--font-fraunces), 'Fraunces', Georgia, serif;
+    --font-body: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     
     --radius-button: 10px;
     --radius-card: 18px;
@@ -63,10 +61,12 @@ html, body {
     background-color: var(--primary);
     border-radius: 50%;
     position: fixed;
-    transform: translate(-50%, -50%);
+    top: 0;
+    left: 0;
     pointer-events: none;
     z-index: 10000;
-    transition: width 0.3s, height 0.3s, background-color 0.3s, opacity 0.3s ease;
+    will-change: transform;
+    transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease, opacity 0.3s ease;
     opacity: 0;
     display: none;
 }
@@ -78,10 +78,12 @@ html, body {
     border: 1px solid var(--primary);
     border-radius: 50%;
     position: fixed;
-    transform: translate(-50%, -50%);
+    top: 0;
+    left: 0;
     pointer-events: none;
     z-index: 9999;
-    transition: transform 0.1s cubic-bezier(0.25, 1, 0.5, 1), width 0.3s, height 0.3s, border-color 0.3s, background-color 0.3s, opacity 0.3s ease;
+    will-change: transform;
+    transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, background-color 0.3s ease, opacity 0.3s ease;
     opacity: 0;
     display: none;
 }
@@ -315,21 +317,20 @@ section.dark-bg .btn-secondary:hover {
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 100;
-    background-color: transparent;
+    z-index: 1000;
+    background-color: rgba(250, 248, 244, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid transparent;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.5s ease, border-color 0.5s ease;
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .main-header.scrolled {
-    background-color: rgba(250, 248, 244, 0.85);
+    background-color: rgba(250, 248, 244, 0.92);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border-color);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
-}
-
-.main-header.hidden {
-    transform: translateY(-100%);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
 }
 
 .nav-container {
@@ -1881,82 +1882,6 @@ section.dark-bg .btn-secondary:hover {
     }
 }
 
-/* ==========================================================================
-   Luxury Portfolio Page Styles
-   ========================================================================== */
-
-.portfolio-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(480px, 1fr)) !important;
-    gap: 40px;
-}
-
-@media (max-width: 768px) {
-    .portfolio-grid {
-        grid-template-columns: 1fr !important;
-        gap: 24px;
-    }
-}
-
-.portfolio-card {
-    transition: border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-.portfolio-card:hover {
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08) !important;
-    border-color: var(--primary) !important;
-}
-
-@media (max-width: 768px) {
-    .portfolio-card:hover {
-        transform: translateY(-8px);
-    }
-}
-
-.portfolio-card-art-wrap svg {
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.portfolio-card:hover .portfolio-card-art-wrap svg {
-    transform: scale(1.05);
-}
-
-/* Animate SVG elements on card hover */
-.portfolio-card:hover svg g {
-    opacity: 1 !important;
-}
-
-.portfolio-card:hover svg circle {
-    stroke-width: 2px;
-}
-
-/* Interactive slide-out case study drawer animations */
-@keyframes drawerFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes drawerSlideIn {
-    from { transform: translateX(100%); }
-    to { transform: translateX(0); }
-}
-
-.drawer-overlay {
-    animation: drawerFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.drawer-overlay .drawer-content {
-    animation: drawerSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* Mobile drawer scaling */
-@media (max-width: 576px) {
-    .drawer-overlay .drawer-content {
-        padding: 24px !important;
-        max-width: 100% !important;
-    }
-}
-
 .contact-details a {
     transition: var(--transition-quick);
 }
@@ -1980,11 +1905,467 @@ html.lenis, html.lenis body {
     overflow: hidden;
 }
 
-/* Disable default CSS transition on portfolio page elements so GSAP can animate them smoothly */
-.portfolio-page-smooth .scroll-reveal,
-.portfolio-page-smooth .reveal-left,
-.portfolio-page-smooth .portfolio-card {
-    transition: none !important;
-    opacity: unset;
-    transform: unset;
+/* ==========================================================================
+   Mobile & Desktop Performance Optimizations
+   ========================================================================== */
+
+/* Skip layout calculation for offscreen sections until scrolled into view */
+.about-values,
+.services-overview,
+.contact-section,
+.faq-section,
+.footer {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 600px;
 }
+
+.scroll-reveal {
+    will-change: transform, opacity;
+}
+
+.main-header {
+    will-change: transform;
+}
+
+/* Respect user accessibility reduced-motion setting */
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ==========================================================================
+   Mega Menu & Sub-Menu Dropdown Styling (Refined Adjustable UI)
+   ========================================================================== */
+.nav-item-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.nav-dropdown-trigger {
+    background: none;
+    border: none;
+    color: var(--text-body);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: var(--transition-quick);
+}
+
+.nav-dropdown-trigger:hover,
+.nav-dropdown-trigger.active {
+    color: var(--text-heading);
+    background-color: rgba(220, 199, 161, 0.18);
+}
+
+.dropdown-chevron {
+    transition: transform 0.3s ease;
+}
+
+.nav-item-dropdown:hover .dropdown-chevron,
+.nav-dropdown-trigger.active .dropdown-chevron {
+    transform: rotate(180deg);
+}
+
+/* Desktop Mega Menu Dropdown Box */
+.mega-menu-panel {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-35%) translateY(10px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.03);
+    padding: 20px 24px;
+    z-index: 2500;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+    min-width: 520px;
+}
+
+/* Hover bridge prevents mouse gap flicker */
+.mega-menu-panel::before {
+    content: '';
+    position: absolute;
+    top: -16px;
+    left: 0;
+    width: 100%;
+    height: 18px;
+    background: transparent;
+}
+
+.mega-menu-panel.mega-menu-wide {
+    min-width: 620px;
+    left: 50%;
+    transform: translateX(-38%) translateY(10px);
+}
+
+.mega-menu-panel.mega-menu-compact {
+    min-width: 290px;
+    left: -15px;
+    transform: translateY(10px);
+}
+
+.nav-item-dropdown.open .mega-menu-panel.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.nav-item-dropdown.open .mega-menu-panel.mega-menu-wide.show {
+    transform: translateX(-38%) translateY(2px);
+}
+
+.nav-item-dropdown.open .mega-menu-panel.mega-menu-compact.show {
+    transform: translateY(2px);
+}
+
+.mega-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.mega-menu-col-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--border-color-light);
+}
+
+.mega-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px;
+    margin-bottom: 4px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.mega-menu-item:hover {
+    background-color: var(--background-secondary);
+    transform: translateX(4px);
+}
+
+.mega-menu-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background-color: rgba(220, 199, 161, 0.25);
+    color: var(--dark-section);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.mega-menu-item:hover .mega-menu-icon {
+    background-color: var(--primary);
+    color: var(--text-heading);
+}
+
+.mega-menu-text h5 {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-heading);
+    margin-bottom: 1px;
+    line-height: 1.25;
+}
+
+.mega-menu-text p {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 220px;
+}
+
+.mega-menu-featured-box {
+    grid-column: span 2;
+    background: var(--background-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-heading);
+    border-radius: 10px;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.mega-menu-featured-box p {
+    font-size: 12.5px;
+    color: var(--text-body);
+    font-weight: 500;
+}
+
+.mega-menu-featured-box a {
+    color: var(--text-heading);
+    background: rgba(220, 199, 161, 0.4);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s ease;
+}
+
+.mega-menu-featured-box a:hover {
+    background: var(--primary);
+    gap: 8px;
+    color: var(--text-heading);
+}
+
+/* Accordion Dropdown Mobile Drawer Styling */
+.drawer-accordion {
+    border-bottom: 1px solid var(--border-color-light);
+}
+
+.drawer-accordion-btn {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: none;
+    border: none;
+    padding: 16px 0;
+    font-size: 20px;
+    font-family: var(--font-heading);
+    font-weight: 500;
+    color: var(--text-heading);
+    cursor: pointer;
+    text-align: left;
+}
+
+.drawer-accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    padding-left: 12px;
+}
+
+.drawer-accordion.open .drawer-accordion-content {
+    max-height: 600px;
+    padding-bottom: 16px;
+}
+
+.drawer-sub-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    margin: 4px 0;
+    border-radius: 8px;
+    font-size: 15px;
+    color: var(--text-body);
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.drawer-sub-link:hover,
+.drawer-sub-link.active {
+    background-color: var(--background-secondary);
+    color: var(--dark-section);
+    font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+    .desktop-nav {
+        display: none !important;
+    }
+}
+
+
+/* ==========================================================================
+   Career & Freelancer Portal Components
+   ========================================================================== */
+.career-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: rgba(220, 199, 161, 0.25);
+    border: 1px solid var(--primary);
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--text-heading);
+    text-transform: uppercase;
+}
+
+.filter-pill {
+    padding: 8px 18px;
+    border-radius: 30px;
+    border: 1px solid var(--border-color);
+    background: #FFFFFF;
+    color: var(--text-body);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-pill:hover,
+.filter-pill.active {
+    background: var(--dark-section);
+    color: #FFFFFF;
+    border-color: var(--dark-section);
+}
+
+.gig-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-card);
+    padding: 28px;
+    transition: var(--transition-editorial);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+
+.gig-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--primary);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.gig-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.06);
+    border-color: var(--primary);
+}
+
+.gig-card:hover::before {
+    opacity: 1;
+}
+
+.gig-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--background-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-body);
+}
+
+/* Modal Popup Overlay */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(34, 34, 34, 0.65);
+    backdrop-filter: blur(8px);
+    z-index: 10500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    animation: fadeInModal 0.25s forwards ease-out;
+}
+
+@keyframes fadeInModal {
+    to { opacity: 1; }
+}
+
+.modal-card {
+    background: #FFFFFF;
+    border-radius: 20px;
+    max-width: 650px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 36px;
+    position: relative;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--background-secondary);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-body);
+    transition: background 0.2s ease;
+}
+
+.modal-close-btn:hover {
+    background: var(--border-color);
+}
+
+/* Process Timeline & Trust Cards */
+.timeline-step-number {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: var(--dark-section);
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.trust-badge-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    transition: var(--transition-quick);
+}
+
+.trust-badge-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-soft);
+}
+

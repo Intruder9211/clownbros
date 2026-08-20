@@ -6,8 +6,7 @@ export default function Contact() {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        details: '',
-        budget: '10k_25k'
+        details: ''
     });
     const [projectTypes, setProjectTypes] = useState<string[]>([]);
     const [formStatus, setFormStatus] = useState<{ type: 'success' | 'error' | 'idle'; message: string }>({
@@ -29,7 +28,7 @@ export default function Contact() {
         setIsSubmitting(true);
         setFormStatus({ type: 'idle', message: '' });
 
-        const { name, email, details, budget } = formData;
+        const { name, email, details } = formData;
         const typesStr = projectTypes.length > 0 ? projectTypes.join(', ') : 'None selected';
 
         // Construct mailto link
@@ -37,8 +36,7 @@ export default function Contact() {
         const body = encodeURIComponent(
             `Name: ${name}\n` +
             `Client Email: ${email}\n` +
-            `Project Types: ${typesStr}\n` +
-            `Estimated Budget: ${budget.replace('_', ' – ')}\n\n` +
+            `Project Types: ${typesStr}\n\n` +
             `Project Details:\n${details}`
         );
         const mailtoUrl = `mailto:singhmohit101103@gmail.com?subject=${subject}&body=${body}`;
@@ -50,7 +48,7 @@ export default function Contact() {
                 message: 'Thank you for your interest! We have received your email details. We will review your project brief and call or email you back shortly.'
             });
             window.location.href = mailtoUrl;
-            setFormData({ name: '', email: '', details: '', budget: '10k_25k' });
+            setFormData({ name: '', email: '', details: '' });
             setProjectTypes([]);
         }, 1200);
     };
@@ -234,22 +232,6 @@ export default function Contact() {
                                         required 
                                         disabled={isSubmitting}
                                     ></textarea>
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="form-budget" className="form-label">Estimated Budget</label>
-                                    <select 
-                                        id="form-budget" 
-                                        className="form-select"
-                                        value={formData.budget}
-                                        onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                                        disabled={isSubmitting}
-                                    >
-                                        <option value="under_10k">Under $10,000</option>
-                                        <option value="10k_25k">$10,000 – $25,000</option>
-                                        <option value="25k_50k">$25,000 – $50,000</option>
-                                        <option value="above_50k">$50,000+</option>
-                                    </select>
                                 </div>
 
                                 {formStatus.type !== 'idle' && (

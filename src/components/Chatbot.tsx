@@ -97,9 +97,9 @@ const CONCIERGE_RESPONSES: { keywords: string[]; answer: string; suggestions?: s
   },
   {
     keywords: ['portfolio', 'project', 'work', 'case studies', 'case study', 'examples', 'clients', 'done', 'space artisans', 'movers vaughan', 'ricliso', 'richmondhill'],
-    answer: "We have built several bespoke products for our global clients, including Space Artisans Design Studio (luxury architecture), Movers Vaughan & Movers Richmond Hill (automated logistics engines & local SEO), and Ricliso (enterprise ISO certification portals). You can explore our interactive case studies and see live builds on our dedicated Portfolio page.",
+    answer: "We have built several bespoke products for our global clients, including Space Artisans Design Studio (luxury architecture), Movers Vaughan & Movers Richmond Hill (automated logistics engines & local SEO), and Ricliso (enterprise ISO certification portals). You can explore our services and technical capabilities on our Services page.",
     suggestions: ["Our Tech Stack", "Start a Project"],
-    cta: { text: "View Portfolio Page", link: "/portfolio" }
+    cta: { text: "View Services Page", link: "/services" }
   },
   {
     keywords: ['contact', 'touch', 'start', 'meeting', 'call', 'hire', 'project', 'onboard', 'phone', 'number', 'email', 'singhmohit'],
