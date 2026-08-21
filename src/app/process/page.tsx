@@ -66,40 +66,58 @@ export default function ProcessPage() {
                 </div>
             </section>
 
-            {/* Timeline Steps */}
+            {/* Timeline Steps - 3 Column Grid Layout */}
             <section style={{ padding: '90px 0', backgroundColor: 'var(--background)' }}>
                 <div className="container">
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '60px' }}>
-                        {steps.map((step, idx) => (
-                            <div key={step.num} className="scroll-reveal" style={{ display: 'grid', gridTemplateColumns: '80px 1fr', gap: '30px', background: '#FFFFFF', padding: '40px', borderRadius: '20px', border: '1px solid var(--border-color)', boxShadow: '0 10px 30px rgba(0,0,0,0.03)' }}>
-                                <div className="timeline-step-number" style={{ width: '64px', height: '64px', fontSize: '24px' }}>
-                                    {step.num}
-                                </div>
-
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '30px' }}>
+                        {steps.map((step) => (
+                            <div 
+                                key={step.num} 
+                                className="scroll-reveal value-card" 
+                                style={{ 
+                                    background: '#FFFFFF', 
+                                    padding: '32px', 
+                                    borderRadius: '20px', 
+                                    border: '1px solid var(--border-color)', 
+                                    boxShadow: '0 10px 30px rgba(0,0,0,0.03)',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'space-between',
+                                    transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+                                }}
+                            >
                                 <div>
-                                    <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }}>
-                                        {step.subtitle}
-                                    </span>
-                                    <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '28px', color: 'var(--text-heading)', fontWeight: 600, marginBottom: '14px' }}>
+                                    {/* Header Badge & Subtitle */}
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+                                        <div className="timeline-step-number" style={{ width: '52px', height: '52px', fontSize: '20px', fontWeight: 700 }}>
+                                            {step.num}
+                                        </div>
+                                        <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.08em', background: 'rgba(74, 143, 99, 0.12)', padding: '4px 10px', borderRadius: '20px' }}>
+                                            {step.subtitle}
+                                        </span>
+                                    </div>
+
+                                    {/* Title & Description */}
+                                    <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', color: 'var(--text-heading)', fontWeight: 600, lineHeight: 1.3, marginBottom: '12px' }}>
                                         {step.title}
-                                    </h2>
-                                    <p style={{ fontSize: '16px', color: 'var(--text-body)', lineHeight: 1.6, marginBottom: '24px' }}>
+                                    </h3>
+                                    <p style={{ fontSize: '14px', color: 'var(--text-body)', lineHeight: 1.6, marginBottom: '24px' }}>
                                         {step.description}
                                     </p>
+                                </div>
 
-                                    {/* Deliverables checklist */}
-                                    <div style={{ background: 'var(--background-secondary)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color-light)' }}>
-                                        <div style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '10px' }}>
-                                            Key Deliverables:
-                                        </div>
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
-                                            {step.deliverables.map((item) => (
-                                                <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: 'var(--text-heading)', fontWeight: 500 }}>
-                                                    <span style={{ color: '#4A8F63', fontWeight: 700 }}>✓</span>
-                                                    {item}
-                                                </div>
-                                            ))}
-                                        </div>
+                                {/* Deliverables checklist */}
+                                <div style={{ background: 'var(--background-secondary)', padding: '16px 18px', borderRadius: '12px', border: '1px solid var(--border-color-light)', marginTop: 'auto' }}>
+                                    <div style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '10px', letterSpacing: '0.05em' }}>
+                                        Key Deliverables:
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                        {step.deliverables.map((item) => (
+                                            <div key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '13px', color: 'var(--text-heading)', fontWeight: 500, lineHeight: 1.4 }}>
+                                                <span style={{ color: '#4A8F63', fontWeight: 700, flexShrink: 0 }}>✓</span>
+                                                <span>{item}</span>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                             </div>

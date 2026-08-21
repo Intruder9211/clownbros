@@ -402,8 +402,8 @@ export default function Navigation() {
                                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
                                             </div>
                                             <div className="mega-menu-text">
-                                                <h5>Freelancer Portal</h5>
-                                                <p>Top 3% elite talent network.</p>
+                                                <h5>Fresher & Freelancer Hub</h5>
+                                                <p>Indian talent network in ₹.</p>
                                             </div>
                                         </Link>
                                         <Link href="/careers#gigs" className="mega-menu-item" onClick={handleSubLinkClick}>
@@ -411,8 +411,8 @@ export default function Navigation() {
                                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
                                             </div>
                                             <div className="mega-menu-text">
-                                                <h5>Open Freelance Gigs</h5>
-                                                <p>Explore contract roles.</p>
+                                                <h5>Open Freelance Gigs (₹)</h5>
+                                                <p>Fresher market rates in Rs.</p>
                                             </div>
                                         </Link>
                                         <Link href="/careers#apply" className="mega-menu-item" onClick={handleSubLinkClick}>
@@ -420,8 +420,8 @@ export default function Navigation() {
                                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>
                                             </div>
                                             <div className="mega-menu-text">
-                                                <h5>Apply as Freelancer</h5>
-                                                <p>Direct talent application.</p>
+                                                <h5>Apply as Fresher / Freelancer</h5>
+                                                <p>Direct Indian talent application.</p>
                                             </div>
                                         </Link>
                                     </div>
@@ -517,9 +517,9 @@ export default function Navigation() {
                                         </svg>
                                     </button>
                                     <div className="drawer-accordion-content">
-                                        <Link href="/careers" className="drawer-sub-link" onClick={closeMenu}>Freelancer Hub</Link>
-                                        <Link href="/careers#gigs" className="drawer-sub-link" onClick={closeMenu}>Open Freelance Gigs</Link>
-                                        <Link href="/careers#apply" className="drawer-sub-link" onClick={closeMenu}>Apply as Freelancer</Link>
+                                        <Link href="/careers" className="drawer-sub-link" onClick={closeMenu}>Fresher & Freelancer Hub (₹)</Link>
+                                        <Link href="/careers#gigs" className="drawer-sub-link" onClick={closeMenu}>Open Gigs in Rs (₹)</Link>
+                                        <Link href="/careers#apply" className="drawer-sub-link" onClick={closeMenu}>Apply as Fresher Freelancer</Link>
                                     </div>
                                 </li>
 
