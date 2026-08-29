@@ -380,6 +380,69 @@ export default function Navigation() {
                                 </div>
                             </li>
 
+                            {/* Mega Menu 2: Ecosystem & Lab */}
+                            <li 
+                                className={`nav-item-dropdown ${activeDropdown === 'ecosystem' ? 'open' : ''}`}
+                                onMouseEnter={() => handleNavDropdownEnter('ecosystem')}
+                                onMouseLeave={handleNavDropdownLeave}
+                            >
+                                <button 
+                                    className={`nav-dropdown-trigger ${activeDropdown === 'ecosystem' ? 'active' : ''}`}
+                                    onClick={(e) => handleNavDropdownToggle('ecosystem', e)}
+                                >
+                                    <span>Ecosystem &amp; Lab</span>
+                                    <svg className="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </button>
+                                <div className={`mega-menu-panel mega-menu-wide ${activeDropdown === 'ecosystem' ? 'show' : ''}`}>
+                                    <div className="mega-menu-grid">
+                                        <div>
+                                            <div className="mega-menu-col-title">AI &amp; Developer Tooling</div>
+                                            <a href="https://theclownfounder.vercel.app/" target="_blank" rel="noopener noreferrer" className="mega-menu-item" onClick={handleSubLinkClick}>
+                                                <div className="mega-menu-icon">
+                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2a8 8 0 0 0-8 8c0 3.3 2 6.2 5 7.4V20a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2.6c3-1.2 5-4.1 5-7.4a8 8 0 0 0-8-8z"/><line x1="9" y1="13" x2="15" y2="13"/></svg>
+                                                </div>
+                                                <div className="mega-menu-text">
+                                                    <h5>The ClownFounder ↗</h5>
+                                                    <p>Autonomous Company OS &amp; AI Suite.</p>
+                                                </div>
+                                            </a>
+                                            <a href="https://clowneaser.vercel.app/" target="_blank" rel="noopener noreferrer" className="mega-menu-item" onClick={handleSubLinkClick}>
+                                                <div className="mega-menu-icon">
+                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                </div>
+                                                <div className="mega-menu-text">
+                                                    <h5>ClownEaser ↗</h5>
+                                                    <p>Design Token Extractor &amp; AI CSS Studio.</p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div>
+                                            <div className="mega-menu-col-title">Platforms &amp; Document Systems</div>
+                                            <a href="https://theclownmart.vercel.app/" target="_blank" rel="noopener noreferrer" className="mega-menu-item" onClick={handleSubLinkClick}>
+                                                <div className="mega-menu-icon">
+                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                                                </div>
+                                                <div className="mega-menu-text">
+                                                    <h5>The ClownMart ↗</h5>
+                                                    <p>High-Velocity E-Commerce Engine.</p>
+                                                </div>
+                                            </a>
+                                            <a href="https://clownkosh.vercel.app/" target="_blank" rel="noopener noreferrer" className="mega-menu-item" onClick={handleSubLinkClick}>
+                                                <div className="mega-menu-icon">
+                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                                                </div>
+                                                <div className="mega-menu-text">
+                                                    <h5>ClownKosh ↗</h5>
+                                                    <p>Distraction-Free PDF Library PWA.</p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
                             {/* Dropdown 3: Careers & Freelancers */}
                             <li 
                                 className={`nav-item-dropdown ${activeDropdown === 'careers' ? 'open' : ''}`}
@@ -505,6 +568,22 @@ export default function Navigation() {
                                         <Link href="/process" className="drawer-sub-link" onClick={closeMenu}>How We Work (Process)</Link>
                                         <Link href="/trust" className="drawer-sub-link" onClick={closeMenu}>Trust & Compliance</Link>
                                         <Link href="/case-studies" className="drawer-sub-link" onClick={closeMenu}>Client Case Studies</Link>
+                                    </div>
+                                </li>
+
+                                {/* Mobile Accordion: Ecosystem & Lab */}
+                                <li className={`drawer-accordion ${mobileAccordion === 'ecosystem' ? 'open' : ''}`}>
+                                    <button className="drawer-accordion-btn" onClick={() => toggleAccordion('ecosystem')}>
+                                        <span>Ecosystem &amp; Lab</span>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ transform: mobileAccordion === 'ecosystem' ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s ease' }}>
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                    </button>
+                                    <div className="drawer-accordion-content">
+                                        <a href="https://theclownfounder.vercel.app/" target="_blank" rel="noopener noreferrer" className="drawer-sub-link" onClick={closeMenu}>The ClownFounder ↗ (AI OS)</a>
+                                        <a href="https://clowneaser.vercel.app/" target="_blank" rel="noopener noreferrer" className="drawer-sub-link" onClick={closeMenu}>ClownEaser ↗ (AI CSS Studio)</a>
+                                        <a href="https://theclownmart.vercel.app/" target="_blank" rel="noopener noreferrer" className="drawer-sub-link" onClick={closeMenu}>The ClownMart ↗ (E-Commerce)</a>
+                                        <a href="https://clownkosh.vercel.app/" target="_blank" rel="noopener noreferrer" className="drawer-sub-link" onClick={closeMenu}>ClownKosh ↗ (PDF Library)</a>
                                     </div>
                                 </li>
 

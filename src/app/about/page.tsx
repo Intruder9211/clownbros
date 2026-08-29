@@ -154,6 +154,22 @@ export default function About() {
                                 We position ourselves as long-term technology collaborators. As your user base and operations expand, we ensure your codebase, cloud infrastructure, and user interfaces adapt effortlessly without costly rewrites.
                             </p>
                         </div>
+
+                        <div className="editorial-card scroll-reveal" style={{ transitionDelay: '0.3s', gridColumn: '1 / -1', background: 'var(--dark-section)', color: '#FFFFFF', border: '1px solid var(--border-color)' }}>
+                            <span className="panel-label" style={{ fontSize: '12px', fontWeight: 600, color: 'var(--primary)', display: 'block', marginBottom: '16px' }}>THE VENTURE STUDIO MODEL</span>
+                            <h3 className="editorial-h3" style={{ marginBottom: '16px', color: '#FFFFFF' }}>
+                                Proven Product Builders — We Engineer &amp; Operate The Clown Ecosystem
+                            </h3>
+                            <p style={{ color: 'var(--footer-text)', fontSize: '16px', lineHeight: 1.7, marginBottom: '20px' }}>
+                                We don&apos;t just write code for hire. We operate a proprietary venture lab that develops and scales in-house software products like <strong style={{ color: '#FFFFFF' }}>The ClownFounder</strong> (Autonomous Company OS), <strong style={{ color: '#FFFFFF' }}>ClownEaser</strong> (AI CSS Studio), <strong style={{ color: '#FFFFFF' }}>The ClownMart</strong> (Headless Commerce), and <strong style={{ color: '#FFFFFF' }}>ClownKosh</strong> (Document PWA). Everything we learn from our own products directly supercharges our client builds.
+                            </p>
+                            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                                <a href="https://theclownfounder.vercel.app/" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '13px' }}>The ClownFounder ↗</a>
+                                <a href="https://clowneaser.vercel.app/" target="_blank" rel="noopener noreferrer" className="btn btn-secondary" style={{ padding: '8px 16px', fontSize: '13px', background: 'rgba(255,255,255,0.05)', color: '#FFFFFF', borderColor: 'rgba(255,255,255,0.2)' }}>ClownEaser ↗</a>
+                                <a href="https://theclownmart.vercel.app/" target="_blank" rel="noopener noreferrer" className="btn btn-secondary" style={{ padding: '8px 16px', fontSize: '13px', background: 'rgba(255,255,255,0.05)', color: '#FFFFFF', borderColor: 'rgba(255,255,255,0.2)' }}>The ClownMart ↗</a>
+                                <a href="https://clownkosh.vercel.app/" target="_blank" rel="noopener noreferrer" className="btn btn-secondary" style={{ padding: '8px 16px', fontSize: '13px', background: 'rgba(255,255,255,0.05)', color: '#FFFFFF', borderColor: 'rgba(255,255,255,0.2)' }}>ClownKosh ↗</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

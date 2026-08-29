@@ -7,88 +7,93 @@ interface CaseStudy {
     id: string;
     client: string;
     title: string;
-    category: string; // E-Commerce, FinTech, SaaS, AI, Mobile
-    metric: string; // e.g. "+310% Conversion Boost"
+    category: string; // AI, E-Commerce, DevTools, PWA
+    metric: string; // e.g. "92% Focus", "< 320ms", "100% In-Memory"
     metricLabel: string;
     summary: string;
     challenge: string;
     solution: string;
     results: string[];
     techStack: string[];
+    liveUrl: string;
 }
 
 const CASE_STUDIES: CaseStudy[] = [
     {
         id: 'cs-1',
-        client: 'FinFlow Architecture Blueprint',
-        title: 'High-Frequency FinTech Trading Terminal & Mobile App Platform',
-        category: 'FinTech',
-        metric: '< 380ms',
-        metricLabel: 'Engineered Target Sub-Second Response Rate',
-        summary: 'Architecture specification for high-throughput market trading terminals and real-time cross-platform mobile apps.',
-        challenge: 'Financial terminals often suffer from WebSocket connection dropouts, high rendering latency, and memory leaks during volatile market spikes.',
-        solution: 'Engineered server-side rendered micro-frontends with real-time WebSockets, automated Redis cache layers, and an ultra-fast dark-mode UI.',
+        client: 'In-House Venture / AI Studio',
+        title: 'The ClownFounder — Autonomous Company OS & Multi-Agent AI Suite',
+        category: 'AI',
+        metric: '92% Focus',
+        metricLabel: 'Solo Founder Operational Overhead Reduced',
+        summary: 'Autonomous AI Executive Team with founder-in-the-loop approvals. Parallel sales, engineering, QA, finance, and support units that handle operations and morning executive briefs.',
+        challenge: 'Solo founders lose up to 82% of high-leverage product hours managing operational triage, change orders, billing reconciliations, and routine dev coordination.',
+        solution: 'Engineered an autonomous multi-agent execution pipeline that triages webhooks and client communications, drafts 3-sentence proposals with evidence diffs, and executes upon 1-tap founder approval.',
         results: [
-            'Target page load latency benchmarked under 380ms',
-            'Engineered for 99.9% uptime with automated Redis clustering',
-            'Architecture optimized for 10,000+ concurrent WebSocket streams',
-            'Modular Next.js 15 & Flutter cross-platform codebase'
+            'Autonomous triage across Sales, Engineering, QA, and Finance units',
+            'Overnight Morning Brief system for zero-friction morning reviews',
+            'Full Linear ticket, Stripe billing, and Resend email dispatch automation',
+            'Isolated, zero-data-training enterprise security architecture'
         ],
-        techStack: ['Next.js 15', 'TypeScript', 'Flutter', 'Node.js', 'PostgreSQL', 'Redis']
+        techStack: ['Next.js 15', 'TypeScript', 'Multi-Agent LLMs', 'Stripe API', 'Linear API', 'Tailwind'],
+        liveUrl: 'https://theclownfounder.vercel.app/'
     },
     {
         id: 'cs-2',
-        client: 'Aura Luxury Retail Blueprint',
-        title: 'High-Converting Editorial E-Commerce Storefront Architecture',
+        client: 'In-House Venture / Commerce Lab',
+        title: 'The ClownMart — High-Velocity Headless E-Commerce Marketplace',
         category: 'E-Commerce',
-        metric: '98/100',
-        metricLabel: 'Mobile Core Web Vitals Benchmark',
-        summary: 'Bespoke headless e-commerce architecture designed for premium fashion, apparel, and luxury retail brands.',
-        challenge: 'Standard monolithic store templates often suffer from bloated scripts, slow checkout flows, and poor mobile engagement.',
-        solution: 'Architected a headless Next.js e-commerce engine integrated with Shopify Storefront API, 3D interactive WebGL models, and 1-click checkout.',
+        metric: '< 280ms',
+        metricLabel: 'Edge-Cached Sub-Second Page Render Latency',
+        summary: 'Information-dense, ultra-fast modern marketplace specializing in premium retail footwear with instant search, multi-faceted filtering, and responsive cart flows.',
+        challenge: 'Standard e-commerce platforms suffer from bloated client scripts, heavy re-renders, and slow navigation transitions that cause checkout drop-offs.',
+        solution: 'Architected a headless Next.js 15 commerce storefront utilizing Edge serverless caching, optimistic cart state updates, dynamic theme switching, and accessible keyboard navigation.',
         results: [
-            'Engineered for 98/100 Google Lighthouse mobile speed score',
-            'Streamlined single-page checkout flow to maximize conversion',
-            'Interactive WebGL product rendering with fluid 60fps animations',
-            'Vercel Edge serverless caching for instant international delivery'
+            'Sub-280ms global TTFB with Vercel Edge caching',
+            'Instant multi-filter faceted catalog search with zero input lag',
+            'Optimistic client-side cart synchronization and drawer checkout',
+            'Seamless dark/light theme switching with zero layout shift'
         ],
-        techStack: ['Next.js', 'Shopify API', 'Three.js', 'Tailwind', 'Vercel Edge']
+        techStack: ['Next.js 15', 'TypeScript', 'Tailwind', 'SSR', 'Edge Caching', 'Lucide Icons'],
+        liveUrl: 'https://theclownmart.vercel.app/'
     },
     {
         id: 'cs-3',
-        client: 'OmniAI Workflow Engine',
-        title: 'Autonomous LLM Workflow & Document Automation Engine',
-        category: 'AI',
-        metric: '40+ hrs',
-        metricLabel: 'Target Weekly Operations Time Saved',
-        summary: 'Enterprise RAG agent architecture engineered to automate complex customer support, document parsing, and CRM updates.',
-        challenge: 'Operations and support teams waste hundreds of hours manually processing unstructured PDFs, contracts, and routine client queries.',
-        solution: 'Deployed custom vector database pipelines using LangChain, OpenAI GPT-4o, and an intuitive human-in-the-loop audit dashboard.',
+        client: 'In-House Venture / DevTools',
+        title: 'ClownEaser — Headless Design Token Extractor & AI CSS Studio',
+        category: 'DevTools',
+        metric: '100% In-Memory',
+        metricLabel: 'Zero-Persistence Ephemeral Extraction Engine',
+        summary: 'Headless computed CSS token parser and Elementor AI CSS Studio. Extracts typography scales, container spacing, and palette tokens directly into Elementor Global Kit 3.x schema.',
+        challenge: 'Design-to-CMS handoffs take hours of manual copy-pasting of CSS properties, hex values, and font metrics from static designs into website builders.',
+        solution: 'Constructed an AST-based token extraction pipeline that headlessly computes live styles from HTML/ZIP packages and maps them directly to Elementor 3.x Global Kit JSON, backed by a natural-language AI CSS Studio.',
         results: [
-            'Engineered for 90%+ automated query resolution accuracy',
-            'Vector ingestion pipelines designed for high-throughput batching',
-            'SOC2-ready privacy architecture with end-to-end data isolation',
-            'Seamless webhook connectors for Slack, WhatsApp, and CRMs'
+            'Instant conversion of HTML/ZIP files into Elementor Global Kit 3.x JSON',
+            'Integrated AI CSS Studio for generating scoped CSS animations via prompt',
+            '100% ephemeral in-memory extraction with zero server persistence',
+            'Automatic semantic color scoring and typography scale mapping'
         ],
-        techStack: ['Python', 'OpenAI API', 'LangChain', 'Pinecone', 'React', 'FastAPI']
+        techStack: ['Next.js', 'Headless AST Parser', 'Elementor Global Kit 3.x', 'AI Prompt Engine', 'Tailwind'],
+        liveUrl: 'https://clowneaser.vercel.app/'
     },
     {
         id: 'cs-4',
-        client: 'HealthSync Telehealth Blueprint',
-        title: 'HIPAA-Compliant Patient Portal & Encrypted Mobile App',
-        category: 'Mobile',
-        metric: '99.9%',
-        metricLabel: 'Infrastructure High-Availability Target',
-        summary: 'Encrypted telehealth mobile application and web portal architecture connecting patients with specialist doctors worldwide.',
-        challenge: 'Telehealth systems require strict end-to-end encryption, ultra-low video latency, and full HIPAA and GDPR regulatory compliance.',
-        solution: 'Engineered native iOS/Android mobile applications with WebRTC peer-to-peer video calling, encrypted chat, and automated appointment workflows.',
+        client: 'In-House Venture / Document Systems',
+        title: 'ClownKosh — Distraction-Free Personal PDF Library & Document Reader',
+        category: 'PWA',
+        metric: '100% Offline',
+        metricLabel: 'IndexedDB Local Document Cache & PWA Capability',
+        summary: 'Personal distraction-free digital library and PDF reader Progressive Web App with client-side indexing, document shelf management, and responsive reading view.',
+        challenge: 'Traditional PDF readers are bloated with heavy desktop dependencies, intrusive cloud sign-ins, and poor mobile touch navigation.',
+        solution: 'Built an offline-first PWA powered by PDF.js and IndexedDB that indexes documents locally in the browser cache, featuring dark reader themes, responsive zoom, and shelf organization.',
         results: [
-            'Architecture designed to scale smoothly across hundreds of thousands of users',
-            '100% HIPAA and GDPR data privacy architecture guidelines',
-            'Sub-120ms WebRTC global video call latency target',
-            'Biometric authentication and role-based access controls'
+            'Complete offline PWA installation on iOS, Android, and Desktop',
+            'Zero server uploads — 100% private client-side IndexedDB document storage',
+            'Fluid PDF rendering with custom zoom levels and bookmarking',
+            'Distraction-free dark mode reader UI with zero intrusive telemetry'
         ],
-        techStack: ['Swift', 'Kotlin', 'WebRTC', 'AWS MedTech', 'Node.js']
+        techStack: ['React', 'PDF.js', 'Progressive Web App (PWA)', 'IndexedDB', 'Service Workers'],
+        liveUrl: 'https://clownkosh.vercel.app/'
     }
 ];
 
@@ -114,7 +119,7 @@ export default function CaseStudiesPage() {
         };
     }, [activeModalStudy]);
 
-    const categories = ['All', 'FinTech', 'E-Commerce', 'AI', 'Mobile'];
+    const categories = ['All', 'AI', 'E-Commerce', 'DevTools', 'PWA'];
 
     const filteredStudies = selectedCategory === 'All'
         ? CASE_STUDIES
@@ -126,22 +131,33 @@ export default function CaseStudiesPage() {
             <section className="page-hero" style={{ backgroundColor: 'var(--background-secondary)', borderBottom: '1px solid var(--border-color)' }}>
                 <div className="container">
                     <div style={{ maxWidth: '820px', margin: '0 auto', textAlign: 'center' }}>
-                        <span className="subtitle" style={{ letterSpacing: '0.1em' }}>FEATURED ARCHITECTURES &amp; PROOF OF WORK</span>
+                        <span className="subtitle" style={{ letterSpacing: '0.1em' }}>IN-HOUSE VENTURES &amp; PROOF OF CAPABILITY</span>
                         <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(36px, 5vw, 64px)', fontWeight: 600, color: 'var(--text-heading)', lineHeight: 1.15, marginBottom: '24px' }}>
                             Solution Blueprints &amp; <br />
-                            <span style={{ fontStyle: 'italic', color: 'var(--primary-hover)' }}>Measurable Impact</span>
+                            <span style={{ fontStyle: 'italic', color: 'var(--primary-hover)' }}>Live Proprietary Products</span>
                         </h1>
                         <p style={{ fontSize: '20px', color: 'var(--text-body)', lineHeight: 1.6, marginBottom: '36px' }}>
-                            Explore production-ready engineering blueprints, high-converting design systems, and scalable fullstack applications built to modern standards.
+                            Explore production-grade software platforms, AI systems, and high-velocity storefronts engineered and operated by the ClownBros studio.
                         </p>
-                        
-                        {/* Category Filter Pills */}
-                        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+
+                        {/* Category Filter Tabs */}
+                        <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
                             {categories.map((cat) => (
                                 <button
                                     key={cat}
-                                    className={`filter-pill ${selectedCategory === cat ? 'active' : ''}`}
                                     onClick={() => setSelectedCategory(cat)}
+                                    className={`tab-btn ${selectedCategory === cat ? 'active' : ''}`}
+                                    style={{
+                                        padding: '10px 20px',
+                                        borderRadius: '30px',
+                                        fontSize: '14px',
+                                        fontWeight: 600,
+                                        border: '1px solid var(--border-color)',
+                                        background: selectedCategory === cat ? 'var(--text-heading)' : '#FFFFFF',
+                                        color: selectedCategory === cat ? '#FFFFFF' : 'var(--text-heading)',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s ease'
+                                    }}
                                 >
                                     {cat}
                                 </button>
@@ -151,18 +167,14 @@ export default function CaseStudiesPage() {
                 </div>
             </section>
 
-            {/* Showcase Grid */}
-            <section style={{ padding: '90px 0', backgroundColor: 'var(--background)' }}>
+            {/* Case Studies Grid */}
+            <section className="scroll-reveal" style={{ padding: '96px 0' }}>
                 <div className="container">
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '32px' }}>
+                    <div className="gigs-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '32px' }}>
                         {filteredStudies.map((study) => (
-                            <div 
-                                key={study.id} 
-                                className="editorial-card scroll-reveal"
-                                style={{ background: '#FFFFFF', padding: '36px', borderRadius: '20px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
-                            >
+                            <div key={study.id} className="editorial-card" style={{ background: '#FFFFFF', padding: '36px', borderRadius: '16px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                 <div>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                                         <span className="gig-tag">{study.category}</span>
                                         <span style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight: 600 }}>{study.client}</span>
                                     </div>
@@ -194,14 +206,26 @@ export default function CaseStudiesPage() {
                                     </div>
                                 </div>
 
-                                <button 
-                                    onClick={() => setActiveModalStudy(study)}
-                                    className="btn btn-secondary" 
-                                    style={{ width: '100%', padding: '12px', borderRadius: '8px', fontSize: '14px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-                                >
-                                    <span>Read Full Case Breakdown</span>
-                                    <span>→</span>
-                                </button>
+                                <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
+                                    <a
+                                        href={study.liveUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="btn btn-primary"
+                                        style={{ width: '100%', padding: '12px', borderRadius: '8px', fontSize: '14px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                                    >
+                                        <span>Explore Live Platform</span>
+                                        <span>↗</span>
+                                    </a>
+                                    <button 
+                                        onClick={() => setActiveModalStudy(study)}
+                                        className="btn btn-secondary" 
+                                        style={{ width: '100%', padding: '10px', borderRadius: '8px', fontSize: '13.5px', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                                    >
+                                        <span>Read Architecture Breakdown</span>
+                                        <span>→</span>
+                                    </button>
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -240,7 +264,7 @@ export default function CaseStudiesPage() {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '28px' }}>
                             <div>
                                 <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-heading)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>
-                                    The Challenge
+                                    The Problem &amp; Challenge
                                 </h3>
                                 <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.6 }}>
                                     {activeModalStudy.challenge}
@@ -249,7 +273,7 @@ export default function CaseStudiesPage() {
 
                             <div>
                                 <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-heading)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '8px' }}>
-                                    Our Engineering Solution
+                                    Our Engineering Architecture
                                 </h3>
                                 <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.6 }}>
                                     {activeModalStudy.solution}
@@ -258,7 +282,7 @@ export default function CaseStudiesPage() {
 
                             <div>
                                 <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-heading)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>
-                                    Quantifiable Results
+                                    Quantifiable Outcomes
                                 </h3>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                     {activeModalStudy.results.map((r) => (
@@ -271,13 +295,13 @@ export default function CaseStudiesPage() {
                             </div>
                         </div>
 
-                        <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+                        <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
                             <button onClick={() => setActiveModalStudy(null)} className="btn btn-secondary" style={{ padding: '10px 20px', borderRadius: '8px' }}>
                                 Close
                             </button>
-                            <Link href="/contact" className="btn btn-primary" style={{ padding: '10px 24px', borderRadius: '8px' }}>
-                                Start Similar Project
-                            </Link>
+                            <a href={activeModalStudy.liveUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ padding: '10px 24px', borderRadius: '8px' }}>
+                                Launch Live App ↗
+                            </a>
                         </div>
                     </div>
                 </div>

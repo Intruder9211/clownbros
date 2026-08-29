@@ -96,10 +96,10 @@ const CONCIERGE_RESPONSES: { keywords: string[]; answer: string; suggestions?: s
     suggestions: ["Pricing Info", "Start a Project"]
   },
   {
-    keywords: ['portfolio', 'project', 'work', 'case studies', 'case study', 'examples', 'clients', 'blueprints', 'proof'],
-    answer: "We engineer production-ready solution blueprints across modern domains — including high-frequency FinTech dashboards (FinFlow), headless luxury e-commerce engines (Aura), autonomous LLM agent platforms (OmniAI), and encrypted HIPAA telehealth systems (HealthSync). You can explore our full case breakdowns on our Case Studies page.",
-    suggestions: ["View Case Studies", "Our Tech Stack", "Start a Project"],
-    cta: { text: "Explore Case Studies", link: "/case-studies" }
+    keywords: ['portfolio', 'project', 'work', 'case studies', 'case study', 'examples', 'clients', 'blueprints', 'proof', 'ecosystem', 'clownfounder', 'clowneaser', 'clownmart', 'clownkosh'],
+    answer: "We engineer and operate 4 active proprietary platforms in The Clown Ecosystem: The ClownFounder (Autonomous AI Company OS), ClownEaser (Computed Design Token Extractor & AI CSS Studio), The ClownMart (High-Velocity Headless E-Commerce), and ClownKosh (Distraction-Free PDF Library PWA). You can explore live demos and architectural breakdowns directly on our site.",
+    suggestions: ["The Clown Ecosystem", "Our Tech Stack", "Start a Project"],
+    cta: { text: "Explore Live Products", link: "/case-studies" }
   },
   {
     keywords: ['contact', 'touch', 'start', 'meeting', 'call', 'hire', 'project', 'onboard', 'phone', 'number', 'email', 'singhmohit'],

@@ -250,6 +250,148 @@ export default function Home() {
                     </div>
                 </div>
             </section>
+
+            {/* Proprietary In-House Ventures & Ecosystem Section */}
+            <section className="secondary-bg scroll-reveal" style={{ borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
+                <div className="container">
+                    <div className="section-header flex-header" style={{ maxWidth: 'none', marginBottom: '48px' }}>
+                        <div>
+                            <span className="section-tagline">PROPRIETARY LAB &amp; VENTURES</span>
+                            <h2 className="section-title" style={{ margin: '8px 0 0 0' }}>The Clown Ecosystem</h2>
+                            <p style={{ color: 'var(--text-body)', fontSize: '17px', marginTop: '12px', maxWidth: '640px' }}>
+                                We don&apos;t just engineer for clients — we build, launch, and operate proprietary digital products under the Clown umbrella.
+                            </p>
+                        </div>
+                        <div style={{ alignSelf: 'flex-end' }}>
+                            <span className="pill-badge" style={{ borderColor: 'var(--primary)', color: 'var(--text-heading)' }}>
+                                4 Active In-House Platforms
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className="services-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+                        {/* 1. The ClownFounder */}
+                        <div className="editorial-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', overflow: 'hidden' }}>
+                            <div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                                    <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#818cf8', background: 'rgba(99, 102, 241, 0.1)', padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(99, 102, 241, 0.25)' }}>
+                                        Autonomous AI OS
+                                    </span>
+                                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></span>
+                                </div>
+                                <h3 className="editorial-h3" style={{ margin: '0 0 10px 0', fontSize: '22px' }}>The ClownFounder</h3>
+                                <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.55, marginBottom: '16px' }}>
+                                    Autonomous AI Executive Team with founder-in-the-loop approvals. Parallel sales, engineering, QA, finance, and support units that handle operations and morning executive briefs.
+                                </p>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '20px' }}>
+                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>Multi-Agent AI</span>
+                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>Next.js</span>
+                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>Command Center</span>
+                                </div>
+                            </div>
+                            <a 
+                                href="https://theclownfounder.vercel.app/" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="btn btn-secondary" 
+                                style={{ width: '100%', textAlign: 'center', justifyContent: 'center', fontSize: '13.5px', padding: '10px 16px' }}
+                            >
+                                Explore Live Platform ↗
+                            </a>
+                        </div>
+
+                        {/* 2. ClownEaser */}
+                        <div className="editorial-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', overflow: 'hidden' }}>
+                            <div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                                    <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6366f1', background: 'rgba(99, 102, 241, 0.1)', padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(99, 102, 241, 0.25)' }}>
+                                        Dev Tooling &amp; AI
+                                    </span>
+                                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></span>
+                                </div>
+                                <h3 className="editorial-h3" style={{ margin: '0 0 10px 0', fontSize: '22px' }}>ClownEaser</h3>
+                                <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.55, marginBottom: '16px' }}>
+                                    Headless computed CSS token parser and Elementor AI CSS Studio. Extracts typography, container spacing, and colors directly into Elementor Global Kit 3.x schema.
+                                </p>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '20px' }}>
+                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>AST Extraction</span>
+                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>Elementor 3.x</span>
+                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>AI CSS Studio</span>
+                                </div>
+                            </div>
+                            <a 
+                                href="https://clowneaser.vercel.app/" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="btn btn-secondary" 
+                                style={{ width: '100%', textAlign: 'center', justifyContent: 'center', fontSize: '13.5px', padding: '10px 16px' }}
+                            >
+                                Launch Token Studio ↗
+                            </a>
+                        </div>
+
+                        {/* 3. The ClownMart */}
+                        <div className="editorial-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', overflow: 'hidden' }}>
+                            <div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                                    <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#ea580c', background: 'rgba(234, 88, 12, 0.1)', padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(234, 88, 12, 0.25)' }}>
+                                        Headless Commerce
+                                    </span>
+                                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></span>
+                                </div>
+                                <h3 className="editorial-h3" style={{ margin: '0 0 10px 0', fontSize: '22px' }}>The ClownMart</h3>
+                                <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.55, marginBottom: '16px' }}>
+                                    Information-dense, high-velocity modern marketplace specializing in premium retail footwear. Engineered with sub-second catalog search, instant filtering, and responsive cart flows.
+                                </p>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '20px' }}>
+                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>Next.js 15</span>
+                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>Edge Caching</span>
+                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>Cart Architecture</span>
+                                </div>
+                            </div>
+                            <a 
+                                href="https://theclownmart.vercel.app/" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="btn btn-secondary" 
+                                style={{ width: '100%', textAlign: 'center', justifyContent: 'center', fontSize: '13.5px', padding: '10px 16px' }}
+                            >
+                                View Live Marketplace ↗
+                            </a>
+                        </div>
+
+                        {/* 4. ClownKosh */}
+                        <div className="editorial-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', overflow: 'hidden' }}>
+                            <div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                                    <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#0d9488', background: 'rgba(13, 148, 136, 0.1)', padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(13, 148, 136, 0.25)' }}>
+                                        PWA &amp; Doc Systems
+                                    </span>
+                                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></span>
+                                </div>
+                                <h3 className="editorial-h3" style={{ margin: '0 0 10px 0', fontSize: '22px' }}>ClownKosh</h3>
+                                <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.55, marginBottom: '16px' }}>
+                                    Distraction-free personal digital library and PDF reader Progressive Web App. Features client-side indexing, offline storage, document shelf management, and responsive reading views.
+                                </p>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '20px' }}>
+                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>Offline PWA</span>
+                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>PDF.js Engine</span>
+                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>IndexedDB</span>
+                                </div>
+                            </div>
+                            <a 
+                                href="https://clownkosh.vercel.app/" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="btn btn-secondary" 
+                                style={{ width: '100%', textAlign: 'center', justifyContent: 'center', fontSize: '13.5px', padding: '10px 16px' }}
+                            >
+                                Open Digital Library ↗
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
  
             {/* Featured Services Preview Section */}
             <section className="scroll-reveal">
