@@ -7,27 +7,27 @@ export default function Home() {
     return (
         <main>
             {/* Hero Section */}
-            <section className="hero-section" id="hero" style={{ paddingTop: '160px', paddingBottom: '96px' }}>
+            <section className="hero-section" id="hero">
                 <div className="container">
                     <div className="hero-grid" style={{ marginBottom: '80px' }}>
                         {/* Left Column: Text Content */}
                         <div className="reveal-left visible">
-                            <div className="hero-tagline animate-fade-in" style={{ marginBottom: '24px' }}>
-                                <span className="pill-badge">EST. 2026 — BRAND PROMISE</span>
+                            <div className="hero-tagline animate-fade-in" style={{ marginBottom: '16px' }}>
+                                <span className="pill-badge">EST. 2026 — MODERN ENGINEERING STUDIO</span>
                             </div>
                             
-                            <h1 className="hero-title editorial-hero-title animate-fade-in delay-1" style={{ marginBottom: '32px' }}>
-                                From Idea to Impact. <br />
-                                <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>We shape the digital future.</span>
+                            <h1 className="hero-title editorial-hero-title animate-fade-in delay-1" style={{ marginBottom: '20px' }}>
+                                From Concept to Impact. <br />
+                                <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>We engineer high-performance digital products.</span>
                             </h1>
                             
-                            <p className="hero-lead editorial-hero-lead animate-fade-in delay-2" style={{ marginBottom: '40px' }}>
-                                ClownBros is a modern technology and digital transformation partner. We craft premium digital ecosystems, custom software architectures, and automated marketing funnels that accelerate global business growth.
+                            <p className="hero-lead editorial-hero-lead animate-fade-in delay-2" style={{ marginBottom: '28px' }}>
+                                ClownBros is a modern technology &amp; design studio. We craft lightning-fast web applications, mobile platforms, and scalable digital architectures for ambitious startups and expanding brands.
                             </p>
                             
-                            <div className="hero-actions animate-fade-in delay-3" style={{ display: 'flex', gap: '16px' }}>
-                                <Link href="/services" className="btn btn-primary">Our Services</Link>
-                                <Link href="/contact" className="btn btn-secondary">Start Project</Link>
+                            <div className="hero-actions animate-fade-in delay-3" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                                <Link href="/services" className="btn btn-primary">Explore Capabilities</Link>
+                                <Link href="/contact" className="btn btn-secondary">Schedule Discovery Call</Link>
                             </div>
                         </div>
  
@@ -128,10 +128,10 @@ export default function Home() {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                             <span className="section-tagline" style={{ color: 'var(--primary)', marginBottom: '0px' }}>Agency Philosophy</span>
                             <h2 className="editorial-h2" style={{ color: '#FFFFFF', margin: 0 }}>
-                                &ldquo;Every business deserves a premium digital presence regardless of its size.&rdquo;
+                                &ldquo;Every ambitious idea deserves an enterprise-grade digital foundation — without the agency bloat.&rdquo;
                             </h2>
                             <p style={{ color: 'var(--footer-text)', fontSize: '16px', fontStyle: 'italic', marginTop: '8px', margin: 0 }}>
-                                — ClownBros Founding Core
+                                — ClownBros Core Engineering Philosophy
                             </p>
                         </div>
                         <div className="float-element svg-wrap-philosophy">
@@ -221,21 +221,29 @@ export default function Home() {
                         <div>
                             <span className="section-tagline">Company Overview</span>
                             <h2 className="editorial-h2" style={{ color: 'var(--text-heading)' }}>
-                                Long-term partner, not just a provider.
+                                Builders first. Long-term partners always.
                             </h2>
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
                             <p style={{ fontSize: '18px', color: 'var(--text-body)', lineHeight: 1.7 }}>
-                                We don&apos;t just build websites or application interfaces—we construct cohesive digital solutions. Our work connects creative design, custom code structures, search engine visibility, and lead generation under a unified strategy.
+                                We replace agency layers and junior account managers with direct technical execution. We engineer full digital systems — connecting bespoke Figma UI/UX, clean TypeScript codebases, automated cloud CI/CD pipelines, and conversion-focused architectures under one transparent partnership.
                             </p>
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '32px 48px', marginTop: '16px' }}>
-                                <div>
-                                    <h3 className="editorial-h2" style={{ color: 'var(--primary-hover)', marginBottom: '8px' }}>99%</h3>
-                                    <p style={{ fontSize: '15px', color: 'var(--text-muted)' }}>Client retention rate through active support partnerships</p>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '24px', marginTop: '8px' }}>
+                                <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+                                    <h3 className="editorial-h2" style={{ color: 'var(--primary-hover)', marginBottom: '6px', fontSize: '32px' }}>&lt; 400ms</h3>
+                                    <p style={{ fontSize: '14px', color: 'var(--text-muted)', margin: 0 }}>Target Core Web Vitals &amp; Sub-second speed</p>
                                 </div>
-                                <div>
-                                    <h3 className="editorial-h2" style={{ color: 'var(--primary-hover)', marginBottom: '8px' }}>200+</h3>
-                                    <p style={{ fontSize: '15px', color: 'var(--text-muted)' }}>Custom web & application builds deployed worldwide</p>
+                                <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+                                    <h3 className="editorial-h2" style={{ color: 'var(--primary-hover)', marginBottom: '6px', fontSize: '32px' }}>100%</h3>
+                                    <p style={{ fontSize: '14px', color: 'var(--text-muted)', margin: 0 }}>Source code, assets &amp; IP ownership transfer</p>
+                                </div>
+                                <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+                                    <h3 className="editorial-h2" style={{ color: 'var(--primary-hover)', marginBottom: '6px', fontSize: '32px' }}>1-Week</h3>
+                                    <p style={{ fontSize: '14px', color: 'var(--text-muted)', margin: 0 }}>Iterative agile sprints with live staging access</p>
+                                </div>
+                                <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+                                    <h3 className="editorial-h2" style={{ color: 'var(--primary-hover)', marginBottom: '6px', fontSize: '32px' }}>30-Day</h3>
+                                    <p style={{ fontSize: '14px', color: 'var(--text-muted)', margin: 0 }}>Post-launch bug warranty &amp; dedicated support</p>
                                 </div>
                             </div>
                         </div>
@@ -257,34 +265,34 @@ export default function Home() {
                     <div className="services-grid">
                         <div className="editorial-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '340px' }}>
                             <div>
-                                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>01 / Custom Web</span>
-                                <h3 className="editorial-h3" style={{ margin: '16px 0 12px 0' }}>Website Development</h3>
-                                <p style={{ fontSize: '16px', color: 'var(--text-body)' }}>Custom corporate web solutions, React/Next.js dynamic builds, WordPress headless, and eCommerce frameworks built to scale.</p>
+                                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>01 / Web &amp; Web Apps</span>
+                                <h3 className="editorial-h3" style={{ margin: '16px 0 12px 0' }}>High-Performance Web Platforms</h3>
+                                <p style={{ fontSize: '16px', color: 'var(--text-body)' }}>Custom Next.js &amp; React fullstack portals, headless eCommerce storefronts, interactive web applications, and optimized corporate sites.</p>
                             </div>
                             <Link href="/services" style={{ color: 'var(--text-heading)', fontWeight: 600, fontSize: '15px', textDecoration: 'none', marginTop: '24px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                                Explore <span style={{ color: 'var(--primary)' }}>&rarr;</span>
+                                Explore Capabilities <span style={{ color: 'var(--primary)' }}>&rarr;</span>
                             </Link>
                         </div>
  
                         <div className="editorial-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '340px' }}>
                             <div>
-                                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>02 / Software</span>
-                                <h3 className="editorial-h3" style={{ margin: '16px 0 12px 0' }}>Mobile App Development</h3>
-                                <p style={{ fontSize: '16px', color: 'var(--text-body)' }}>Native Android/iOS application structures, cross-platform deployments (Flutter/React Native), and robust custom SaaS portals.</p>
+                                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>02 / Mobile Engineering</span>
+                                <h3 className="editorial-h3" style={{ margin: '16px 0 12px 0' }}>Cross-Platform Mobile Apps</h3>
+                                <p style={{ fontSize: '16px', color: 'var(--text-body)' }}>Native iOS &amp; Android software engineered with Flutter and React Native, offering offline sync, real-time WebSockets, and seamless UX.</p>
                             </div>
                             <Link href="/services" style={{ color: 'var(--text-heading)', fontWeight: 600, fontSize: '15px', textDecoration: 'none', marginTop: '24px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                                Explore <span style={{ color: 'var(--primary)' }}>&rarr;</span>
+                                Explore Capabilities <span style={{ color: 'var(--primary)' }}>&rarr;</span>
                             </Link>
                         </div>
  
                         <div className="editorial-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '340px' }}>
                             <div>
-                                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>03 / Interaction</span>
-                                <h3 className="editorial-h3" style={{ margin: '16px 0 12px 0' }}>UI/UX Design Systems</h3>
-                                <p style={{ fontSize: '16px', color: 'var(--text-body)' }}>Complete Figma product layouts, visual wireframing, UX research, style design guidelines, and user navigation testing.</p>
+                                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>03 / Product Design</span>
+                                <h3 className="editorial-h3" style={{ margin: '16px 0 12px 0' }}>UI/UX &amp; Design Systems</h3>
+                                <p style={{ fontSize: '16px', color: 'var(--text-body)' }}>High-fidelity Figma prototypes, comprehensive design tokens, conversion-focused wireframing, and rigorous user journey testing.</p>
                             </div>
                             <Link href="/services" style={{ color: 'var(--text-heading)', fontWeight: 600, fontSize: '15px', textDecoration: 'none', marginTop: '24px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                                Explore <span style={{ color: 'var(--primary)' }}>&rarr;</span>
+                                Explore Capabilities <span style={{ color: 'var(--primary)' }}>&rarr;</span>
                             </Link>
                         </div>
                     </div>
@@ -296,12 +304,12 @@ export default function Home() {
                 <div className="container" style={{ textAlign: 'center' }}>
                     <span className="section-tagline" style={{ color: 'var(--primary)' }}>Partner With Us</span>
                     <h2 className="editorial-hero-title" style={{ margin: '16px 0 24px 0', color: '#FFFFFF' }}>
-                        Ready to start your digital transformation?
+                        Ready to engineer your next digital breakthrough?
                     </h2>
-                    <p className="editorial-large-text" style={{ maxWidth: '640px', margin: '0 auto 40px auto', color: 'var(--footer-text)' }}>
-                        Tell us about your brand goals, scope of work, or software requirements. Our technology architects will prepare a custom proposal.
+                    <p className="editorial-large-text" style={{ maxWidth: '680px', margin: '0 auto 40px auto', color: 'var(--footer-text)' }}>
+                        Schedule a complimentary 30-minute discovery &amp; architecture session. We&apos;ll deliver a tailored feature breakdown, tech stack recommendation, and fixed-milestone roadmap within 24 hours.
                     </p>
-                    <Link href="/contact" className="btn btn-primary">Start a Project Brief</Link>
+                    <Link href="/contact" className="btn btn-primary">Schedule Discovery Call</Link>
                 </div>
             </section>
         </main>

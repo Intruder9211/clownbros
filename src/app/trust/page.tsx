@@ -7,7 +7,7 @@ export default function TrustPage() {
     return (
         <main className="trust-page">
             {/* Hero Section */}
-            <section style={{ padding: '120px 0 80px', backgroundColor: 'var(--background-secondary)', borderBottom: '1px solid var(--border-color)' }}>
+            <section className="page-hero" style={{ backgroundColor: 'var(--background-secondary)', borderBottom: '1px solid var(--border-color)' }}>
                 <div className="container">
                     <div style={{ maxWidth: '820px', margin: '0 auto', textAlign: 'center' }}>
                         <div className="career-badge" style={{ marginBottom: '20px' }}>

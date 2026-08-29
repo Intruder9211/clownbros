@@ -12,8 +12,8 @@ export default function MobileAppsPage() {
     ];
 
     return (
-        <main style={{ paddingTop: '120px' }}>
-            <section style={{ padding: '80px 0', backgroundColor: 'var(--background-secondary)', borderBottom: '1px solid var(--border-color)' }}>
+        <main>
+            <section className="page-hero" style={{ backgroundColor: 'var(--background-secondary)', borderBottom: '1px solid var(--border-color)' }}>
                 <div className="container">
                     <div style={{ maxWidth: '780px', margin: '0 auto', textAlign: 'center' }}>
                         <span className="subtitle">DEDICATED SERVICE</span>

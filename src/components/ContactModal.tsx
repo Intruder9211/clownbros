@@ -91,12 +91,12 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                 </button>
 
                 <div style={{ marginBottom: '20px' }}>
-                    <span className="career-badge" style={{ marginBottom: '8px' }}>🚀 Direct Project Consultation</span>
+                    <span className="career-badge" style={{ marginBottom: '8px' }}>🚀 Complimentary Technical Discovery</span>
                     <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '26px', color: 'var(--text-heading)', fontWeight: 600 }}>
-                        Start Your Project With ClownBros
+                        Schedule a Free Architecture Session
                     </h2>
                     <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                        Tell us about your product or growth goals. Our senior technical leads respond within 24 hours.
+                        Tell us about your product or feature requirements. Our senior technical leads provide an architectural spec and fixed-budget roadmap within 24 hours.
                     </p>
                 </div>
 

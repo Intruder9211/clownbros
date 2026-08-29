@@ -30,66 +30,66 @@ export default function Services() {
     const servicesList = [
         {
             num: '01',
-            title: 'Website Development',
-            desc: 'We build ultra-fast, premium custom corporate websites, interactive landing pages, portfolio sites, and high-conversion e-commerce storefronts tailored to business expansion plans.',
-            subs: ['Custom Business Websites', 'Corporate Websites', 'Landing Pages', 'Portfolio Websites', 'Ecommerce Websites', 'WordPress & Headless CMS', 'React.js & Next.js Builds']
+            title: 'High-Performance Web Platforms',
+            desc: 'We engineer ultra-fast custom web applications, SaaS portals, headless eCommerce storefronts, and corporate websites built on Next.js, React, and TypeScript with sub-second page loads.',
+            subs: ['Custom Web Applications (Next.js/React)', 'Headless & Custom eCommerce', 'High-Converting Corporate Portals', 'Interactive Web Portfolios', 'RESTful & GraphQL API Integrations', 'Core Web Vitals & Speed Optimization']
         },
         {
             num: '02',
-            title: 'Mobile App Development',
-            desc: 'Transform your product ideas into native Android, iOS, or high-performance cross-platform software. We engineer scalable SaaS and mobile commerce experiences.',
-            subs: ['Android Applications', 'iOS Applications', 'Cross Platform Apps', 'Flutter Apps', 'React Native Apps', 'Business Applications', 'SaaS Applications']
+            title: 'Cross-Platform Mobile Apps',
+            desc: 'Transform product concepts into native-feeling iOS and Android applications engineered with Flutter and React Native. Includes offline data synchronization, real-time WebSockets, and app store deployment.',
+            subs: ['iOS & Android App Development', 'Flutter & React Native Architecture', 'Real-Time Chat & Video WebRTC', 'Secure Payment Gateway Integrations', 'Offline-First Local DB Sync', 'App Store & Play Store Publishing']
         },
         {
             num: '03',
-            title: 'UI/UX Design',
-            desc: 'We construct comprehensive, custom-coded web and application interfaces that prioritize clean navigation, responsive grids, user research, and comprehensive design systems.',
-            subs: ['Website UI Design', 'Mobile App UI Design', 'Dashboard Design', 'Wireframing', 'Prototyping', 'Design Systems', 'User Experience Research']
+            title: 'UI/UX & Interactive Design Systems',
+            desc: 'We craft comprehensive Figma interface systems, clickable prototypes, and conversion-focused user journeys with complete design tokens, accessibility compliance, and developer-ready specs.',
+            subs: ['Figma UI/UX Interface Design', 'Interactive Clickable Prototypes', 'Design Systems & Component Kits', 'User Journey & UX Wireframing', 'Conversion Rate Optimization (CRO)', 'WCAG Accessibility Standards']
         },
         {
             num: '04',
-            title: 'Digital Marketing',
-            desc: 'We drive user acquisition via technical SEO, performance marketing (Google & Meta Ads), custom landing-page funnels, and CRM automation tools.',
-            subs: ['SEO & Local SEO', 'Technical SEO', 'Content Marketing', 'Google Ads & Meta Ads', 'Performance Marketing', 'Email Marketing', 'Lead Generation']
+            title: 'Cloud Infrastructure & DevOps',
+            desc: 'Establish scalable, secure cloud foundations. We deploy automated CI/CD pipelines, containerized Docker clusters, database clustering, and zero-downtime serverless environments on AWS and Vercel.',
+            subs: ['AWS & Vercel Cloud Architecture', 'CI/CD Pipeline Automation (GitHub Actions)', 'Docker Containerization & Clusters', 'Database Clustering (PostgreSQL/MongoDB)', 'SSL, CDN & Serverless Edge Caching', '24/7 Uptime & Error Telemetry']
         },
         {
             num: '05',
-            title: 'Branding',
-            desc: 'Formulate a premium visual brand identity that commands premium pricing. We construct guidelines, logos, and presentation systems.',
-            subs: ['Logo Design', 'Brand Identity', 'Visual Guidelines', 'Social Media Branding', 'Business Presentations', 'Corporate Identity']
+            title: 'AI & Workflow Automation',
+            desc: 'Integrate custom LLM pipelines, autonomous AI agents, and automated business workflows that reduce operational bottlenecks and automate repetitive customer interactions.',
+            subs: ['LLM & OpenAI/Claude Integrations', 'Autonomous Workflow Agents', 'Custom Vector Search & RAG Pipelines', 'WhatsApp & CRM Automation', 'Automated Document & Data Ingestion', 'AI Customer Support Agents']
         },
         {
             num: '06',
-            title: 'Social Media Management',
-            desc: 'Scale online reach and nurture organic pipelines through targeted social strategies, content curation, and reels templates.',
-            subs: ['Instagram Growth', 'Facebook Marketing', 'LinkedIn Marketing', 'YouTube Marketing', 'Content Planning', 'Reels Strategy', 'Creative Design']
+            title: 'Technical SEO & Digital Growth',
+            desc: 'Drive organic search dominance and user acquisition with technical SEO audits, schema architecture, high-converting funnel design, and multi-channel performance marketing.',
+            subs: ['Technical & Structural SEO', 'Programmatic SEO & Schema Markup', 'Conversion Funnel Engineering', 'Google & Meta Performance Ads', 'Content Strategy & Editorial Systems', 'Analytics & Attribution Tracking']
         },
         {
             num: '07',
-            title: 'Sales & Business Growth',
-            desc: 'Architect sales funnels, connect custom CRMs, and configure AI chatbots to nurture leads and convert audiences automatically.',
-            subs: ['Sales Funnel Creation', 'CRM Integration', 'Marketing Automation', 'WhatsApp Automation', 'AI Chatbots', 'Lead Nurturing', 'Conversion Optimization']
+            title: 'Brand Identity & Visual Guidelines',
+            desc: 'Craft an authoritative, premium brand identity that commands high market value. We design cohesive visual guidelines, vector logos, brand books, and investor pitch decks.',
+            subs: ['Logo & Visual Identity Systems', 'Comprehensive Brand Style Guides', 'Vector Graphics & Custom Iconography', 'Investor Pitch Decks & Presentations', 'Marketing Asset Templates', 'Social Media Identity Kits']
         },
         {
             num: '08',
-            title: 'Cloud & Automation',
-            desc: 'Establish database security, host serverless applications, build APIs, and construct automated release hooks.',
-            subs: ['API Development', 'Backend Systems', 'Cloud Deployment (AWS/Azure/GCP)', 'VPS Management', 'CI/CD Pipelines', 'Business Automation']
+            title: 'Backend Systems & Custom APIs',
+            desc: 'Build secure, low-latency server architectures with Node.js, NestJS, and PostgreSQL. Engineered for high concurrency, enterprise authentication, and seamless third-party integrations.',
+            subs: ['Scalable RESTful & GraphQL APIs', 'Microservices & Message Queues (Redis/Kafka)', 'Role-Based Authentication (OAuth/JWT)', 'Enterprise Database Schemas', 'Webhook & Third-Party Integrations', 'Data Encryption & OWASP Security']
         }
     ];
 
     return (
-        <main style={{ paddingTop: '120px' }}>
+        <main>
             {/* Services Page Header */}
-            <section className="scroll-reveal" style={{ paddingBottom: '64px' }}>
+            <section className="page-hero scroll-reveal" style={{ paddingBottom: '64px' }}>
                 <div className="container about-hero-grid">
                     <div className="reveal-left visible">
                         <span className="section-tagline">Capabilities</span>
                         <h1 className="editorial-hero-title" style={{ marginBottom: '24px' }}>
-                            What We Do
+                            Full-Spectrum Digital Engineering
                         </h1>
                         <p style={{ maxWidth: '640px', color: 'var(--text-body)', fontSize: '20px', lineHeight: 1.6 }}>
-                            End-to-end digital frameworks combining design excellence, robust code, cloud scalability, and business growth engines under one roof.
+                            End-to-end digital capabilities combining bespoke UI/UX, robust TypeScript codebases, scalable cloud deployments, and conversion-optimized growth architectures.
                         </p>
                     </div>
                     <div className="reveal-right visible float-element svg-wrap-services-hero">
@@ -295,11 +295,11 @@ export default function Services() {
 
                     <div className="faqs-wrapper" style={{ borderTop: '1px solid var(--border-color)', maxWidth: '800px', margin: '0 auto' }}>
                         {[
-                            { q: "What does ClownBros do exactly?", a: "We are an end-to-end digital partner. We help startups and enterprises build and scale their presence through UI/UX design, custom web and mobile development, CRM setups, cloud architectures, and search engine optimization (SEO)." },
-                            { q: "Do you work with startups, or just large enterprises?", a: "We work with both! Our target audience spans growing startups, medium businesses, SaaS brands, and large corporate enterprises. We customize our development and features based on your specific requirements and scaling stage." },
-                            { q: "What technologies do you specialize in?", a: "Our standard stack includes HTML5, CSS3, JavaScript, TypeScript, React.js, Next.js, and Tailwind CSS for frontend. On the backend, we run Node.js/Express, NestJS, and PHP/Laravel, connected to PostgreSQL, MongoDB, or Cloud Firestore, hosted on AWS, Vercel, or Azure." },
-                            { q: "How does pricing and project delivery work?", a: "We value complete transparency. After our initial consultation, we outline a fixed scope, project budget, and milestones. Payments are tied directly to review stages, ensuring you sign off on every feature before the next block begins." },
-                            { q: "Do you offer post-launch support?", a: "Absolutely. We don't just build and hand over code — we aim to be your long-term technology partner. We offer dedicated hosting maintenance, analytics tracking, ongoing SEO optimization, and feature iterations post-launch." }
+                            { q: "How does ClownBros ensure high quality and zero project risk?", a: "We work in rapid 1-week iterative sprints. You receive private staging preview links and direct GitHub repository access from Day 1. Payments are milestone-driven — you only approve funds once each deliverable is tested and accepted." },
+                            { q: "Who owns the source code and designs after launch?", a: "You own 100% of all intellectual property, source code, Figma design systems, databases, and cloud resources. Complete legal IP assignment is standard in all of our contracts." },
+                            { q: "Do you sign a Mutual NDA before reviewing our project brief?", a: "Absolutely. We routinely sign non-disclosure agreements before reviewing proprietary specifications, database schemas, or business workflows. Your intellectual property and concept are completely confidential." },
+                            { q: "How does pricing and timeline scoping work?", a: "Following our initial technical discovery call, we deliver a comprehensive architectural roadmap with fixed-scope pricing and milestone deadlines. There are no hidden fees or unexpected billable hours." },
+                            { q: "What post-launch warranty and support do you provide?", a: "Every production release includes a 30-day bug warranty where any issues are resolved free of charge. We also provide direct Slack and WhatsApp technical support channels and ongoing cloud SLA maintenance." }
                         ].map((faq, i) => (
                             <div 
                                 className={`faq-item ${activeFaq === i ? 'active' : ''}`} 

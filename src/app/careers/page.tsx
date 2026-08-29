@@ -8,7 +8,7 @@ interface Gig {
     title: string;
     category: string;
     type: string; // e.g. "Contract / 15-30 hrs/wk", "Project Retainer"
-    rate: string; // e.g. "₹300 - ₹550 / hr"
+    rate: string; // e.g. "$18 - $30 / hr"
     location: string;
     skills: string[];
     description: string;
@@ -18,66 +18,66 @@ interface Gig {
 const GIGS: Gig[] = [
     {
         id: 'gig-1',
-        title: 'Junior Next.js & React Developer',
+        title: 'Next.js & React Frontend Developer',
         category: 'Frontend',
         type: 'Contract / 15-30 hrs/wk',
-        rate: '₹300 - ₹550 / hr',
-        location: 'Remote (India)',
+        rate: '$18 - $30 / hr',
+        location: 'Remote (Global)',
         skills: ['Next.js 15', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Web Vitals'],
         description: 'Building modern, high-performance web app frontends and landing pages for client startups.',
         featured: true
     },
     {
         id: 'gig-2',
-        title: 'Fresher Flutter Mobile Specialist',
+        title: 'Flutter Mobile App Specialist',
         category: 'Mobile',
         type: 'Project Retainer',
-        rate: '₹250 - ₹500 / hr',
-        location: 'Remote (India)',
+        rate: '$16 - $28 / hr',
+        location: 'Remote (Global)',
         skills: ['Flutter', 'Dart', 'Firebase', 'REST APIs', 'App Store Setup'],
         description: 'Assist in developing cross-platform iOS and Android mobile applications with clean UI and API integration.',
         featured: true
     },
     {
         id: 'gig-3',
-        title: 'Junior Fullstack Node.js & DB Developer',
+        title: 'Fullstack Node.js & Database Developer',
         category: 'Backend',
         type: 'Freelance Contract',
-        rate: '₹300 - ₹600 / hr',
-        location: 'Remote (India)',
+        rate: '$20 - $35 / hr',
+        location: 'Remote (Global)',
         skills: ['Node.js', 'PostgreSQL', 'Prisma', 'REST APIs', 'Express'],
         description: 'Architecting RESTful microservices, backend APIs, and real-time database models for web apps.',
         featured: false
     },
     {
         id: 'gig-4',
-        title: 'Fresher UI/UX Product Designer (Figma)',
+        title: 'UI/UX Product Designer (Figma)',
         category: 'Design',
         type: 'Flex Contract (15-25 hrs/wk)',
-        rate: '₹250 - ₹450 / hr',
-        location: 'Remote (India)',
+        rate: '$15 - $25 / hr',
+        location: 'Remote (Global)',
         skills: ['Figma', 'Wireframing', 'UI Components', 'Prototyping', 'Design Systems'],
         description: 'Design intuitive editorial web layouts, mobile app screens, and interactive visual component libraries.',
         featured: true
     },
     {
         id: 'gig-5',
-        title: 'AI & LLM Integration Developer (Fresher)',
+        title: 'AI & LLM Integration Developer',
         category: 'AI/ML',
         type: 'Project-based Contract',
-        rate: '₹350 - ₹700 / hr',
-        location: 'Remote (India)',
+        rate: '$25 - $45 / hr',
+        location: 'Remote (Global)',
         skills: ['OpenAI API', 'LangChain', 'Python', 'Vector DBs', 'Prompt Engineering'],
         description: 'Build intelligent LLM autonomous agents, vector search pipelines, and AI workflow tools for clients.',
         featured: false
     },
     {
         id: 'gig-6',
-        title: 'Junior Cloud DevOps Specialist',
+        title: 'Cloud DevOps Specialist',
         category: 'DevOps',
         type: 'Hourly On-Call Contract',
-        rate: '₹350 - ₹650 / hr',
-        location: 'Remote (India)',
+        rate: '$22 - $40 / hr',
+        location: 'Remote (Global)',
         skills: ['AWS', 'Docker', 'Linux', 'Terraform', 'CI/CD Pipelines'],
         description: 'Automate deployment pipelines, server monitoring, and Docker containerization for production systems.',
         featured: false
@@ -114,7 +114,7 @@ export default function CareersPage() {
         portfolio: '',
         track: 'Frontend Development',
         experience: '0-2 years (Fresher)',
-        hourlyRate: '₹300 - ₹500 / hr',
+        hourlyRate: '$18 - $30 / hr',
         availability: '20-30 hours/week',
         pitch: ''
     });
@@ -173,7 +173,7 @@ export default function CareersPage() {
                     portfolio: '',
                     track: 'Frontend Development',
                     experience: '0-2 years (Fresher)',
-                    hourlyRate: '₹300 - ₹500 / hr',
+                    hourlyRate: '$18 - $30 / hr',
                     availability: '20-30 hours/week',
                     pitch: ''
                 });
@@ -191,24 +191,24 @@ export default function CareersPage() {
     return (
         <main className="careers-page">
             {/* Hero Section */}
-            <section style={{ padding: '120px 0 80px', backgroundColor: 'var(--background-secondary)', borderBottom: '1px solid var(--border-color)' }}>
+            <section className="page-hero" style={{ backgroundColor: 'var(--background-secondary)', borderBottom: '1px solid var(--border-color)' }}>
                 <div className="container">
                     <div style={{ maxWidth: '820px', margin: '0 auto', textAlign: 'center' }}>
                         <div className="career-badge" style={{ marginBottom: '20px' }}>
                             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#4A8F63' }}></span>
-                            India Freelance & Fresher Talent Network
+                            Global Remote Freelance &amp; Talent Network
                         </div>
                         <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(36px, 5vw, 64px)', fontWeight: 600, color: 'var(--text-heading)', lineHeight: 1.15, marginBottom: '24px' }}>
-                            Kickstart Your Freelance Career in India. <br />
-                            <span style={{ fontStyle: 'italic', color: 'var(--primary-hover)' }}>At Fair Market Rates in ₹.</span>
+                            Kickstart Your Freelance Engineering Career. <br />
+                            <span style={{ fontStyle: 'italic', color: 'var(--primary-hover)' }}>Competitive Hourly Rates in USD ($).</span>
                         </h1>
                         <p style={{ fontSize: '20px', color: 'var(--text-body)', lineHeight: 1.6, marginBottom: '36px' }}>
-                            We partner with ambitious fresher and entry-level Indian freelance developers, UI/UX designers, and AI engineers. Build real-world client projects with guaranteed weekly payouts in Rupees (₹), 100% remote autonomy, and structured mentorship.
+                            We partner with ambitious freelance developers, UI/UX designers, and AI engineers globally. Collaborate on high-performance web &amp; mobile builds with guaranteed weekly payouts in USD ($), 100% remote autonomy, and structured code reviews.
                         </p>
                         
                         <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
                             <a href="#gigs" className="btn btn-primary" style={{ padding: '14px 32px', borderRadius: '10px' }}>
-                                Explore Open Gigs (₹)
+                                Explore Open Gigs ($)
                             </a>
                             <button onClick={() => openApplyModal()} className="btn btn-secondary" style={{ padding: '14px 32px', borderRadius: '10px', background: '#FFFFFF', border: '1px solid var(--border-color)' }}>
                                 Join Talent Network
@@ -219,20 +219,20 @@ export default function CareersPage() {
                     {/* Stats Highlights */}
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px', marginTop: '64px', paddingTop: '40px', borderTop: '1px solid var(--border-color)' }}>
                         <div style={{ textAlign: 'center' }}>
-                            <div style={{ fontFamily: 'var(--font-heading)', fontSize: '42px', fontWeight: 700, color: 'var(--text-heading)' }}>₹50L+</div>
-                            <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Paid to Indian Freelancers Annually</div>
+                            <div style={{ fontFamily: 'var(--font-heading)', fontSize: '42px', fontWeight: 700, color: 'var(--text-heading)' }}>$18 - $45</div>
+                            <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Target Hourly Rate Bandwidth (USD)</div>
                         </div>
                         <div style={{ textAlign: 'center' }}>
                             <div style={{ fontFamily: 'var(--font-heading)', fontSize: '42px', fontWeight: 700, color: 'var(--text-heading)' }}>100%</div>
-                            <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Remote Autonomy & Flexibility</div>
+                            <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Remote Autonomy &amp; Flexibility</div>
                         </div>
                         <div style={{ textAlign: 'center' }}>
-                            <div style={{ fontFamily: 'var(--font-heading)', fontSize: '42px', fontWeight: 700, color: 'var(--text-heading)' }}>Weekly (₹)</div>
-                            <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Guaranteed Direct Bank Payouts</div>
+                            <div style={{ fontFamily: 'var(--font-heading)', fontSize: '42px', fontWeight: 700, color: 'var(--text-heading)' }}>Weekly ($)</div>
+                            <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Guaranteed Direct Wire/Stripe Payouts</div>
                         </div>
                         <div style={{ textAlign: 'center' }}>
-                            <div style={{ fontFamily: 'var(--font-heading)', fontSize: '42px', fontWeight: 700, color: 'var(--text-heading)' }}>Fresher</div>
-                            <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Curated Growth & Mentorship</div>
+                            <div style={{ fontFamily: 'var(--font-heading)', fontSize: '42px', fontWeight: 700, color: 'var(--text-heading)' }}>0-2 Yrs+</div>
+                            <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Mentorship &amp; Modern Tech Stack</div>
                         </div>
                     </div>
                 </div>
@@ -243,7 +243,7 @@ export default function CareersPage() {
                 <div className="container">
                     <div className="section-header" style={{ marginBottom: '50px', textAlign: 'center' }}>
                         <span className="subtitle">THE FREELANCER ADVANTAGE</span>
-                        <h2 className="title">Why Top Engineers & Designers Partner With ClownBros</h2>
+                        <h2 className="title">Why Top Engineers &amp; Designers Partner With ClownBros</h2>
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
@@ -251,9 +251,9 @@ export default function CareersPage() {
                             <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(220, 199, 161, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', color: 'var(--dark-section)' }}>
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                             </div>
-                            <h3 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '12px' }}>Guaranteed Weekly Payouts (₹)</h3>
+                            <h3 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '12px' }}>Guaranteed Weekly Payouts ($)</h3>
                             <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.6 }}>
-                                No chasing client invoices. ClownBros handles client invoicing and guarantees your payout every Friday directly via UPI, IMPS, or Direct Bank Transfer in Rupees (₹).
+                                No chasing client invoices. ClownBros handles all client billing and guarantees your payout every Friday directly in USD ($).
                             </p>
                         </div>
 
@@ -479,7 +479,7 @@ export default function CareersPage() {
                                             type="text" 
                                             value={formData.hourlyRate}
                                             onChange={(e) => setFormData({ ...formData, hourlyRate: e.target.value })}
-                                            placeholder="e.g. ₹350/hr"
+                                            placeholder="e.g. $25/hr"
                                             style={{ width: '100%', padding: '10px 14px', border: '1px solid var(--border-color)', borderRadius: '8px', fontSize: '14px' }}
                                         />
                                     </div>

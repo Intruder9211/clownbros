@@ -5,33 +5,32 @@ import Link from 'next/link';
 
 export default function About() {
     const values = [
-        { title: 'Innovation First', desc: 'We leverage cutting-edge technologies to design scalable and forward-compatible solutions.', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
-        { title: 'Transparency', desc: 'Honest conversations, explicit timelines, and open-book communication at every milestone.', icon: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z' },
-        { title: 'Quality Over Quantity', desc: 'We deliberately limit our active client pipeline to commit extreme detail to every single project.', icon: 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z' },
-        { title: 'Security & Scale', desc: 'Enterprise-grade architectures featuring high performance, server protection, and robust APIs.', icon: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z' },
-        { title: 'Client Success', desc: 'Our growth is linked to yours. We measure ourselves solely by the impact and ROI we deliver.', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
-        { title: 'Continuous Growth', desc: 'Technology evolves daily. We systematically upskill our teams to implement modern, stable tools.', icon: 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6' }
+        { title: 'Engineering Craftsmanship', desc: 'We build with type-safe, modular architectures and strict code standards — zero brittle templates or technical debt.', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
+        { title: 'Complete Transparency', desc: 'Direct staging links, open GitHub repositories, daily commits, and clear milestone sign-offs at every step.', icon: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z' },
+        { title: '100% Asset Ownership', desc: 'You own all source code, Figma design files, cloud assets, and intellectual property from minute one.', icon: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z' },
+        { title: 'Sub-Second Speed', desc: 'We engineer with Core Web Vitals at the forefront — sub-second page loads, automated caching, and high conversion rates.', icon: 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z' },
+        { title: 'Outcome-Driven ROI', desc: 'We measure success by your software adoption, user retention, and tangible business revenue growth.', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
+        { title: 'Dedicated Post-Launch Care', desc: 'Every build is backed by a 30-day bug warranty, direct Slack/WhatsApp channels, and 99.9% uptime SLA.', icon: 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6' }
     ];
 
     const targetAudience = [
-        'Startups', 'Small Businesses', 'Medium Enterprises', 'Large Enterprises',
-        'E-commerce Brands', 'Healthcare Companies', 'Educational Institutions',
-        'Real Estate Agencies', 'Restaurants & Hotels', 'SaaS Companies',
-        'Finance Companies', 'Manufacturing Businesses', 'Personal Brands & Influencers'
+        'High-Growth Startups', 'SaaS Companies', 'E-Commerce Brands', 'FinTech & Trading',
+        'Healthcare & Telehealth', 'Consulting & Agencies', 'Modern SMBs', 'Direct-to-Consumer Brands',
+        'Real Estate Platforms', 'Education Platforms', 'Creator Brands & Media', 'Enterprise Portals'
     ];
 
     return (
-        <main style={{ paddingTop: '120px' }}>
+        <main>
             {/* About Page Hero */}
-            <section className="scroll-reveal" style={{ paddingBottom: '64px' }}>
+            <section className="page-hero scroll-reveal" style={{ paddingBottom: '64px' }}>
                 <div className="container about-hero-grid">
                     <div className="reveal-left visible">
-                        <span className="section-tagline">Vision & Purpose</span>
+                        <span className="section-tagline">Vision &amp; Purpose</span>
                         <h1 className="editorial-hero-title" style={{ marginBottom: '24px' }}>
-                            To build premium digital ecosystems that shape the digital presence of growing brands globally.
+                            Crafting high-performance digital systems with uncompromised engineering standards.
                         </h1>
                         <p style={{ fontSize: '18px', color: 'var(--text-body)', lineHeight: 1.7 }}>
-                            We partner with businesses to elevate their operations, build robust cloud infrastructures, and craft interfaces that delight.
+                            We are an engineering-first digital studio built by builders, not salespeople. We eliminate agency bloat and deliver custom web apps, native mobile software, and cloud workflows that scale.
                         </p>
                     </div>
                     <div className="reveal-right visible float-element svg-wrap-about-hero">
@@ -131,7 +130,7 @@ export default function About() {
                     </div>
                 </div>
             </section>
- 
+
             {/* Mission & Vision Section */}
             <section className="secondary-bg scroll-reveal" style={{ borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)', padding: '96px 0' }}>
                 <div className="container">
@@ -139,20 +138,20 @@ export default function About() {
                         <div className="editorial-card scroll-reveal" style={{ transitionDelay: '0.1s' }}>
                             <span className="panel-label" style={{ fontSize: '12px', fontWeight: 600, color: 'var(--primary-hover)', display: 'block', marginBottom: '16px' }}>OUR MISSION</span>
                             <h3 className="editorial-h3" style={{ marginBottom: '20px' }}>
-                                Empowering businesses with digital solutions combining design, code, cloud automation, and marketing under a single partnership.
+                                To empower high-growth startups and established brands with modern software architectures, bespoke design systems, and rapid milestone execution.
                             </h3>
                             <p style={{ color: 'var(--text-body)', fontSize: '17px' }}>
-                                We believe every business deserves a premium digital presence, regardless of its size. We construct frameworks that simplify business operations, increase user acquisition, and elevate authority.
+                                We believe clients deserve direct access to the engineers and designers building their product. We replace guesswork with weekly sprint demos, verifiable staging deployments, and total intellectual property ownership.
                             </p>
                         </div>
- 
+
                         <div className="editorial-card scroll-reveal" style={{ transitionDelay: '0.2s' }}>
                             <span className="panel-label" style={{ fontSize: '12px', fontWeight: 600, color: 'var(--primary-hover)', display: 'block', marginBottom: '16px' }}>OUR VISION</span>
                             <h3 className="editorial-h3" style={{ marginBottom: '20px' }}>
-                                Becoming one of the world&apos;s most trusted technology partners by delivering modern, scalable, and secure digital foundations.
+                                Setting a new benchmark for boutique technology partnerships rooted in transparency, speed, and engineering rigor.
                             </h3>
                             <p style={{ color: 'var(--text-body)', fontSize: '17px' }}>
-                                We align as a long-term technology collaborator rather than a transactional vendor. Our goal is to accompany our clients on their expansion milestones, building architecture that adapts as they scale.
+                                We position ourselves as long-term technology collaborators. As your user base and operations expand, we ensure your codebase, cloud infrastructure, and user interfaces adapt effortlessly without costly rewrites.
                             </p>
                         </div>
                     </div>
@@ -168,7 +167,7 @@ export default function About() {
                             Who We Work With
                         </h2>
                         <p style={{ marginTop: '16px', color: 'var(--text-body)', fontSize: '17px' }}>
-                            We partner with entities across stages, tailoring core development stack features and budgets to match specific operational needs.
+                            We partner with founders, CTOs, and growth teams across stages — tailoring architecture blueprints, sprint cadences, and budgets to match specific operational goals.
                         </p>
                     </div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
@@ -194,18 +193,18 @@ export default function About() {
                     </div>
                 </div>
             </section>
- 
+
             {/* Core Values Section */}
             <section className="secondary-bg scroll-reveal" style={{ borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)', padding: '96px 0' }}>
                 <div className="container">
                     <div className="section-header" style={{ marginBottom: '64px', textAlign: 'center', marginLeft: 'auto', marginRight: 'auto' }}>
                         <span className="section-tagline">Our Pillars</span>
-                        <h2 className="section-title">Core Values</h2>
+                        <h2 className="section-title">Core Principles</h2>
                         <p style={{ maxWidth: '600px', margin: '0 auto', color: 'var(--text-body)' }}>
-                            The values that guide our developers, designers, and marketing engineers through every pixel and query.
+                            The architectural standards and delivery guarantees that guide every sprint, component, and query.
                         </p>
                     </div>
- 
+
                     <div className="values-grid">
                         {values.map((val, i) => (
                             <div 
@@ -231,17 +230,17 @@ export default function About() {
                     </div>
                 </div>
             </section>
- 
+
             {/* Bottom Call to Action */}
             <section className="scroll-reveal" style={{ padding: '96px 0', textAlign: 'center' }}>
                 <div className="container">
                     <h2 className="editorial-h2" style={{ marginBottom: '24px' }}>
-                        Let&apos;s build together.
+                        Let&apos;s build something extraordinary.
                     </h2>
-                    <p style={{ maxWidth: '540px', margin: '0 auto 32px auto', color: 'var(--text-body)' }}>
-                        Connect with our digital architects to discuss details, scoping parameters, and custom solutions.
+                    <p style={{ maxWidth: '620px', margin: '0 auto 32px auto', color: 'var(--text-body)' }}>
+                        Connect directly with our technical leads to discuss product specifications, architecture roadmaps, and fixed-budget milestone pricing.
                     </p>
-                    <Link href="/contact" className="btn btn-primary">Start a Project</Link>
+                    <Link href="/contact" className="btn btn-primary">Schedule Discovery Call</Link>
                 </div>
             </section>
         </main>

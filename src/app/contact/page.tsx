@@ -54,20 +54,20 @@ export default function Contact() {
     };
 
     return (
-        <main style={{ paddingTop: '120px' }}>
+        <main>
             {/* Contact Section */}
-            <section className="scroll-reveal" style={{ paddingBottom: '96px' }}>
+            <section className="page-hero scroll-reveal" style={{ paddingBottom: '96px' }}>
                 <div className="container">
                     <div className="contact-grid">
                         {/* Left Info Panel */}
                         <div className="contact-info reveal-left visible" style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignSelf: 'start' }}>
-                            <span className="section-tagline">Onboarding</span>
+                            <span className="section-tagline">Discovery &amp; Scoping</span>
                             <h1 className="editorial-hero-title">
-                                Have an idea? <br />
-                                <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>Let&apos;s make impact.</span>
+                                Have a product vision? <br />
+                                <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>Let&apos;s engineer it.</span>
                             </h1>
                             <p style={{ color: 'var(--text-body)', fontSize: '18px', lineHeight: 1.6 }}>
-                                Tell us about your project or growth goals. Our engineering team reviews all briefs within 24 hours to map features, structure timelines, and propose design scopes.
+                                Schedule a complimentary technical discovery call. Our senior engineers will map your architecture, recommend the optimal stack, and deliver a fixed-milestone roadmap within 24 hours.
                             </p>
 
                             {/* Contact Visual Asset */}

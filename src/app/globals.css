@@ -169,15 +169,61 @@ caption {
     padding: 0 48px;
 }
 
-@media (max-width: 768px) {
-    .container {
-        padding: 0 24px;
-    }
+section {
+    padding: 110px 0;
+    background-color: var(--background);
 }
 
-section {
-    padding: 128px 0;
-    background-color: var(--background);
+.hero-section,
+.page-hero {
+    padding-top: 116px;
+    padding-bottom: 64px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 18px !important;
+    }
+
+    section {
+        padding: 48px 0 !important;
+    }
+
+    .hero-section,
+    .page-hero {
+        padding-top: 72px !important;
+        padding-bottom: 36px !important;
+    }
+
+    .section-header {
+        margin-bottom: 36px !important;
+    }
+
+    .hero-grid {
+        margin-bottom: 36px !important;
+        gap: 32px !important;
+    }
+
+    .hero-tagline {
+        margin-bottom: 14px !important;
+    }
+
+    .hero-title, .editorial-hero-title {
+        margin-bottom: 18px !important;
+        font-size: clamp(30px, 7.8vw, 42px) !important;
+        line-height: 1.18 !important;
+    }
+
+    .hero-lead, .editorial-hero-lead {
+        margin-bottom: 24px !important;
+        font-size: 16px !important;
+        line-height: 1.55 !important;
+    }
+
+    .pill-badge, .career-badge {
+        font-size: 11px !important;
+        padding: 4px 10px !important;
+    }
 }
 
 section.secondary-bg {
@@ -1437,7 +1483,7 @@ section.dark-bg .btn-secondary:hover {
     position: fixed;
     bottom: 32px;
     right: 32px;
-    z-index: 999;
+    z-index: 10002;
     width: 56px;
     height: 56px;
     border-radius: 50%;
@@ -1499,7 +1545,7 @@ section.dark-bg .btn-secondary:hover {
     position: fixed;
     bottom: 104px;
     right: 32px;
-    z-index: 998;
+    z-index: 10001;
     width: 380px;
     height: 560px;
     max-height: calc(100vh - 140px);
@@ -2367,5 +2413,144 @@ html.lenis, html.lenis body {
     border-color: var(--primary);
     transform: translateY(-4px);
     box-shadow: var(--shadow-soft);
+}
+
+/* ==========================================================================
+   Sticky Floating Vertical Social & WhatsApp Bar
+   ========================================================================== */
+.sticky-social-bar {
+    position: fixed;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 998;
+    display: flex;
+    flex-direction: column;
+    pointer-events: auto;
+}
+
+.sticky-social-pill {
+    background: transparent;
+    border: none;
+    border-radius: 40px;
+    padding: 6px 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: none;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sticky-social-link {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    background: transparent;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.12));
+}
+
+.sticky-social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
+}
+
+.sticky-social-link:hover {
+    background: var(--item-hover-bg, rgba(220, 199, 161, 0.15));
+    transform: scale(1.18);
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+}
+
+.sticky-social-link:hover .sticky-social-icon {
+    transform: scale(1.08);
+}
+
+/* Tooltip floating to the left */
+.sticky-social-tooltip {
+    position: absolute;
+    right: calc(100% + 12px);
+    top: 50%;
+    transform: translateY(-50%) translateX(8px);
+    background: var(--dark-section);
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 6px 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+    border: 1px solid rgba(220, 199, 161, 0.3);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: var(--font-body);
+}
+
+/* Tooltip arrow */
+.sticky-social-tooltip::after {
+    content: '';
+    position: absolute;
+    right: -5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid var(--dark-section);
+}
+
+.sticky-social-link:hover .sticky-social-tooltip {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+}
+
+/* WhatsApp pulse animation on load */
+@keyframes wspPulse {
+    0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
+.link-whatsapp {
+    animation: wspPulse 2.8s infinite;
+}
+
+/* Mobile & Tablet Responsive Adjustments */
+@media (max-width: 768px) {
+    .sticky-social-bar {
+        right: 10px;
+        top: auto;
+        bottom: 84px; /* Sits cleanly above bottom mobile widgets */
+        transform: none;
+    }
+    
+    .sticky-social-pill {
+        padding: 6px 4px;
+        gap: 6px;
+        border-radius: 30px;
+    }
+    
+    .sticky-social-link {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .sticky-social-link svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .sticky-social-tooltip {
+        display: none; /* Hide hover tooltips on touch devices */
+    }
 }
 

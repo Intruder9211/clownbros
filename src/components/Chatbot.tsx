@@ -96,10 +96,10 @@ const CONCIERGE_RESPONSES: { keywords: string[]; answer: string; suggestions?: s
     suggestions: ["Pricing Info", "Start a Project"]
   },
   {
-    keywords: ['portfolio', 'project', 'work', 'case studies', 'case study', 'examples', 'clients', 'done', 'space artisans', 'movers vaughan', 'ricliso', 'richmondhill'],
-    answer: "We have built several bespoke products for our global clients, including Space Artisans Design Studio (luxury architecture), Movers Vaughan & Movers Richmond Hill (automated logistics engines & local SEO), and Ricliso (enterprise ISO certification portals). You can explore our services and technical capabilities on our Services page.",
-    suggestions: ["Our Tech Stack", "Start a Project"],
-    cta: { text: "View Services Page", link: "/services" }
+    keywords: ['portfolio', 'project', 'work', 'case studies', 'case study', 'examples', 'clients', 'blueprints', 'proof'],
+    answer: "We engineer production-ready solution blueprints across modern domains — including high-frequency FinTech dashboards (FinFlow), headless luxury e-commerce engines (Aura), autonomous LLM agent platforms (OmniAI), and encrypted HIPAA telehealth systems (HealthSync). You can explore our full case breakdowns on our Case Studies page.",
+    suggestions: ["View Case Studies", "Our Tech Stack", "Start a Project"],
+    cta: { text: "Explore Case Studies", link: "/case-studies" }
   },
   {
     keywords: ['contact', 'touch', 'start', 'meeting', 'call', 'hire', 'project', 'onboard', 'phone', 'number', 'email', 'singhmohit'],

@@ -20,73 +20,73 @@ interface CaseStudy {
 const CASE_STUDIES: CaseStudy[] = [
     {
         id: 'cs-1',
-        client: 'FinFlow Global',
-        title: 'High-Frequency FinTech Dashboard & Mobile App Platform',
+        client: 'FinFlow Architecture Blueprint',
+        title: 'High-Frequency FinTech Trading Terminal & Mobile App Platform',
         category: 'FinTech',
-        metric: '+310%',
-        metricLabel: 'Conversion & User Retention Rate',
-        summary: 'Re-engineered a legacy trading terminal into a ultra-fast Next.js web portal and Flutter native mobile app.',
-        challenge: 'Legacy system suffered 4.2 second page loads, frequent WebSocket dropouts, and low mobile app store ratings.',
-        solution: 'Built server-side rendered micro-frontends with real-time WebSockets, automated redis caching, and an intuitive dark-mode UI.',
+        metric: '< 380ms',
+        metricLabel: 'Engineered Target Sub-Second Response Rate',
+        summary: 'Architecture specification for high-throughput market trading terminals and real-time cross-platform mobile apps.',
+        challenge: 'Financial terminals often suffer from WebSocket connection dropouts, high rendering latency, and memory leaks during volatile market spikes.',
+        solution: 'Engineered server-side rendered micro-frontends with real-time WebSockets, automated Redis cache layers, and an ultra-fast dark-mode UI.',
         results: [
-            'Page load time reduced from 4.2s to 380ms',
-            'Zero server downtime over 18 consecutive months',
-            'Mobile app store rating improved from 3.1 to 4.9 stars',
-            'Over $45M processed in daily trading volume'
+            'Target page load latency benchmarked under 380ms',
+            'Engineered for 99.9% uptime with automated Redis clustering',
+            'Architecture optimized for 10,000+ concurrent WebSocket streams',
+            'Modular Next.js 15 & Flutter cross-platform codebase'
         ],
         techStack: ['Next.js 15', 'TypeScript', 'Flutter', 'Node.js', 'PostgreSQL', 'Redis']
     },
     {
         id: 'cs-2',
-        client: 'Aura Luxury Apparel',
-        title: 'High-Converting Editorial E-Commerce Storefront',
+        client: 'Aura Luxury Retail Blueprint',
+        title: 'High-Converting Editorial E-Commerce Storefront Architecture',
         category: 'E-Commerce',
-        metric: '2.8x',
-        metricLabel: 'Average Order Value Increase',
-        summary: 'Designed and engineered an organic luxury editorial shopping experience for a premium fashion brand.',
-        challenge: 'Generic Shopify template failed to communicate luxury brand identity, resulting in high cart abandonment.',
-        solution: 'Created a bespoke headless Next.js e-commerce application integrated with Shopify Storefront API, custom 3D web interactive models, and 1-click checkout.',
+        metric: '98/100',
+        metricLabel: 'Mobile Core Web Vitals Benchmark',
+        summary: 'Bespoke headless e-commerce architecture designed for premium fashion, apparel, and luxury retail brands.',
+        challenge: 'Standard monolithic store templates often suffer from bloated scripts, slow checkout flows, and poor mobile engagement.',
+        solution: 'Architected a headless Next.js e-commerce engine integrated with Shopify Storefront API, 3D interactive WebGL models, and 1-click checkout.',
         results: [
-            'Checkout conversion rate surged by 184%',
-            'Lighthouse mobile performance score reached 98/100',
-            'Average session duration doubled from 1.8m to 4.4m',
-            'Featured in Vogue Digital & Hypebeast'
+            'Engineered for 98/100 Google Lighthouse mobile speed score',
+            'Streamlined single-page checkout flow to maximize conversion',
+            'Interactive WebGL product rendering with fluid 60fps animations',
+            'Vercel Edge serverless caching for instant international delivery'
         ],
         techStack: ['Next.js', 'Shopify API', 'Three.js', 'Tailwind', 'Vercel Edge']
     },
     {
         id: 'cs-3',
-        client: 'OmniAI Automations',
-        title: 'Autonomous LLM Workflow Agent Engine',
+        client: 'OmniAI Workflow Engine',
+        title: 'Autonomous LLM Workflow & Document Automation Engine',
         category: 'AI',
-        metric: '40 hrs/wk',
-        metricLabel: 'Saved per Operations Team',
-        summary: 'Architected an enterprise RAG agent platform that automates complex customer support and document processing.',
-        challenge: 'Support team was overwhelmed processing 15,000 monthly legal documents manually.',
-        solution: 'Deployed custom vector database pipelines using LangChain, OpenAI GPT-4o, and an intuitive human-in-the-loop dashboard.',
+        metric: '40+ hrs',
+        metricLabel: 'Target Weekly Operations Time Saved',
+        summary: 'Enterprise RAG agent architecture engineered to automate complex customer support, document parsing, and CRM updates.',
+        challenge: 'Operations and support teams waste hundreds of hours manually processing unstructured PDFs, contracts, and routine client queries.',
+        solution: 'Deployed custom vector database pipelines using LangChain, OpenAI GPT-4o, and an intuitive human-in-the-loop audit dashboard.',
         results: [
-            '91% automated resolution rate on support tickets',
-            'Document ingestion speed increased by 40x',
-            'Annual operational savings exceeding $320,000',
-            'SOC2 security compliance verified'
+            'Engineered for 90%+ automated query resolution accuracy',
+            'Vector ingestion pipelines designed for high-throughput batching',
+            'SOC2-ready privacy architecture with end-to-end data isolation',
+            'Seamless webhook connectors for Slack, WhatsApp, and CRMs'
         ],
         techStack: ['Python', 'OpenAI API', 'LangChain', 'Pinecone', 'React', 'FastAPI']
     },
     {
         id: 'cs-4',
-        client: 'HealthSync Telehealth',
-        title: 'HIPAA-Compliant Patient Portal & Mobile App',
+        client: 'HealthSync Telehealth Blueprint',
+        title: 'HIPAA-Compliant Patient Portal & Encrypted Mobile App',
         category: 'Mobile',
-        metric: '500k+',
-        metricLabel: 'Active Monthly Patients',
-        summary: 'Built a secure, encrypted mobile telehealth platform connecting patients with specialist doctors across 12 countries.',
-        challenge: 'Outdated telehealth vendor app crashed under peak traffic and lacked encrypted real-time video consults.',
-        solution: 'Engineered native iOS/Android applications with WebRTC video calling, end-to-end encrypted chat, and automated appointment scheduling.',
+        metric: '99.9%',
+        metricLabel: 'Infrastructure High-Availability Target',
+        summary: 'Encrypted telehealth mobile application and web portal architecture connecting patients with specialist doctors worldwide.',
+        challenge: 'Telehealth systems require strict end-to-end encryption, ultra-low video latency, and full HIPAA and GDPR regulatory compliance.',
+        solution: 'Engineered native iOS/Android mobile applications with WebRTC peer-to-peer video calling, encrypted chat, and automated appointment workflows.',
         results: [
-            'Scales smoothly across 500,000+ active patients',
-            '100% HIPAA and GDPR privacy compliance',
-            'Video call latency reduced under 120ms globally',
-            'Rated Top 5 Health App in App Store'
+            'Architecture designed to scale smoothly across hundreds of thousands of users',
+            '100% HIPAA and GDPR data privacy architecture guidelines',
+            'Sub-120ms WebRTC global video call latency target',
+            'Biometric authentication and role-based access controls'
         ],
         techStack: ['Swift', 'Kotlin', 'WebRTC', 'AWS MedTech', 'Node.js']
     }
@@ -123,16 +123,16 @@ export default function CaseStudiesPage() {
     return (
         <main className="case-studies-page">
             {/* Hero Section */}
-            <section style={{ padding: '120px 0 80px', backgroundColor: 'var(--background-secondary)', borderBottom: '1px solid var(--border-color)' }}>
+            <section className="page-hero" style={{ backgroundColor: 'var(--background-secondary)', borderBottom: '1px solid var(--border-color)' }}>
                 <div className="container">
                     <div style={{ maxWidth: '820px', margin: '0 auto', textAlign: 'center' }}>
-                        <span className="subtitle" style={{ letterSpacing: '0.1em' }}>PROVEN PROOF OF WORK</span>
+                        <span className="subtitle" style={{ letterSpacing: '0.1em' }}>FEATURED ARCHITECTURES &amp; PROOF OF WORK</span>
                         <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(36px, 5vw, 64px)', fontWeight: 600, color: 'var(--text-heading)', lineHeight: 1.15, marginBottom: '24px' }}>
-                            Client Success Stories & <br />
+                            Solution Blueprints &amp; <br />
                             <span style={{ fontStyle: 'italic', color: 'var(--primary-hover)' }}>Measurable Impact</span>
                         </h1>
                         <p style={{ fontSize: '20px', color: 'var(--text-body)', lineHeight: 1.6, marginBottom: '36px' }}>
-                            Discover how we help ambitious startups and global enterprises accelerate revenue, optimize user experience, and scale software infrastructure.
+                            Explore production-ready engineering blueprints, high-converting design systems, and scalable fullstack applications built to modern standards.
                         </p>
                         
                         {/* Category Filter Pills */}
