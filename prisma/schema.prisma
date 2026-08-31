@@ -1,0 +1,173 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  SUPERADMIN
+  ADMIN
+  EDITOR
+}
+
+enum InquiryStatus {
+  NEW
+  IN_REVIEW
+  CONTACTED
+  ARCHIVED
+}
+
+enum ApplicationStatus {
+  PENDING
+  REVIEWING
+  SHORTLISTED
+  REJECTED
+  HIRED
+}
+
+// 1. Admin Users for the Secure Dashboard
+model AdminUser {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String?
+  passwordHash String
+  role         Role      @default(ADMIN)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+// 2. Services Management
+model Service {
+  id           String   @id @default(cuid())
+  slug         String   @unique
+  order        Int      @default(0)
+  num          String   // e.g. "01", "02"
+  title        String
+  summary      String?
+  description  String   @db.Text
+  capabilities String[] // Sub-services/capabilities
+  category     String   @default("core")
+  iconName     String?  // SVG or Lucide icon key
+  featured     Boolean  @default(true)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// 3. Tech Stack Matrix
+model TechStackItem {
+  id          String   @id @default(cuid())
+  name        String
+  category    String   // frontend, backend, cloud, design, ai
+  description String
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// 4. Careers & Freelance Gigs
+model Job {
+  id               String            @id @default(cuid())
+  slug             String            @unique
+  title            String
+  category         String            // Frontend, Backend, Mobile, Design, AI/ML, DevOps
+  type             String            // e.g. "Contract / 15-30 hrs/wk", "Project Retainer"
+  rate             String            // e.g. "$18 - $30 / hr"
+  location         String            @default("Remote (Global)")
+  skills           String[]          // Tag list
+  description      String            @db.Text
+  responsibilities String[]
+  requirements     String[]
+  featured         Boolean           @default(false)
+  isActive         Boolean           @default(true)
+  order            Int               @default(0)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  applications     JobApplication[]
+}
+
+// 5. Ecosystem & Partners / Ventures
+model EcosystemItem {
+  id          String   @id @default(cuid())
+  title       String
+  category    String   // Partner, Venture, Framework, Cloud Tool
+  tagline     String?
+  description String   @db.Text
+  logoUrl     String?
+  websiteUrl  String?
+  metrics     String?  // e.g. "99.99% Uptime", "50k+ requests"
+  featured    Boolean  @default(true)
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// 6. Agency Profile & Dynamic Site Settings
+model CompanyProfile {
+  id                 String   @id @default("clownbros-profile")
+  companyName        String   @default("ClownBros Digital Ltd.")
+  tagline            String   @default("Modern Engineering Studio")
+  primaryEmail       String   @default("hello@clownbros.com")
+  supportEmail       String?  @default("singhmohit101103@gmail.com")
+  phone              String?
+  address            String?  @default("Global / Remote HQ")
+  
+  // Social Profiles
+  instagramUrl       String?  @default("https://instagram.com/clownbros")
+  youtubeUrl         String?  @default("https://youtube.com/@clownbros")
+  linkedinUrl        String?  @default("https://linkedin.com/company/clownbros")
+  twitterUrl         String?  @default("https://x.com/clownbros")
+  githubUrl          String?  @default("https://github.com/clownbros")
+
+  // Header & Banner announcements
+  announcementText   String?  @default("EST. 2026 — MODERN ENGINEERING STUDIO")
+  announcementActive Boolean  @default(true)
+  heroHeadline       String?  @default("From Concept to Impact.")
+  heroSubheadline    String?  @default("We engineer high-performance digital products.")
+
+  updatedAt          DateTime @updatedAt
+}
+
+// 7. Client Inquiries / Contact Form Leads
+model Inquiry {
+  id             String        @id @default(cuid())
+  name           String
+  email          String
+  company        String?
+  phone          String?
+  budget         String?
+  serviceNeeded  String?
+  message        String        @db.Text
+  status         InquiryStatus @default(NEW)
+  internalNotes  String?       @db.Text
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+// 8. Freelancer / Job Applications
+model JobApplication {
+  id             String            @id @default(cuid())
+  jobId          String?
+  job            Job?              @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  applicantName  String
+  applicantEmail String
+  phone          String?
+  portfolioUrl   String?
+  linkedinUrl    String?
+  resumeUrl      String?
+  coverLetter    String?           @db.Text
+  status         ApplicationStatus @default(PENDING)
+  notes          String?           @db.Text
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+}

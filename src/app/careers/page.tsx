@@ -15,7 +15,7 @@ interface Gig {
     featured?: boolean;
 }
 
-const GIGS: Gig[] = [
+const FALLBACK_gigs: Gig[] = [
     {
         id: 'gig-1',
         title: 'Next.js & React Frontend Developer',
@@ -26,65 +26,45 @@ const GIGS: Gig[] = [
         skills: ['Next.js 15', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Web Vitals'],
         description: 'Building modern, high-performance web app frontends and landing pages for client startups.',
         featured: true
-    },
-    {
-        id: 'gig-2',
-        title: 'Flutter Mobile App Specialist',
-        category: 'Mobile',
-        type: 'Project Retainer',
-        rate: '$16 - $28 / hr',
-        location: 'Remote (Global)',
-        skills: ['Flutter', 'Dart', 'Firebase', 'REST APIs', 'App Store Setup'],
-        description: 'Assist in developing cross-platform iOS and Android mobile applications with clean UI and API integration.',
-        featured: true
-    },
-    {
-        id: 'gig-3',
-        title: 'Fullstack Node.js & Database Developer',
-        category: 'Backend',
-        type: 'Freelance Contract',
-        rate: '$20 - $35 / hr',
-        location: 'Remote (Global)',
-        skills: ['Node.js', 'PostgreSQL', 'Prisma', 'REST APIs', 'Express'],
-        description: 'Architecting RESTful microservices, backend APIs, and real-time database models for web apps.',
-        featured: false
-    },
-    {
-        id: 'gig-4',
-        title: 'UI/UX Product Designer (Figma)',
-        category: 'Design',
-        type: 'Flex Contract (15-25 hrs/wk)',
-        rate: '$15 - $25 / hr',
-        location: 'Remote (Global)',
-        skills: ['Figma', 'Wireframing', 'UI Components', 'Prototyping', 'Design Systems'],
-        description: 'Design intuitive editorial web layouts, mobile app screens, and interactive visual component libraries.',
-        featured: true
-    },
-    {
-        id: 'gig-5',
-        title: 'AI & LLM Integration Developer',
-        category: 'AI/ML',
-        type: 'Project-based Contract',
-        rate: '$25 - $45 / hr',
-        location: 'Remote (Global)',
-        skills: ['OpenAI API', 'LangChain', 'Python', 'Vector DBs', 'Prompt Engineering'],
-        description: 'Build intelligent LLM autonomous agents, vector search pipelines, and AI workflow tools for clients.',
-        featured: false
-    },
-    {
-        id: 'gig-6',
-        title: 'Cloud DevOps Specialist',
-        category: 'DevOps',
-        type: 'Hourly On-Call Contract',
-        rate: '$22 - $40 / hr',
-        location: 'Remote (Global)',
-        skills: ['AWS', 'Docker', 'Linux', 'Terraform', 'CI/CD Pipelines'],
-        description: 'Automate deployment pipelines, server monitoring, and Docker containerization for production systems.',
-        featured: false
     }
 ];
 
 export default function CareersPage() {
+    const [gigs, setGigs] = React.useState<Gig[]>(FALLBACK_gigs);
+    const [loading, setLoading] = React.useState(true);
+
+    React.useEffect(() => {
+        let isMounted = true;
+        const fetchLiveGigs = async () => {
+            try {
+                const res = await fetch('/api/careers', { cache: 'no-store' });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.success && Array.isArray(data.jobs) && data.jobs.length > 0) {
+                        const mapped: Gig[] = data.jobs.map((j: any) => ({
+                            id: j.id,
+                            title: j.title,
+                            category: j.category || 'General',
+                            type: j.type || 'Contract',
+                            rate: j.rate || 'Competitive',
+                            location: j.location || 'Remote (Global)',
+                            skills: Array.isArray(j.skills) ? j.skills : [],
+                            description: j.description || '',
+                            featured: Boolean(j.featured)
+                        }));
+                        if (isMounted) setGigs(mapped);
+                    }
+                }
+            } catch (e) {
+                console.warn('Using fallback gigs:', e);
+            } finally {
+                if (isMounted) setLoading(false);
+            }
+        };
+        fetchLiveGigs();
+        return () => { isMounted = false; };
+    }, []);
+
     const [activeFilter, setActiveFilter] = useState('All');
     const [selectedGig, setSelectedGig] = useState<Gig | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -126,8 +106,8 @@ export default function CareersPage() {
     const availableSkillTags = ['React', 'Next.js', 'TypeScript', 'Node.js', 'Flutter', 'Figma', 'Python', 'AWS', 'GraphQL', 'Docker', 'Tailwind', 'PostgreSQL'];
 
     const filteredGigs = activeFilter === 'All' 
-        ? GIGS 
-        : GIGS.filter(g => g.category.toLowerCase() === activeFilter.toLowerCase());
+        ? gigs 
+        : gigs.filter(g => g.category.toLowerCase() === activeFilter.toLowerCase());
 
     const openApplyModal = (gig?: Gig) => {
         if (gig) {
@@ -159,10 +139,7 @@ export default function CareersPage() {
             const res = await fetch('/api/careers', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    ...formData,
-                    selectedSkills
-                })
+                body: JSON.stringify({ ...formData, selectedSkills, jobId: selectedGig?.id })
             });
             const data = await res.json();
             if (data.success) {
