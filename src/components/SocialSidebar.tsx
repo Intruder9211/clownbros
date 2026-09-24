@@ -87,7 +87,7 @@ export default function SocialSidebar() {
           <a
             key={item.id}
             href={item.url}
-            target="_blank"
+            target={item.url.startsWith('mailto:') ? '_self' : '_blank'}
             rel="noopener noreferrer"
             className={`sticky-social-link link-${item.id}`}
             aria-label={item.name}
