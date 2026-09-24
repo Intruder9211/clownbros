@@ -68,7 +68,7 @@ export default function SocialSidebar() {
     {
       id: 'email',
       name: 'Direct Project Email',
-      url: 'mailto:singhmohit101103@gmail.com?subject=Project%20Inquiry%20-%20ClownBros',
+      url: 'mailto:hello@clownbros.com?cc=singhmohit101103@gmail.com&subject=new%20contact%20lead',
       color: '#C8AF7E',
       hoverBg: 'rgba(200, 175, 126, 0.15)',
       icon: (

@@ -619,7 +619,7 @@ export default function Navigation() {
 
                     <div className="drawer-footer">
                         <p className="drawer-label">Get in Touch</p>
-                        <a href="mailto:singhmohit101103@gmail.com" className="drawer-email" style={{ display: 'block', marginBottom: '8px' }}>
+                        <a href="mailto:hello@clownbros.com?cc=singhmohit101103@gmail.com&subject=new%20contact%20lead" className="drawer-email" style={{ display: 'block', marginBottom: '8px' }}>
                             singhmohit101103@gmail.com
                         </a>
                         <a href="tel:7303061282" className="drawer-email" style={{ display: 'block', marginBottom: '24px' }}>

@@ -31,26 +31,40 @@ export default function Contact() {
         const { name, email, details } = formData;
         const typesStr = projectTypes.length > 0 ? projectTypes.join(', ') : 'None selected';
 
-        // Construct mailto link
-        const subject = encodeURIComponent(`Project Brief from ${name}`);
-        const body = encodeURIComponent(
-            `Name: ${name}\n` +
-            `Client Email: ${email}\n` +
-            `Project Types: ${typesStr}\n\n` +
-            `Project Details:\n${details}`
-        );
-        const mailtoUrl = `mailto:singhmohit101103@gmail.com?subject=${subject}&body=${body}`;
+        const submitForm = async () => {
+            try {
+                const res = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        phone: '', // Contact page doesn't have phone input
+                        details,
+                        projectTypes
+                    })
+                });
 
-        setTimeout(() => {
-            setIsSubmitting(false);
-            setFormStatus({
-                type: 'success',
-                message: 'Thank you for your interest! We have received your email details. We will review your project brief and call or email you back shortly.'
-            });
-            window.location.href = mailtoUrl;
-            setFormData({ name: '', email: '', details: '' });
-            setProjectTypes([]);
-        }, 1200);
+                if (res.ok) {
+                    setFormStatus({
+                        type: 'success',
+                        message: 'Thank you for your interest! We have received your project brief. We will review it and get back to you shortly.'
+                    });
+                    setFormData({ name: '', email: '', details: '' });
+                    setProjectTypes([]);
+                } else {
+                    const data = await res.json();
+                    setFormStatus({ type: 'error', message: data.error || 'Failed to submit the form' });
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                setFormStatus({ type: 'error', message: 'Something went wrong while submitting the form.' });
+            } finally {
+                setIsSubmitting(false);
+            }
+        };
+
+        submitForm();
     };
 
     return (
@@ -146,7 +160,7 @@ export default function Contact() {
                             <div className="contact-details" style={{ borderTop: '1px solid var(--border-color)', paddingTop: '24px' }}>
                                 <div style={{ marginBottom: '20px' }}>
                                     <span style={{ fontSize: '12px', fontWeight: 600, color: '#dcc7a1', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '8px' }}>Direct Email</span>
-                                    <a href="mailto:singhmohit101103@gmail.com" className="editorial-h4" style={{ textDecoration: 'none', color: 'var(--text-heading)' }}>
+                                    <a href="mailto:hello@clownbros.com?cc=singhmohit101103@gmail.com&subject=new%20contact%20lead" className="editorial-h4" style={{ textDecoration: 'none', color: 'var(--text-heading)' }}>
                                         singhmohit101103@gmail.com
                                     </a>
                                 </div>

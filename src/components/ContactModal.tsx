@@ -61,26 +61,36 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
         const { name, email, phone, details } = formData;
         const servicesStr = selectedServices.length > 0 ? selectedServices.join(', ') : 'General Inquiry';
 
-        const subject = encodeURIComponent(`Project Brief from ${name}`);
-        const body = encodeURIComponent(
-            `Name: ${name}\n` +
-            `Client Email: ${email}\n` +
-            `Phone: ${phone || 'Not provided'}\n` +
-            `Requested Services: ${servicesStr}\n\n` +
-            `Project Details:\n${details}`
-        );
-        const mailtoUrl = `mailto:singhmohit101103@gmail.com?subject=${subject}&body=${body}`;
-
-        setTimeout(() => {
-            setIsSubmitting(false);
-            setSubmitStatus({
-                success: true,
-                message: 'Thank you for reaching out! We received your brief and will contact you within 24 hours.'
+        try {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    phone,
+                    details,
+                    projectTypes: selectedServices
+                })
             });
-            window.location.href = mailtoUrl;
-            setFormData({ name: '', email: '', phone: '', details: '' });
-            setSelectedServices([]);
-        }, 1000);
+
+            if (res.ok) {
+                setSubmitStatus({
+                    success: true,
+                    message: 'Thank you for reaching out! We received your brief and will contact you within 24 hours.'
+                });
+                setFormData({ name: '', email: '', phone: '', details: '' });
+                setSelectedServices([]);
+            } else {
+                const data = await res.json();
+                alert(data.error || 'Failed to submit the form');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Something went wrong while submitting the form.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
