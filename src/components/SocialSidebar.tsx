@@ -68,7 +68,7 @@ export default function SocialSidebar() {
     {
       id: 'email',
       name: 'Direct Project Email',
-      url: 'mailto:hello@clownbros.com?cc=singhmohit101103@gmail.com&subject=new%20contact%20lead',
+      url: 'https://mail.google.com/mail/?view=cm&fs=1&to=hello@clownbros.com&cc=singhmohit101103@gmail.com&su=new%20contact%20lead',
       color: '#C8AF7E',
       hoverBg: 'rgba(200, 175, 126, 0.15)',
       icon: (
@@ -87,7 +87,7 @@ export default function SocialSidebar() {
           <a
             key={item.id}
             href={item.url}
-            target={item.url.startsWith('mailto:') ? '_self' : '_blank'}
+            target="_blank"
             rel="noopener noreferrer"
             className={`sticky-social-link link-${item.id}`}
             aria-label={item.name}
