@@ -171,13 +171,23 @@ caption {
 
 section {
     padding: 110px 0;
-    background-color: var(--background);
+    background: linear-gradient(135deg, var(--background) 0%, rgba(220, 199, 161, 0.08) 100%);
 }
 
 .hero-section,
 .page-hero {
     padding-top: 116px;
     padding-bottom: 64px;
+    position: relative;
+    background-color: var(--background);
+    background-image: 
+        linear-gradient(rgba(250, 248, 244, 0.8), rgba(250, 248, 244, 0.8)),
+        url('/monuments-bg.jpg');
+    background-position: center center, center center;
+    background-size: cover, cover;
+    background-repeat: no-repeat, no-repeat;
+    background-attachment: fixed, fixed;
+    background-blend-mode: normal, multiply;
 }
 
 @media (max-width: 768px) {
@@ -227,11 +237,11 @@ section {
 }
 
 section.secondary-bg {
-    background-color: var(--background-secondary);
+    background: linear-gradient(135deg, var(--background-secondary) 0%, rgba(220, 199, 161, 0.18) 100%);
 }
 
 section.dark-bg {
-    background-color: var(--dark-section);
+    background: linear-gradient(135deg, var(--dark-section) 0%, #151310 100%);
     color: var(--footer-text);
 }
 

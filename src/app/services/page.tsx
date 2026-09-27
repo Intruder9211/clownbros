@@ -32,7 +32,7 @@ export default function Services() {
             num: '01',
             title: 'High-Performance Web Platforms',
             desc: 'We engineer ultra-fast custom web applications, SaaS portals, headless eCommerce storefronts, and corporate websites built on Next.js, React, and TypeScript with sub-second page loads.',
-            subs: ['Custom Web Applications (Next.js/React)', 'Headless & Custom eCommerce', 'High-Converting Corporate Portals', 'Interactive Web Portfolios', 'RESTful & GraphQL API Integrations', 'Core Web Vitals & Speed Optimization']
+            subs: ['Custom Web Applications (Next.js/React)', 'WordPress & WooCommerce Stores', 'Shopify & Custom eCommerce', 'Interactive Web Portfolios', 'RESTful & GraphQL API Integrations', 'Core Web Vitals & Speed Optimization']
         },
         {
             num: '02',
@@ -91,7 +91,7 @@ export default function Services() {
                         <p style={{ maxWidth: '640px', color: 'var(--text-body)', fontSize: '20px', lineHeight: 1.6 }}>
                             End-to-end digital capabilities combining bespoke UI/UX, robust TypeScript codebases, scalable cloud deployments, and conversion-optimized growth architectures.
                         </p>
-                    </div>
+                            </div>
                     <div className="reveal-right visible float-element svg-wrap-services-hero">
                         <svg viewBox="0 0 500 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style={{ maxWidth: '100%', maxHeight: '100%' }}>
                           <defs>
@@ -224,7 +224,7 @@ export default function Services() {
                                             <p style={{ fontSize: '18px', color: 'var(--text-body)', lineHeight: 1.7 }}>
                                                 {service.desc}
                                             </p>
-                                        </div>
+                            </div>
                                         <div className="service-right">
                                             <ul className="sub-services-list" style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                                 {service.subs.map((sub, sIdx) => (
@@ -346,7 +346,7 @@ export default function Services() {
                                     }}
                                 >
                                     <p className="faq-answer" style={{ paddingBottom: '24px', fontSize: '16px', color: 'var(--text-body)', lineHeight: 1.6 }}>{faq.a}</p>
-                                </div>
+                            </div>
                             </div>
                         ))}
                     </div>

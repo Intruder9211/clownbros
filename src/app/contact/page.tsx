@@ -173,7 +173,7 @@ export default function Contact() {
                                 <div>
                                     <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '8px' }}>Working Hours</span>
                                     <span style={{ fontSize: '16px', color: 'var(--text-body)' }}>
-                                        UTC / EST / CET viewports (Global Support)
+                                        24/7 (Global Support)
                                     </span>
                                 </div>
                             </div>

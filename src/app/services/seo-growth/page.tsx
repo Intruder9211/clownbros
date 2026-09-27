@@ -1,9 +1,18 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
+import ContactModal from '@/components/ContactModal';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 
 export default function SEOGrowthPage() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedService, setSelectedService] = useState('');
+
+    const handleCardClick = (title) => {
+        setSelectedService(title);
+        setIsModalOpen(true);
+    };
     const features = [
         { title: 'Technical & Organic SEO Audits', desc: 'Optimize site architecture, canonical tags, XML sitemaps, structured schema data, and mobile crawlability.' },
         { title: 'Core Web Vitals Speed Tuning', desc: 'Transform slow loading metrics into sub-second page loads to score 95+ on Google PageSpeed Insights.' },
@@ -38,15 +47,16 @@ export default function SEOGrowthPage() {
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '28px' }}>
-                        {features.map((f) => (
-                            <div key={f.title} style={{ background: '#FFFFFF', padding: '32px', borderRadius: '18px', border: '1px solid var(--border-color)' }}>
+                        {features.map((f, i) => (
+                            <motion.div key={f.title} onClick={() => handleCardClick(f.title)} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1, duration: 0.5 }} whileHover={{ y: -8, boxShadow: '0px 12px 24px rgba(0, 0, 0, 0.1)' }} style={{ cursor: 'pointer', background: '#FFFFFF', padding: '32px', borderRadius: '18px', border: '1px solid var(--border-color)' }}>
                                 <h3 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '10px' }}>{f.title}</h3>
                                 <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.6 }}>{f.desc}</p>
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
                 </div>
             </section>
+            <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} preSelectedService={selectedService} />
         </main>
     );
 }

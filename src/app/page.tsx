@@ -1,9 +1,25 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function Home() {
+    const [quote, setQuote] = useState({ 
+        text: 'Every ambitious idea deserves an enterprise-grade digital foundation — without the agency bloat.', 
+        author: 'ClownBros Core Engineering Philosophy' 
+    });
+
+    useEffect(() => {
+        fetch('https://dummyjson.com/quotes/random')
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.quote) {
+                    setQuote({ text: data.quote, author: data.author });
+                }
+            })
+            .catch(err => console.error("Failed to fetch quote", err));
+    }, []);
+
     return (
         <main>
             {/* Hero Section */}
@@ -126,12 +142,12 @@ export default function Home() {
                     {/* Agency Philosophy - 2-Column Split */}
                     <div className="scroll-reveal editorial-card philosophy-grid" style={{ backgroundColor: 'var(--dark-section)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-card)', overflow: 'hidden', position: 'relative' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                            <span className="section-tagline" style={{ color: 'var(--primary)', marginBottom: '0px' }}>Agency Philosophy</span>
+                            <span className="section-tagline" style={{ color: 'var(--primary)', marginBottom: '0px' }}>Daily Inspiration</span>
                             <h2 className="editorial-h2" style={{ color: '#FFFFFF', margin: 0 }}>
-                                &ldquo;Every ambitious idea deserves an enterprise-grade digital foundation — without the agency bloat.&rdquo;
+                                &ldquo;{quote.text}&rdquo;
                             </h2>
                             <p style={{ color: 'var(--footer-text)', fontSize: '16px', fontStyle: 'italic', marginTop: '8px', margin: 0 }}>
-                                — ClownBros Core Engineering Philosophy
+                                — {quote.author}
                             </p>
                         </div>
                         <div className="float-element svg-wrap-philosophy">

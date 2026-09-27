@@ -5,9 +5,10 @@ import React, { useState } from 'react';
 interface ContactModalProps {
     isOpen: boolean;
     onClose: () => void;
+    preSelectedService?: string;
 }
 
-export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
+export default function ContactModal({ isOpen, onClose, preSelectedService }: ContactModalProps) {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -18,27 +19,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState<{ success: boolean; message: string } | null>(null);
 
-    // Disable background scrolling when modal is open
-    React.useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = 'hidden';
-            document.documentElement.style.overflow = 'hidden';
-            document.documentElement.classList.add('lenis-stopped');
-        } else {
-            document.body.style.overflow = '';
-            document.documentElement.style.overflow = '';
-            document.documentElement.classList.remove('lenis-stopped');
-        }
-        return () => {
-            document.body.style.overflow = '';
-            document.documentElement.style.overflow = '';
-            document.documentElement.classList.remove('lenis-stopped');
-        };
-    }, [isOpen]);
-
-    if (!isOpen) return null;
-
-    const availableServices = [
+    const baseServices = [
         'Web & Web3 App',
         'Mobile App (iOS/Android)',
         'UI/UX Design',
@@ -46,6 +27,36 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
         'AI & ML Solutions',
         'SEO & Growth'
     ];
+
+    const availableServices = preSelectedService && !baseServices.includes(preSelectedService) 
+        ? [...baseServices, preSelectedService] 
+        : baseServices;
+
+    // Disable background scrolling when modal is open
+    React.useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
+            document.documentElement.classList.add('lenis-stopped');
+
+            // Handle pre-selected service
+            if (preSelectedService) {
+                setSelectedServices([preSelectedService]);
+            }
+        } else {
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+            document.documentElement.classList.remove('lenis-stopped');
+            // Reset state slightly after close animation
+            const timer = setTimeout(() => {
+                setSubmitStatus(null);
+                setSelectedServices([]);
+            }, 300);
+            return () => clearTimeout(timer);
+        }
+    }, [isOpen, preSelectedService]);
+
+    if (!isOpen) return null;
 
     const toggleService = (service: string) => {
         setSelectedServices(prev =>

@@ -1,12 +1,22 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
+import ContactModal from '@/components/ContactModal';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 
 export default function WebDevelopmentPage() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedService, setSelectedService] = useState('');
+
+    const handleCardClick = (title) => {
+        setSelectedService(title);
+        setIsModalOpen(true);
+    };
     const features = [
         { title: 'Next.js 15 & React 19', desc: 'Type-safe, server-rendered web applications built for extreme speed and Google Core Web Vitals score of 95+.' },
-        { title: 'Headless E-Commerce', desc: 'Custom Shopify and Stripe integrations delivering lightning-fast product pages and 1-click checkouts.' },
+        { title: 'WordPress & WooCommerce', desc: 'Fully animated, highly responsive, and customizable WordPress websites and WooCommerce stores tailored to your brand.' },
+        { title: 'Shopify & Headless E-Commerce', desc: 'Fully animated and responsive Shopify stores, custom themes, and headless integrations delivering lightning-fast product pages.' },
         { title: 'Corporate & Web3 Platforms', desc: 'Sleek editorial brand websites, Web3 dApps, and interactive client portals designed to convert visitors.' },
         { title: 'Tailwind & Custom CSS Systems', desc: 'Responsive, fluid layouts with glassmorphism, micro-animations, and seamless dark mode support.' }
     ];
@@ -38,15 +48,16 @@ export default function WebDevelopmentPage() {
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '28px' }}>
-                        {features.map((f) => (
-                            <div key={f.title} style={{ background: '#FFFFFF', padding: '32px', borderRadius: '18px', border: '1px solid var(--border-color)' }}>
+                        {features.map((f, i) => (
+                            <motion.div key={f.title} onClick={() => handleCardClick(f.title)} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1, duration: 0.5 }} whileHover={{ y: -8, boxShadow: '0px 12px 24px rgba(0, 0, 0, 0.1)' }} style={{ cursor: 'pointer', background: '#FFFFFF', padding: '32px', borderRadius: '18px', border: '1px solid var(--border-color)' }}>
                                 <h3 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '10px' }}>{f.title}</h3>
                                 <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.6 }}>{f.desc}</p>
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
                 </div>
             </section>
+            <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} preSelectedService={selectedService} />
         </main>
     );
 }

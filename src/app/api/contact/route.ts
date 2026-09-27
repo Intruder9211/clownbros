@@ -47,12 +47,27 @@ export async function POST(request: Request) {
         auth: { user: smtpUser, pass: smtpPass },
       });
 
-      await transporter.sendMail({
+      // Send to Admin
+      const adminMail = transporter.sendMail({
         from: '"' + name + '" <' + smtpUser + '>',
         to: process.env.ADMIN_NOTIFICATION_EMAIL || 'singhmohit101103@gmail.com',
         replyTo: email,
         subject: 'New Contact Lead - ' + name,
         text: 'Name: ' + name + '\nEmail: ' + email + '\nPhone: ' + phone + '\nTypes: ' + typesStr + '\nBudget: ' + (budgetStr || 'N/A') + '\n\nDetails:\n' + details,
+      });
+
+      // Send Thank you to Client
+      const clientMail = transporter.sendMail({
+        from: '"ClownBros Team" <' + smtpUser + '>',
+        to: email,
+        subject: 'Thank you for contacting ClownBros!',
+        text: `Hi ${name},\n\nThank you for reaching out to us! We have received your project details and our team will get back to you shortly.\n\nBest regards,\nThe ClownBros Team\n\n--- Your Details ---\nService: ${typesStr}\nMessage: ${details}`,
+      });
+
+      // We don't await the emails to ensure the API responds extremely fast (under 2s)
+      // The emails will process in the background.
+      Promise.all([adminMail, clientMail]).catch(err => {
+        console.error('Failed to send background emails:', err);
       });
     }
 
