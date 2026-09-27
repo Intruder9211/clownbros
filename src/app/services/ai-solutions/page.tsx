@@ -9,7 +9,7 @@ export default function AISolutionsPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedService, setSelectedService] = useState('');
 
-    const handleCardClick = (title) => {
+    const handleCardClick = (title: string) => {
         setSelectedService(title);
         setIsModalOpen(true);
     };
