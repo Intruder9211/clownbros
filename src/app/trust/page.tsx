@@ -2,143 +2,97 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { ArrowUpRight, Shield, Lock, FileCheck, Eye, Server } from 'lucide-react';
+import StudioCTA from '@/components/StudioCTA';
+import HeroFrame from '@/components/HeroFrame';
+
+const PILLARS = [
+  {
+    icon: FileCheck,
+    title: 'Mutual NDA & 100% IP Assignment',
+    desc: 'We execute mutual non-disclosure agreements before reviewing sensitive specs or repositories. All source code, Figma systems, database schemas, and cloud assets belong 100% to you.',
+    note: 'Executed prior to discovery on request',
+  },
+  {
+    icon: Shield,
+    title: 'OWASP Top 10 Engineering Practices',
+    desc: 'We build against OWASP Top 10 security guidelines—strict input validation, parameterized ORM queries, role-based access control, and encrypted environment secrets.',
+    note: 'Automated dependency & lint checks in CI',
+  },
+  {
+    icon: Lock,
+    title: 'Data Handling & Privacy First',
+    desc: 'Client data is isolated per environment. We never train third-party AI models on proprietary client codebases, documents, or user records.',
+    note: 'Zero cross-client data sharing',
+  },
+  {
+    icon: Eye,
+    title: 'Transparent Repository Access',
+    desc: 'Your engineering leads have direct visibility into private GitHub repositories, pull requests, and staging deployments from day one.',
+    note: 'No black-box code handoffs',
+  },
+  {
+    icon: Server,
+    title: 'Resilient Cloud & Backups',
+    desc: 'Production deployments use HTTPS/TLS, environment-scoped secrets, automated database snapshots, and rollback-ready CI/CD workflows.',
+    note: 'Managed on your AWS / Vercel / Neon accounts',
+  },
+];
 
 export default function TrustPage() {
-    return (
-        <main className="trust-page">
-            {/* Hero Section */}
-            <section className="page-hero" style={{ backgroundColor: 'var(--background-secondary)', borderBottom: '1px solid var(--border-color)' }}>
-                <div className="container">
-                    <div style={{ maxWidth: '820px', margin: '0 auto', textAlign: 'center' }}>
-                        <div className="career-badge" style={{ marginBottom: '20px' }}>
-                            🛡️ Enterprise Governance & Security
-                        </div>
-                        <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(36px, 5vw, 64px)', fontWeight: 600, color: 'var(--text-heading)', lineHeight: 1.15, marginBottom: '24px' }}>
-                            Built on Trust, Security & <br />
-                            <span style={{ fontStyle: 'italic', color: 'var(--primary-hover)' }}>Total Transparency</span>
-                        </h1>
-                        <p style={{ fontSize: '20px', color: 'var(--text-body)', lineHeight: 1.6, marginBottom: '32px' }}>
-                            We protect your proprietary data, trade secrets, and brand reputation with strict NDA enforcement, 100% intellectual property transfer, and rigorous SOC2/GDPR code standards.
-                        </p>
-                        
-                        <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                            <Link href="/contact" className="btn btn-primary" style={{ padding: '14px 32px', borderRadius: '10px' }}>
-                                Request Mutual NDA & Contract
-                            </Link>
-                            <Link href="/process" className="btn btn-secondary" style={{ padding: '14px 32px', borderRadius: '10px', background: '#FFFFFF', border: '1px solid var(--border-color)' }}>
-                                View Delivery SLA
-                            </Link>
-                        </div>
-                    </div>
+  return (
+    <main>
+      <HeroFrame>
+        <span className="font-mono-tech text-xs uppercase tracking-[0.16em] text-[#F15A3B] block mb-4">
+          Trust &amp; Security Center
+        </span>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
+          <div className="lg:col-span-8">
+            <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.03]">
+              Your IP, your code,{' '}
+              <span className="font-serif-editorial italic font-normal text-[#3154D9]">
+                your control.
+              </span>
+            </h1>
+          </div>
+          <div className="lg:col-span-4 space-y-5">
+            <p className="text-base text-[#6B6A65] leading-relaxed">
+              Clear legal ownership, mutual NDAs, and disciplined OWASP security practices—stated accurately without inflated claims.
+            </p>
+            <Link href="/contact" className="btn-studio-primary">
+              <span>Request Mutual NDA</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </HeroFrame>
+
+      <section className="bg-[#171817] text-[#F2EFE7] py-20 sm:py-28">
+        <div className="studio-container">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {PILLARS.map((p) => {
+              const Icon = p.icon;
+              return (
+                <div
+                  key={p.title}
+                  className="p-8 rounded-2xl bg-[#202120] border border-[#F2EFE7]/12 flex flex-col justify-between gap-6"
+                >
+                  <div>
+                    <Icon className="w-5 h-5 text-[#F15A3B] mb-5" />
+                    <h2 className="font-display text-xl font-semibold">{p.title}</h2>
+                    <p className="mt-3 text-sm text-[#9E9B93] leading-relaxed">{p.desc}</p>
+                  </div>
+                  <div className="pt-4 border-t border-[#F2EFE7]/10 font-mono-tech text-[11px] text-[#F15A3B]">
+                    ✓ {p.note}
+                  </div>
                 </div>
-            </section>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
-            {/* Core Trust Pillars */}
-            <section style={{ padding: '90px 0', backgroundColor: 'var(--background)' }}>
-                <div className="container">
-                    <div className="section-header" style={{ marginBottom: '50px', textAlign: 'center' }}>
-                        <span className="subtitle">GOVERNANCE & STANDARDS</span>
-                        <h2 className="title">5 Pillars of Enterprise Trust</h2>
-                    </div>
-
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '30px' }}>
-                        {/* Card 1 */}
-                        <div className="trust-badge-card" style={{ textAlign: 'left', padding: '36px' }}>
-                            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(220, 199, 161, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', color: 'var(--dark-section)' }}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                            </div>
-                            <h3 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '12px' }}>Mutual NDA & IP Assignment</h3>
-                            <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.6, marginBottom: '16px' }}>
-                                We sign non-disclosure agreements before reviewing any sensitive documentation. All source code, assets, database structures, and patents belong 100% to you.
-                            </p>
-                            <div style={{ fontSize: '13px', fontWeight: 600, color: '#4A8F63', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                <span>✓</span> Instant NDA execution on request
-                            </div>
-                        </div>
-
-                        {/* Card 2 */}
-                        <div className="trust-badge-card" style={{ textAlign: 'left', padding: '36px' }}>
-                            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(220, 199, 161, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', color: 'var(--dark-section)' }}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                            </div>
-                            <h3 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '12px' }}>SOC2 & OWASP Code Standards</h3>
-                            <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.6, marginBottom: '16px' }}>
-                                Our codebase architecture adheres to OWASP Top 10 security guidelines, SQL injection prevention, encrypted environment secrets, and strict HTTPS/TLS protocols.
-                            </p>
-                            <div style={{ fontSize: '13px', fontWeight: 600, color: '#4A8F63', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                <span>✓</span> Automated dependency vulnerability scanning
-                            </div>
-                        </div>
-
-                        {/* Card 3 */}
-                        <div className="trust-badge-card" style={{ textAlign: 'left', padding: '36px' }}>
-                            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(220, 199, 161, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', color: 'var(--dark-section)' }}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                            </div>
-                            <h3 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '12px' }}>99.9% Infrastructure Uptime SLA</h3>
-                            <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.6, marginBottom: '16px' }}>
-                                Cloud deployments hosted on multi-region AWS/Vercel serverless clusters feature automatic failover, database replication, and daily automated snapshots.
-                            </p>
-                            <div style={{ fontSize: '13px', fontWeight: 600, color: '#4A8F63', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                <span>✓</span> 24/7 automated uptime telemetry monitoring
-                            </div>
-                        </div>
-
-                        {/* Card 4 */}
-                        <div className="trust-badge-card" style={{ textAlign: 'left', padding: '36px' }}>
-                            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(220, 199, 161, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', color: 'var(--dark-section)' }}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                            </div>
-                            <h3 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '12px' }}>GDPR & Data Privacy Compliance</h3>
-                            <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.6, marginBottom: '16px' }}>
-                                Built-in data erasure compliance, cookie consent controls, encrypted user session tokens, and privacy-first data collection architectures.
-                            </p>
-                            <div style={{ fontSize: '13px', fontWeight: 600, color: '#4A8F63', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                <span>✓</span> Full compliance documentation provided
-                            </div>
-                        </div>
-
-                        {/* Card 5 */}
-                        <div className="trust-badge-card" style={{ textAlign: 'left', padding: '36px' }}>
-                            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(220, 199, 161, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', color: 'var(--dark-section)' }}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                            </div>
-                            <h3 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '12px' }}>Escalation & Account Matrix</h3>
-                            <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.6, marginBottom: '16px' }}>
-                                Every client receives a direct technical lead, emergency 15-minute SLA response channels, and transparent weekly progress audit logs.
-                            </p>
-                            <div style={{ fontSize: '13px', fontWeight: 600, color: '#4A8F63', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                <span>✓</span> Direct Slack & WhatsApp support channel
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Compliance Badge Certification Grid */}
-            <section style={{ padding: '80px 0', backgroundColor: 'var(--background-secondary)', borderTop: '1px solid var(--border-color)' }}>
-                <div className="container">
-                    <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 40px' }}>
-                        <span className="subtitle">VERIFIED REPUTATION</span>
-                        <h2 className="title">Enterprise Compliance Badges</h2>
-                    </div>
-
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', flexWrap: 'wrap', alignItems: 'center' }}>
-                        <div style={{ background: '#FFFFFF', padding: '20px 32px', borderRadius: '14px', border: '1px solid var(--border-color)', fontWeight: 600, color: 'var(--text-heading)', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <span style={{ color: '#4A8F63', fontSize: '20px' }}>🔒</span> SSL / TLS 1.3 Encrypted
-                        </div>
-                        <div style={{ background: '#FFFFFF', padding: '20px 32px', borderRadius: '14px', border: '1px solid var(--border-color)', fontWeight: 600, color: 'var(--text-heading)', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <span style={{ color: '#4A8F63', fontSize: '20px' }}>🛡️</span> OWASP Top 10 Compliant
-                        </div>
-                        <div style={{ background: '#FFFFFF', padding: '20px 32px', borderRadius: '14px', border: '1px solid var(--border-color)', fontWeight: 600, color: 'var(--text-heading)', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <span style={{ color: '#4A8F63', fontSize: '20px' }}>📋</span> GDPR Data Ready
-                        </div>
-                        <div style={{ background: '#FFFFFF', padding: '20px 32px', borderRadius: '14px', border: '1px solid var(--border-color)', fontWeight: 600, color: 'var(--text-heading)', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <span style={{ color: '#4A8F63', fontSize: '20px' }}>⚡</span> 99.9% Uptime Guarantee
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-    );
+      <StudioCTA />
+    </main>
+  );
 }

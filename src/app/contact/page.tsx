@@ -1,272 +1,340 @@
 'use client';
 
 import React, { useState } from 'react';
+import { ArrowUpRight, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import HeroAmbientBg from '@/components/HeroAmbientBg';
 
-export default function Contact() {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        details: ''
-    });
-    const [projectTypes, setProjectTypes] = useState<string[]>([]);
-    const [formStatus, setFormStatus] = useState<{ type: 'success' | 'error' | 'idle'; message: string }>({
-        type: 'idle',
-        message: ''
-    });
-    const [isSubmitting, setIsSubmitting] = useState(false);
+const PROJECT_TYPES = [
+  'Web Development',
+  'Mobile App',
+  'UI/UX Design',
+  'Cloud & DevOps',
+  'AI Solutions',
+  'SEO & Growth',
+];
 
-    const handleCheckboxChange = (type: string) => {
-        if (projectTypes.includes(type)) {
-            setProjectTypes(projectTypes.filter((t) => t !== type));
-        } else {
-            setProjectTypes([...projectTypes, type]);
-        }
-    };
+const BUDGET_RANGES = ['$2k – $5k', '$5k – $15k', '$15k – $35k', '$35k+'];
+const TIMELINES = ['Urgent (2–4 weeks)', 'Standard (4–8 weeks)', 'Full Build (8–12+ weeks)', 'Flexible'];
 
-    const handleFormSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-        setFormStatus({ type: 'idle', message: '' });
+export default function ContactPage() {
+  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [projectTypes, setProjectTypes] = useState<string[]>([]);
+  const [budget, setBudget] = useState('');
+  const [timeline, setTimeline] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    company: '',
+    phone: '',
+    details: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState<{ type: 'idle' | 'success' | 'error'; message: string }>({
+    type: 'idle',
+    message: '',
+  });
 
-        const { name, email, details } = formData;
-        const typesStr = projectTypes.length > 0 ? projectTypes.join(', ') : 'None selected';
+  const toggleType = (t: string) => {
+    setProjectTypes((prev) => (prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]));
+  };
 
-        const submitForm = async () => {
-            try {
-                const res = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        name,
-                        email,
-                        phone: '', // Contact page doesn't have phone input
-                        details,
-                        projectTypes
-                    })
-                });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name.trim() || !formData.email.trim() || !formData.details.trim()) {
+      setStatus({ type: 'error', message: 'Please fill in your name, email, and project description.' });
+      return;
+    }
 
-                if (res.ok) {
-                    setFormStatus({
-                        type: 'success',
-                        message: 'Thank you for your interest! We have received your project brief. We will review it and get back to you shortly.'
-                    });
-                    setFormData({ name: '', email: '', details: '' });
-                    setProjectTypes([]);
-                } else {
-                    const data = await res.json();
-                    setFormStatus({ type: 'error', message: data.error || 'Failed to submit the form' });
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                setFormStatus({ type: 'error', message: 'Something went wrong while submitting the form.' });
-            } finally {
-                setIsSubmitting(false);
-            }
-        };
+    setIsSubmitting(true);
+    setStatus({ type: 'idle', message: '' });
 
-        submitForm();
-    };
+    const compiledDetails = [
+      formData.company ? `Company: ${formData.company}` : null,
+      timeline ? `Target Timeline: ${timeline}` : null,
+      `\nProject Description:\n${formData.details}`,
+    ]
+      .filter(Boolean)
+      .join('\n');
 
-    return (
-        <main>
-            {/* Contact Section */}
-            <section className="page-hero scroll-reveal" style={{ paddingBottom: '96px' }}>
-                <div className="container">
-                    <div className="contact-grid">
-                        {/* Left Info Panel */}
-                        <div className="contact-info reveal-left visible" style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignSelf: 'start' }}>
-                            <span className="section-tagline">Discovery &amp; Scoping</span>
-                            <h1 className="editorial-hero-title">
-                                Have a product vision? <br />
-                                <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>Let&apos;s engineer it.</span>
-                            </h1>
-                            <p style={{ color: 'var(--text-body)', fontSize: '18px', lineHeight: 1.6 }}>
-                                Schedule a complimentary technical discovery call. Our senior engineers will map your architecture, recommend the optimal stack, and deliver a fixed-milestone roadmap within 24 hours.
-                            </p>
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || 'Not provided',
+          budget: budget || undefined,
+          projectTypes,
+          details: compiledDetails,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setStatus({
+          type: 'success',
+          message:
+            'Project brief received. Our senior engineers will review your scope and reply within 24 hours.',
+        });
+        setFormData({ name: '', email: '', company: '', phone: '', details: '' });
+        setProjectTypes([]);
+        setBudget('');
+        setTimeline('');
+      } else {
+        setStatus({ type: 'error', message: data.error || 'Failed to submit brief.' });
+      }
+    } catch {
+      setStatus({
+        type: 'error',
+        message: 'Network error. You can reach us directly at hello@clownbros.com.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-                            {/* Contact Visual Asset */}
-                            <div className="float-element svg-wrap-contact" style={{ margin: '16px 0' }}>
-                                <svg viewBox="0 0 500 350" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style={{ maxWidth: '100%', maxHeight: '100%' }}>
-                                  <defs>
-                                    <linearGradient id="contactGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                      <stop offset="0%" stopColor="#FFFFFF" />
-                                      <stop offset="60%" stopColor="#DCC7A1" />
-                                      <stop offset="100%" stopColor="#C8AF7E" />
-                                    </linearGradient>
-                                    <linearGradient id="contactGlassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                      <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.8" />
-                                      <stop offset="100%" stopColor="#F3EEE5" stopOpacity="0.25" />
-                                    </linearGradient>
-                                    <linearGradient id="contactDarkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                      <stop offset="0%" stopColor="#3A3631" />
-                                      <stop offset="100%" stopColor="#26231F" />
-                                    </linearGradient>
-                                    <filter id="contactShadow" x="-20%" y="-20%" width="140%" height="140%">
-                                      <feDropShadow dx="0" dy="16" stdDeviation="12" floodColor="#26231F" floodOpacity="0.08" />
-                                    </filter>
-                                  </defs>
+  return (
+    <main>
+      <section
+        style={{ backgroundColor: 'var(--bg-s1)' }}
+        className="text-[var(--text-ink)] pt-[88px] sm:pt-[92px] pb-6 sm:pb-8 px-3 sm:px-5"
+      >
+        <div
+          style={{
+            background:
+              'linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-cobalt) 50%, var(--accent-orange) 100%)',
+          }}
+          className="w-full max-w-[1440px] mx-auto p-[2px] rounded-[26px] sm:rounded-[34px] shadow-sm"
+        >
+          <div
+            style={{ backgroundColor: 'var(--bg-s1)' }}
+            className="relative overflow-hidden w-full rounded-[24px] sm:rounded-[32px] px-5 sm:px-8 lg:px-12 py-10 sm:py-14 lg:py-16"
+          >
+            <HeroAmbientBg />
+            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          {/* Left Editorial Info */}
+          <div className="lg:col-span-5 space-y-6">
+            <span className="font-mono-tech text-xs uppercase tracking-[0.16em] text-[#F15A3B] block">
+              Guided Project Briefing
+            </span>
+            <h1 className="font-display text-4xl sm:text-6xl font-semibold tracking-tight leading-[1.03]">
+              Have a product vision?{' '}
+              <span className="font-serif-editorial italic font-normal text-[#F15A3B]">
+                Let&apos;s engineer it.
+              </span>
+            </h1>
+            <p className="text-base text-[#6B6A65] leading-relaxed">
+              Walk through a quick 3-step brief. Our engineering leads respond with a concrete architecture approach and milestone roadmap within 24 hours.
+            </p>
 
-                                  {/* Ground shadow */}
-                                  <ellipse cx="250" cy="270" rx="120" ry="20" fill="#26231F" opacity="0.04" filter="blur(6px)" />
+            <div className="pt-6 border-t border-[#171817]/12 space-y-3 text-sm">
+              <div>
+                <span className="font-mono-tech text-[11px] uppercase tracking-widest text-[#6B6A65] block">
+                  Direct Email
+                </span>
+                <a href="mailto:hello@clownbros.com" className="font-display font-medium hover:text-[#F15A3B]">
+                  hello@clownbros.com
+                </a>
+              </div>
+              <div>
+                <span className="font-mono-tech text-[11px] uppercase tracking-widest text-[#6B6A65] block">
+                  Direct Phone / WhatsApp
+                </span>
+                <a href="tel:7303061282" className="font-display font-medium hover:text-[#F15A3B]">
+                  +91 73030 61282
+                </a>
+              </div>
+            </div>
+          </div>
 
-                                  <g filter="url(#contactShadow)">
-                                    {/* Base Ring / Platform */}
-                                    <path d="M 140 200 L 250 145 L 360 200 L 250 255 Z" fill="none" stroke="#E6DED2" strokeWidth="1.5" opacity="0.8" />
-                                    <path d="M 170 200 L 250 160 L 330 200 L 250 240 Z" fill="none" stroke="#DCC7A1" strokeWidth="1" strokeDasharray="4,4" opacity="0.6" />
+          {/* Right Multi-Step Briefing Form */}
+          <div className="lg:col-span-7 bg-[#E8E3D8]/75 border border-[#171817]/15 rounded-3xl p-6 sm:p-10">
+            {/* Step Progress Indicator */}
+            <div className="flex flex-nowrap items-center justify-between gap-2 overflow-x-auto no-scrollbar pb-5 mb-7 border-b border-[#171817]/12">
+              {[
+                { n: 1, label: '01 Scope' },
+                { n: 2, label: '02 Budget & Time' },
+                { n: 3, label: '03 Details' },
+              ].map((s) => (
+                <button
+                  key={s.n}
+                  type="button"
+                  onClick={() => setStep(s.n as 1 | 2 | 3)}
+                  className={`shrink-0 whitespace-nowrap font-mono-tech text-[11px] sm:text-xs px-3 py-1.5 rounded-full transition-colors ${
+                    step === s.n
+                      ? 'bg-[#171817] text-[#F2EFE7]'
+                      : 'text-[#6B6A65] hover:text-[#171817]'
+                  }`}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
 
-                                    {/* Floating Onboarding Checklist Document */}
-                                    <g transform="translate(40, -40)">
-                                      <path d="M 210 190 L 260 165 L 260 225 L 210 250 Z" fill="#26231F" opacity="0.05" filter="blur(3px)" />
-                                      <path d="M 210 170 L 260 145 L 260 215 L 210 240 Z" fill="#FFFFFF" stroke="#E6DED2" strokeWidth="1" />
-                                      <path d="M 210 170 L 210 240 L 212 241 Z" fill="#E6DED2" />
-                                      <line x1="220" y1="172.5" x2="250" y2="157.5" stroke="#26231F" strokeWidth="1.5" opacity="0.3" />
-                                      <line x1="220" y1="187.5" x2="250" y2="172.5" stroke="#26231F" strokeWidth="1.5" opacity="0.3" />
-                                      <line x1="220" y1="202.5" x2="250" y2="187.5" stroke="#26231F" strokeWidth="1.5" opacity="0.3" />
-                                      <circle cx="216" cy="172.5" r="2.5" fill="#DCC7A1" />
-                                      <circle cx="216" cy="187.5" r="2.5" fill="#DCC7A1" />
-                                      <circle cx="216" cy="202.5" r="2.5" fill="#C8AF7E" />
-                                    </g>
+            {status.type !== 'idle' && (
+              <div
+                className={`mb-6 p-4 rounded-xl border text-sm flex items-start gap-3 ${
+                  status.type === 'success'
+                    ? 'bg-[#171817] text-[#F2EFE7] border-[#171817]'
+                    : 'bg-[#F15A3B]/10 text-[#171817] border-[#F15A3B]'
+                }`}
+              >
+                {status.type === 'success' && <CheckCircle2 className="w-4 h-4 text-[#F15A3B] shrink-0 mt-0.5" />}
+                <span>{status.message}</span>
+              </div>
+            )}
 
-                                    {/* Floating Mailbox / Inbox Organiser */}
-                                    <g transform="translate(-40, -10)">
-                                      <ellipse cx="230" cy="210" rx="35" ry="15" fill="#26231F" opacity="0.08" filter="blur(3px)" />
-                                      <path d="M 180 160 L 220 180 L 220 210 L 180 190 Z" fill="url(#contactDarkGrad)" stroke="#26231F" strokeWidth="0.5" />
-                                      <path d="M 220 180 L 260 160 L 260 190 L 220 210 Z" fill="url(#contactGlassGrad)" stroke="#E6DED2" strokeWidth="1.5" />
-                                      <path d="M 180 160 L 220 140 L 260 160 L 220 180 Z" fill="url(#contactGlassGrad)" stroke="#FFFFFF" strokeWidth="1.5" />
-
-                                      {/* Emerging Envelope */}
-                                      <g transform="translate(10, -25)">
-                                        <path d="M 195 167.5 L 225 152.5 L 225 177.5 L 195 192.5 Z" fill="url(#contactGoldGrad)" stroke="#C8AF7E" strokeWidth="1" />
-                                        <path d="M 195 167.5 L 210 180 L 225 172.5" fill="none" stroke="#FFFFFF" strokeWidth="1.2" />
-                                      </g>
-                                    </g>
-
-                                    {/* Send Arrow / Flying Node */}
-                                    <g transform="translate(0, -90)">
-                                      <ellipse cx="250" cy="180" rx="20" ry="8" fill="#26231F" opacity="0.06" filter="blur(3px)" />
-                                      <path d="M 240 160 L 260 145 L 260 152 L 270 147 L 270 157 L 255 163 L 255 158 Z" fill="url(#contactGoldGrad)" stroke="#C8AF7E" strokeWidth="1" />
-                                      <path d="M 240 160 L 255 158 L 260 145 Z" fill="#C8AF7E" opacity="0.3" />
-                                      <path d="M 225 195 L 245 165" stroke="#DCC7A1" strokeWidth="1.5" strokeDasharray="3,3" opacity="0.7" />
-                                    </g>
-
-                                    {/* Small decorative circles/sparkles */}
-                                    <circle cx="150" cy="130" r="3" fill="#DCC7A1" />
-                                    <circle cx="330" cy="110" r="4" fill="#C8AF7E" />
-                                    <circle cx="320" cy="220" r="2.5" fill="#26231F" opacity="0.4" />
-                                  </g>
-                                </svg>
-                            </div>
-                            
-                            <div className="contact-details" style={{ borderTop: '1px solid var(--border-color)', paddingTop: '24px' }}>
-                                <div style={{ marginBottom: '20px' }}>
-                                    <span style={{ fontSize: '12px', fontWeight: 600, color: '#dcc7a1', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '8px' }}>Direct Email</span>
-                                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@clownbros.com&cc=singhmohit101103@gmail.com&su=new%20contact%20lead" target="_blank" rel="noopener noreferrer" className="editorial-h4" style={{ textDecoration: 'none', color: 'var(--text-heading)' }}>
-                                        singhmohit101103@gmail.com
-                                    </a>
-                                </div>
-                                <div style={{ marginBottom: '20px' }}>
-                                    <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '8px' }}>Call / WhatsApp</span>
-                                    <a href="tel:7303061282" className="editorial-h4" style={{ textDecoration: 'none', color: 'var(--text-heading)' }}>
-                                        +91 73030 61282
-                                    </a>
-                                </div>
-                                <div>
-                                    <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '8px' }}>Working Hours</span>
-                                    <span style={{ fontSize: '16px', color: 'var(--text-body)' }}>
-                                        24/7 (Global Support)
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Right Form Card */}
-                        <div className="editorial-form-container">
-                            <form onSubmit={handleFormSubmit} className="project-form">
-                                <div className="form-group">
-                                    <label htmlFor="form-name" className="form-label">Full Name</label>
-                                    <input 
-                                        type="text" 
-                                        id="form-name" 
-                                        className="form-input" 
-                                        placeholder="John Doe" 
-                                        value={formData.name}
-                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                        required 
-                                        disabled={isSubmitting}
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="form-email" className="form-label">Work Email</label>
-                                    <input 
-                                        type="email" 
-                                        id="form-email" 
-                                        className="form-input" 
-                                        placeholder="john@company.com" 
-                                        value={formData.email}
-                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                        required 
-                                        disabled={isSubmitting}
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <span className="form-label">What do you need help with?</span>
-                                    <div className="project-types-grid">
-                                        {[
-                                            { id: 'web_development', label: 'Website Dev' },
-                                            { id: 'mobile_apps', label: 'Mobile App' },
-                                            { id: 'uiux_design', label: 'UI/UX Design' },
-                                            { id: 'cloud_automation', label: 'Cloud & Automation' },
-                                            { id: 'seo_marketing', label: 'SEO & Marketing' },
-                                            { id: 'branding', label: 'Branding & Logo' }
-                                        ].map((type) => (
-                                            <label className="checkpill" key={type.id}>
-                                                <input 
-                                                    type="checkbox" 
-                                                    checked={projectTypes.includes(type.id)}
-                                                    onChange={() => handleCheckboxChange(type.id)}
-                                                    disabled={isSubmitting}
-                                                />
-                                                <span>{type.label}</span>
-                                            </label>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="form-details" className="form-label">Tell us about your project</label>
-                                    <textarea 
-                                        id="form-details" 
-                                        className="form-textarea" 
-                                        placeholder="Describe your brand goals, scope of work, features, or architectural specifications..." 
-                                        rows={5} 
-                                        value={formData.details}
-                                        onChange={(e) => setFormData({ ...formData, details: e.target.value })}
-                                        required 
-                                        disabled={isSubmitting}
-                                    ></textarea>
-                                </div>
-
-                                {formStatus.type !== 'idle' && (
-                                    <div className={`form-message ${formStatus.type === 'success' ? 'success' : 'error'}`}>
-                                        {formStatus.message}
-                                    </div>
-                                )}
-
-                                <button 
-                                    type="submit" 
-                                    className="btn btn-pill btn-primary btn-submit-form" 
-                                    style={{ width: '100%', padding: '16px' }}
-                                    disabled={isSubmitting}
-                                >
-                                    <span>{isSubmitting ? 'Submitting Brief...' : 'Send Project Brief'}</span>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {step === 1 && (
+                <div className="space-y-5">
+                  <h2 className="font-display text-2xl font-semibold">What are we building?</h2>
+                  <div className="flex flex-wrap gap-2.5">
+                    {PROJECT_TYPES.map((type) => {
+                      const active = projectTypes.includes(type);
+                      return (
+                        <button
+                          key={type}
+                          type="button"
+                          onClick={() => toggleType(type)}
+                          className={`px-4 py-2.5 rounded-full text-sm font-medium border transition-colors ${
+                            active
+                              ? 'bg-[#171817] text-[#F2EFE7] border-[#171817]'
+                              : 'bg-[#F2EFE7] text-[#171817] border-[#171817]/15 hover:border-[#171817]'
+                          }`}
+                        >
+                          {type}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="pt-4 flex justify-end">
+                    <button type="button" onClick={() => setStep(2)} className="btn-studio-primary">
+                      Continue <ArrowUpRight className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
-            </section>
-        </main>
-    );
+              )}
+
+              {step === 2 && (
+                <div className="space-y-6">
+                  <div>
+                    <h2 className="font-display text-2xl font-semibold mb-3">Estimated Budget</h2>
+                    <div className="grid grid-cols-2 gap-3">
+                      {BUDGET_RANGES.map((b) => (
+                        <button
+                          key={b}
+                          type="button"
+                          onClick={() => setBudget(b)}
+                          className={`p-3.5 rounded-xl text-sm font-medium border text-left transition-colors ${
+                            budget === b
+                              ? 'bg-[#171817] text-[#F2EFE7] border-[#171817]'
+                              : 'bg-[#F2EFE7] text-[#171817] border-[#171817]/15 hover:border-[#171817]'
+                          }`}
+                        >
+                          {b}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h2 className="font-display text-xl font-semibold mb-3">Target Timeline</h2>
+                    <div className="grid grid-cols-2 gap-3">
+                      {TIMELINES.map((t) => (
+                        <button
+                          key={t}
+                          type="button"
+                          onClick={() => setTimeline(t)}
+                          className={`p-3.5 rounded-xl text-sm font-medium border text-left transition-colors ${
+                            timeline === t
+                              ? 'bg-[#171817] text-[#F2EFE7] border-[#171817]'
+                              : 'bg-[#F2EFE7] text-[#171817] border-[#171817]/15 hover:border-[#171817]'
+                          }`}
+                        >
+                          {t}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="pt-4 flex items-center justify-between">
+                    <button type="button" onClick={() => setStep(1)} className="btn-studio-outline !py-2.5 !px-4 !text-xs">
+                      <ArrowLeft className="w-3.5 h-3.5" /> Back
+                    </button>
+                    <button type="button" onClick={() => setStep(3)} className="btn-studio-primary">
+                      Continue <ArrowUpRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {step === 3 && (
+                <div className="space-y-4">
+                  <h2 className="font-display text-2xl font-semibold">Your Contact &amp; Brief</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input
+                      type="text"
+                      required
+                      placeholder="Full Name *"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full bg-[#F2EFE7] border border-[#171817]/15 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#F15A3B]"
+                    />
+                    <input
+                      type="email"
+                      required
+                      placeholder="Work Email *"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="w-full bg-[#F2EFE7] border border-[#171817]/15 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#F15A3B]"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <input
+                      type="text"
+                      placeholder="Company / Organization"
+                      value={formData.company}
+                      onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                      className="w-full bg-[#F2EFE7] border border-[#171817]/15 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#F15A3B]"
+                    />
+                    <input
+                      type="tel"
+                      placeholder="Phone / WhatsApp (Optional)"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className="w-full bg-[#F2EFE7] border border-[#171817]/15 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#F15A3B]"
+                    />
+                  </div>
+                  <textarea
+                    rows={4}
+                    required
+                    placeholder="Describe what you're building, core goals, or existing codebase needs *"
+                    value={formData.details}
+                    onChange={(e) => setFormData({ ...formData, details: e.target.value })}
+                    className="w-full bg-[#F2EFE7] border border-[#171817]/15 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#F15A3B] resize-none"
+                  />
+
+                  <div className="pt-2 flex items-center justify-between gap-4">
+                    <button type="button" onClick={() => setStep(2)} className="btn-studio-outline !py-2.5 !px-4 !text-xs">
+                      <ArrowLeft className="w-3.5 h-3.5" /> Back
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="btn-studio-accent disabled:opacity-60"
+                    >
+                      <span>{isSubmitting ? 'Sending Brief...' : 'Submit Project Brief'}</span>
+                      <ArrowUpRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </form>
+          </div>
+        </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
 }

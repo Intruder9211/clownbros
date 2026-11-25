@@ -1,649 +1,505 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { ArrowUpRight, ChevronDown, X } from 'lucide-react';
 import ContactModal from './ContactModal';
+import ThemeSwitcher from './ThemeSwitcher';
+import { useScrollLock } from '@/lib/useScrollLock';
+
+const SERVICE_CATEGORIES = [
+  {
+    group: 'Digital Experiences',
+    items: [
+      { title: 'Web Development', desc: 'Next.js, React & headless platforms', href: '/services/web-development' },
+      { title: 'UI/UX Design', desc: 'Design systems, prototypes & UX', href: '/services/ui-ux-design' },
+    ],
+  },
+  {
+    group: 'Product & Systems',
+    items: [
+      { title: 'Mobile Apps', desc: 'Flutter, React Native & native builds', href: '/services/mobile-apps' },
+      { title: 'AI Solutions', desc: 'LLM agents, RAG & workflow automation', href: '/services/ai-solutions' },
+    ],
+  },
+  {
+    group: 'Growth & Infrastructure',
+    items: [
+      { title: 'Cloud & DevOps', desc: 'AWS, Docker, CI/CD & observability', href: '/services/cloud-devops' },
+      { title: 'SEO & Growth', desc: 'Technical SEO, Core Web Vitals & funnels', href: '/services/seo-growth' },
+    ],
+  },
+];
+
+const STUDIO_LINKS = [
+  { title: 'About', desc: 'Philosophy, culture & engineering ethos', href: '/about' },
+  { title: 'Process', desc: '5-stage build room delivery framework', href: '/process' },
+  { title: 'Trust & Security', desc: 'NDAs, IP ownership & OWASP standards', href: '/trust' },
+  { title: 'Careers', desc: 'Open roles & global engineering network', href: '/careers' },
+];
 
 export default function Navigation() {
-    const [isOpen, setIsOpen] = useState(false);
-    const [scrolled, setScrolled] = useState(false);
-    const [hidden, setHidden] = useState(false);
-    const [mobileAccordion, setMobileAccordion] = useState<string | null>(null);
-    const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-    const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-    const pathname = usePathname();
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<'services' | 'studio' | null>(null);
+  const [mobileSection, setMobileSection] = useState<'services' | 'studio' | null>('services');
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const pathname = usePathname();
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    // Close menu drawer & dropdowns on escape or outside click
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') {
-                setIsOpen(false);
-                setIsContactModalOpen(false);
-                setActiveDropdown(null);
-            }
-        };
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      setActiveDropdown(null);
+      setIsMobileOpen(false);
+    });
+    return () => cancelAnimationFrame(id);
+  }, [pathname]);
 
-        const handleClickOutside = (e: MouseEvent) => {
-            const target = e.target as HTMLElement;
-            if (!target.closest('.nav-item-dropdown')) {
-                setActiveDropdown(null);
-            }
-        };
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
-        window.addEventListener('keydown', handleKeyDown);
-        document.addEventListener('click', handleClickOutside);
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-            document.removeEventListener('click', handleClickOutside);
-        };
-    }, []);
-
-    // Prevent body scroll when drawer or contact modal is open
-    useEffect(() => {
-        if (isOpen || isContactModalOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'unset';
-        }
-    }, [isOpen, isContactModalOpen]);
-
-    // Handle scroll events with RAF throttling for sticky header
-    useEffect(() => {
-        let ticking = false;
-
-        const handleScroll = () => {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    const currentScrollY = window.scrollY;
-                    const isScrolled = currentScrollY > 20;
-
-                    setScrolled(prev => prev !== isScrolled ? isScrolled : prev);
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
-
-    // Pathname change effect for scroll reveal and delegated mouse hover states
-    useEffect(() => {
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
         setActiveDropdown(null);
+        setIsMobileOpen(false);
+        setIsContactModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
 
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            },
-            { threshold: 0.1 }
-        );
+  useScrollLock(isMobileOpen);
 
-        const elements = document.querySelectorAll('.scroll-reveal');
-        elements.forEach((el) => observer.observe(el));
+  // Subtle desktop-only cursor ring
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (!window.matchMedia('(pointer: fine) and (hover: hover)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-        if (window.matchMedia('(pointer: fine)').matches) {
-            const cursorDot = document.getElementById('custom-cursor-dot');
-            const cursorRing = document.getElementById('custom-cursor-ring');
+    const ring = document.getElementById('studio-cursor-ring');
+    if (!ring) return;
 
-            const handleMouseOver = (e: MouseEvent) => {
-                const target = e.target as HTMLElement | null;
-                if (target && target.closest('a, button, input, select, textarea, .checkpill, .value-card, .tech-card, .editorial-card, .faq-header, .service-header, .gig-card, .trust-badge-card')) {
-                    cursorDot?.classList.add('hovered');
-                    cursorRing?.classList.add('hovered');
-                } else {
-                    cursorDot?.classList.remove('hovered');
-                    cursorRing?.classList.remove('hovered');
-                }
-            };
+    let mx = -100;
+    let my = -100;
+    let rx = -100;
+    let ry = -100;
+    let rafId: number | null = null;
 
-            document.addEventListener('mouseover', handleMouseOver, { passive: true });
-
-            return () => {
-                elements.forEach((el) => observer.unobserve(el));
-                document.removeEventListener('mouseover', handleMouseOver);
-            };
-        }
-
-        return () => {
-            elements.forEach((el) => observer.unobserve(el));
-        };
-    }, [pathname]);
-
-    // Hardware-accelerated GPU transform mouse cursor
-    useEffect(() => {
-        if (!window.matchMedia('(pointer: fine)').matches) return;
-
-        const cursorDot = document.getElementById('custom-cursor-dot');
-        const cursorRing = document.getElementById('custom-cursor-ring');
-        if (!cursorDot || !cursorRing) return;
-
-        let mouseX = -100;
-        let mouseY = -100;
-        let ringX = -100;
-        let ringY = -100;
-        let rafId: number | null = null;
-
-        const updatePositions = () => {
-            ringX += (mouseX - ringX) * 0.3;
-            ringY += (mouseY - ringY) * 0.3;
-
-            cursorDot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
-            cursorRing.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
-
-            rafId = null;
-        };
-
-        const moveCursor = (e: MouseEvent) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            if (!rafId) {
-                rafId = requestAnimationFrame(updatePositions);
-            }
-        };
-
-        const handleMouseLeave = () => {
-            cursorDot.style.opacity = '0';
-            cursorRing.style.opacity = '0';
-        };
-
-        const handleMouseEnter = () => {
-            cursorDot.style.opacity = '1';
-            cursorRing.style.opacity = '1';
-        };
-
-        window.addEventListener('mousemove', moveCursor, { passive: true });
-        document.addEventListener('mouseleave', handleMouseLeave);
-        document.addEventListener('mouseenter', handleMouseEnter);
-
-        return () => {
-            window.removeEventListener('mousemove', moveCursor);
-            document.removeEventListener('mouseleave', handleMouseLeave);
-            document.removeEventListener('mouseenter', handleMouseEnter);
-            if (rafId) cancelAnimationFrame(rafId);
-        };
-    }, []);
-
-    const toggleMenu = () => setIsOpen(!isOpen);
-    const closeMenu = () => {
-        setIsOpen(false);
-        setActiveDropdown(null);
+    const render = () => {
+      rx += (mx - rx) * 0.22;
+      ry += (my - ry) * 0.22;
+      ring.style.transform = `translate3d(${rx}px, ${ry}px, 0) translate(-50%, -50%)`;
+      if (Math.abs(mx - rx) > 0.3 || Math.abs(my - ry) > 0.3) {
+        rafId = requestAnimationFrame(render);
+      } else {
+        rafId = null;
+      }
     };
 
-    const toggleAccordion = (name: string) => {
-        setMobileAccordion(prev => prev === name ? null : name);
+    const onMove = (e: MouseEvent) => {
+      mx = e.clientX;
+      my = e.clientY;
+      ring.style.opacity = '1';
+      if (!rafId) rafId = requestAnimationFrame(render);
     };
 
-    const openContactModal = () => {
-        closeMenu();
-        setIsContactModalOpen(true);
+    const onOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target?.closest('a, button, [role="button"], input, select, textarea')) {
+        ring.classList.add('is-hovering');
+      } else {
+        ring.classList.remove('is-hovering');
+      }
     };
 
-    // Single active sub-menu control handlers
-    const handleNavDropdownEnter = (name: string) => {
-        setActiveDropdown(name);
+    const onLeave = () => {
+      ring.style.opacity = '0';
     };
 
-    const handleNavDropdownLeave = () => {
-        setActiveDropdown(null);
+    window.addEventListener('mousemove', onMove, { passive: true });
+    document.addEventListener('mouseover', onOver, { passive: true });
+    document.addEventListener('mouseleave', onLeave);
+
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseover', onOver);
+      document.removeEventListener('mouseleave', onLeave);
+      if (rafId) cancelAnimationFrame(rafId);
     };
+  }, []);
 
-    const handleNavDropdownToggle = (name: string, e: React.MouseEvent) => {
-        e.stopPropagation();
-        setActiveDropdown(prev => prev === name ? null : name);
-    };
+  const openMenu = (name: 'services' | 'studio') => {
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    setActiveDropdown(name);
+  };
 
-    const handleSubLinkClick = () => {
-        setActiveDropdown(null);
-        closeMenu();
-    };
+  const scheduleClose = () => {
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    closeTimerRef.current = setTimeout(() => setActiveDropdown(null), 140);
+  };
 
-    return (
-        <>
-            {/* Custom Cursors */}
-            <div id="custom-cursor-dot" className="custom-cursor-dot"></div>
-            <div id="custom-cursor-ring" className="custom-cursor-ring"></div>
+  return (
+    <>
+      <div id="studio-cursor-ring" className="studio-cursor-ring" aria-hidden="true" />
 
-            {/* Popup Contact Project Modal */}
-            <ContactModal 
-                isOpen={isContactModalOpen} 
-                onClose={() => setIsContactModalOpen(false)} 
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
+      />
+
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? 'bg-[var(--bg-paper)]/92 backdrop-blur-md border-b border-[var(--border-hairline)]'
+            : 'bg-[var(--bg-paper)]/78 backdrop-blur-sm border-b border-transparent'
+        }`}
+      >
+        <div className="studio-container flex items-center justify-between h-20 gap-3">
+          {/* Custom CLOWNBROS Final PNG Logo */}
+          <Link
+            href="/"
+            className="group flex items-center gap-2.5 text-[var(--text-ink)] shrink-0"
+            onClick={() => {
+              setActiveDropdown(null);
+              setIsMobileOpen(false);
+            }}
+          >
+            <img
+              src="/images/clownbros-mark.png"
+              alt="ClownBros"
+              className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
             />
+            <span className="font-display text-base sm:text-lg font-bold tracking-[0.06em] uppercase text-[var(--text-ink)]">
+              CLOWNBROS
+            </span>
+          </Link>
 
-            {/* Main Header */}
-            <header className={`main-header ${scrolled ? 'scrolled' : ''}`}>
-                <div className="nav-container">
-                    {/* Brand Logo */}
-                    <div className="logo-container" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <svg viewBox="0 0 100 100" width="28" height="28" fill="none" stroke="var(--primary)" strokeWidth="6" style={{ opacity: 0.9 }}>
-                            <circle cx="38" cy="50" r="28" />
-                            <circle cx="62" cy="50" r="28" style={{ stroke: 'var(--text-heading)', opacity: 0.6 }} />
-                        </svg>
-                        <Link href="/" className="brand-logo" onClick={closeMenu} style={{ letterSpacing: '0.05em', fontWeight: 600 }}>
-                            CLOWNBROS<span>.</span>
-                        </Link>
-                    </div>
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-8" aria-label="Primary Navigation">
+            {/* Services Dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => openMenu('services')}
+              onMouseLeave={scheduleClose}
+            >
+              <button
+                type="button"
+                onClick={() => setActiveDropdown(activeDropdown === 'services' ? null : 'services')}
+                aria-expanded={activeDropdown === 'services'}
+                className={`flex items-center gap-1.5 py-2 font-display text-sm font-medium tracking-wide transition-colors ${
+                  pathname.startsWith('/services') || activeDropdown === 'services'
+                    ? 'text-[var(--accent-orange)]'
+                    : 'text-[var(--text-ink)] hover:text-[var(--accent-orange)]'
+                }`}
+              >
+                <span>Services</span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                    activeDropdown === 'services' ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
 
-                    {/* Desktop Navigation Links & Mega Dropdowns */}
-                    <nav className="desktop-nav">
-                        <ul className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '20px', listStyle: 'none' }}>
-                            <li>
-                                <Link href="/" className={pathname === '/' ? 'active' : ''} onClick={handleSubLinkClick}>
-                                    Home
-                                </Link>
-                            </li>
-
-                            {/* Mega Menu 1: Services */}
-                            <li 
-                                className={`nav-item-dropdown ${activeDropdown === 'services' ? 'open' : ''}`}
-                                onMouseEnter={() => handleNavDropdownEnter('services')}
-                                onMouseLeave={handleNavDropdownLeave}
-                            >
-                                <button 
-                                    className={`nav-dropdown-trigger ${pathname.startsWith('/services') || activeDropdown === 'services' ? 'active' : ''}`}
-                                    onClick={(e) => handleNavDropdownToggle('services', e)}
-                                >
-                                    <span>Services</span>
-                                    <svg className="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </button>
-                                <div className={`mega-menu-panel mega-menu-wide ${activeDropdown === 'services' ? 'show' : ''}`}>
-                                    <div className="mega-menu-grid">
-                                        <div>
-                                            <div className="mega-menu-col-title">Engineering & Design</div>
-                                            <Link href="/services/web-development" className="mega-menu-item" onClick={handleSubLinkClick}>
-                                                <div className="mega-menu-icon">
-                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                                                </div>
-                                                <div className="mega-menu-text">
-                                                    <h5>Web & Web3 Platforms</h5>
-                                                    <p>Next.js & React web platforms.</p>
-                                                </div>
-                                            </Link>
-                                            <Link href="/services/mobile-apps" className="mega-menu-item" onClick={handleSubLinkClick}>
-                                                <div className="mega-menu-icon">
-                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-                                                </div>
-                                                <div className="mega-menu-text">
-                                                    <h5>Mobile App Engineering</h5>
-                                                    <p>iOS & Android native apps.</p>
-                                                </div>
-                                            </Link>
-                                            <Link href="/services/ui-ux-design" className="mega-menu-item" onClick={handleSubLinkClick}>
-                                                <div className="mega-menu-icon">
-                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/></svg>
-                                                </div>
-                                                <div className="mega-menu-text">
-                                                    <h5>UI/UX Product Design</h5>
-                                                    <p>Figma design systems & UI.</p>
-                                                </div>
-                                            </Link>
-                                        </div>
-                                        <div>
-                                            <div className="mega-menu-col-title">Cloud & Innovation</div>
-                                            <Link href="/services/cloud-devops" className="mega-menu-item" onClick={handleSubLinkClick}>
-                                                <div className="mega-menu-icon">
-                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
-                                                </div>
-                                                <div className="mega-menu-text">
-                                                    <h5>Cloud & DevOps Setup</h5>
-                                                    <p>AWS, Vercel & Docker CI/CD.</p>
-                                                </div>
-                                            </Link>
-                                            <Link href="/services/ai-solutions" className="mega-menu-item" onClick={handleSubLinkClick}>
-                                                <div className="mega-menu-icon">
-                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                                </div>
-                                                <div className="mega-menu-text">
-                                                    <h5>AI & ML Integration</h5>
-                                                    <p>Custom LLMs & AI agents.</p>
-                                                </div>
-                                            </Link>
-                                            <Link href="/services/seo-growth" className="mega-menu-item" onClick={handleSubLinkClick}>
-                                                <div className="mega-menu-icon">
-                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-                                                </div>
-                                                <div className="mega-menu-text">
-                                                    <h5>SEO & Organic Growth</h5>
-                                                    <p>Technical SEO & speed tuning.</p>
-                                                </div>
-                                            </Link>
-                                        </div>
-                                        <div className="mega-menu-featured-box">
-                                            <p>Need custom architecture for your product?</p>
-                                            <Link href="/services" onClick={handleSubLinkClick}>All Services →</Link>
-                                        </div>
-                                    </div>
+              {activeDropdown === 'services' && (
+                <div
+                  className="absolute left-1/2 -translate-x-1/2 top-full pt-3 w-[680px]"
+                  onMouseEnter={() => openMenu('services')}
+                  onMouseLeave={scheduleClose}
+                >
+                  <div className="bg-[var(--bg-ink)] text-[#F2EFE7] border border-white/15 rounded-2xl p-6 shadow-2xl">
+                    <div className="grid grid-cols-3 gap-6">
+                      {SERVICE_CATEGORIES.map((cat) => (
+                        <div key={cat.group}>
+                          <div className="font-mono-tech text-[10px] uppercase tracking-[0.14em] text-[#9E9B93] mb-3 pb-2 border-b border-white/10">
+                            {cat.group}
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            {cat.items.map((item) => (
+                              <Link
+                                key={item.href}
+                                href={item.href}
+                                onClick={() => setActiveDropdown(null)}
+                                className="group block p-2 -mx-2 rounded-lg hover:bg-white/8 transition-colors"
+                              >
+                                <div className="font-display text-sm font-medium text-[#F2EFE7] group-hover:text-[var(--accent-orange)] flex items-center justify-between">
+                                  {item.title}
+                                  <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                                 </div>
-                            </li>
-
-                            {/* Dropdown 2: Company & Trust */}
-                            <li 
-                                className={`nav-item-dropdown ${activeDropdown === 'company' ? 'open' : ''}`}
-                                onMouseEnter={() => handleNavDropdownEnter('company')}
-                                onMouseLeave={handleNavDropdownLeave}
-                            >
-                                <button 
-                                    className={`nav-dropdown-trigger ${pathname === '/about' || pathname === '/process' || pathname === '/trust' || pathname === '/case-studies' || activeDropdown === 'company' ? 'active' : ''}`}
-                                    onClick={(e) => handleNavDropdownToggle('company', e)}
-                                >
-                                    <span>Company & Trust</span>
-                                    <svg className="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </button>
-                                <div className={`mega-menu-panel mega-menu-compact ${activeDropdown === 'company' ? 'show' : ''}`}>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                                        <Link href="/about" className="mega-menu-item" onClick={handleSubLinkClick}>
-                                            <div className="mega-menu-icon">
-                                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                                            </div>
-                                            <div className="mega-menu-text">
-                                                <h5>Vision & Values</h5>
-                                                <p>Our culture & ethos.</p>
-                                            </div>
-                                        </Link>
-                                        <Link href="/process" className="mega-menu-item" onClick={handleSubLinkClick}>
-                                            <div className="mega-menu-icon">
-                                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                                            </div>
-                                            <div className="mega-menu-text">
-                                                <h5>How We Work</h5>
-                                                <p>5-step delivery framework.</p>
-                                            </div>
-                                        </Link>
-                                        <Link href="/trust" className="mega-menu-item" onClick={handleSubLinkClick}>
-                                            <div className="mega-menu-icon">
-                                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                                            </div>
-                                            <div className="mega-menu-text">
-                                                <h5>Trust & Security</h5>
-                                                <p>100% IP transfer & SOC2.</p>
-                                            </div>
-                                        </Link>
-                                        <Link href="/case-studies" className="mega-menu-item" onClick={handleSubLinkClick}>
-                                            <div className="mega-menu-icon">
-                                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-                                            </div>
-                                            <div className="mega-menu-text">
-                                                <h5>Client Case Studies</h5>
-                                                <p>Metrics & success stories.</p>
-                                            </div>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </li>
-
-                            {/* Mega Menu 2: Ecosystem & Lab */}
-                            <li 
-                                className={`nav-item-dropdown ${activeDropdown === 'ecosystem' ? 'open' : ''}`}
-                                onMouseEnter={() => handleNavDropdownEnter('ecosystem')}
-                                onMouseLeave={handleNavDropdownLeave}
-                            >
-                                <button 
-                                    className={`nav-dropdown-trigger ${activeDropdown === 'ecosystem' ? 'active' : ''}`}
-                                    onClick={(e) => handleNavDropdownToggle('ecosystem', e)}
-                                >
-                                    <span>Ecosystem &amp; Lab</span>
-                                    <svg className="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </button>
-                                <div className={`mega-menu-panel mega-menu-wide ${activeDropdown === 'ecosystem' ? 'show' : ''}`}>
-                                    <div className="mega-menu-grid">
-                                        <div>
-                                            <div className="mega-menu-col-title">AI &amp; Developer Tooling</div>
-                                            <a href="https://theclownfounder.vercel.app/" target="_blank" rel="noopener noreferrer" className="mega-menu-item" onClick={handleSubLinkClick}>
-                                                <div className="mega-menu-icon">
-                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2a8 8 0 0 0-8 8c0 3.3 2 6.2 5 7.4V20a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2.6c3-1.2 5-4.1 5-7.4a8 8 0 0 0-8-8z"/><line x1="9" y1="13" x2="15" y2="13"/></svg>
-                                                </div>
-                                                <div className="mega-menu-text">
-                                                    <h5>The ClownFounder ↗</h5>
-                                                    <p>Autonomous Company OS &amp; AI Suite.</p>
-                                                </div>
-                                            </a>
-                                            <a href="https://clowneaser.vercel.app/" target="_blank" rel="noopener noreferrer" className="mega-menu-item" onClick={handleSubLinkClick}>
-                                                <div className="mega-menu-icon">
-                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                                                </div>
-                                                <div className="mega-menu-text">
-                                                    <h5>ClownEaser ↗</h5>
-                                                    <p>Design Token Extractor &amp; AI CSS Studio.</p>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div>
-                                            <div className="mega-menu-col-title">Platforms &amp; Document Systems</div>
-                                            <a href="https://theclownmart.vercel.app/" target="_blank" rel="noopener noreferrer" className="mega-menu-item" onClick={handleSubLinkClick}>
-                                                <div className="mega-menu-icon">
-                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                                                </div>
-                                                <div className="mega-menu-text">
-                                                    <h5>The ClownMart ↗</h5>
-                                                    <p>High-Velocity E-Commerce Engine.</p>
-                                                </div>
-                                            </a>
-                                            <a href="https://clownkosh.vercel.app/" target="_blank" rel="noopener noreferrer" className="mega-menu-item" onClick={handleSubLinkClick}>
-                                                <div className="mega-menu-icon">
-                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                                                </div>
-                                                <div className="mega-menu-text">
-                                                    <h5>ClownKosh ↗</h5>
-                                                    <p>Distraction-Free PDF Library PWA.</p>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-
-                            {/* Dropdown 3: Careers & Freelancers */}
-                            <li 
-                                className={`nav-item-dropdown ${activeDropdown === 'careers' ? 'open' : ''}`}
-                                onMouseEnter={() => handleNavDropdownEnter('careers')}
-                                onMouseLeave={handleNavDropdownLeave}
-                            >
-                                <button 
-                                    className={`nav-dropdown-trigger ${pathname === '/careers' || activeDropdown === 'careers' ? 'active' : ''}`}
-                                    onClick={(e) => handleNavDropdownToggle('careers', e)}
-                                >
-                                    <span>Careers & Network</span>
-                                    <svg className="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                        <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>
-                                </button>
-                                <div className={`mega-menu-panel mega-menu-compact ${activeDropdown === 'careers' ? 'show' : ''}`}>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                                        <Link href="/careers" className="mega-menu-item" onClick={handleSubLinkClick}>
-                                            <div className="mega-menu-icon">
-                                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                                            </div>
-                                            <div className="mega-menu-text">
-                                                <h5>Freelancer &amp; Talent Hub</h5>
-                                                <p>Remote talent network in USD ($).</p>
-                                            </div>
-                                        </Link>
-                                        <Link href="/careers#gigs" className="mega-menu-item" onClick={handleSubLinkClick}>
-                                            <div className="mega-menu-icon">
-                                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-                                            </div>
-                                            <div className="mega-menu-text">
-                                                <h5>Open Freelance Gigs ($)</h5>
-                                                <p>Competitive market rates in USD.</p>
-                                            </div>
-                                        </Link>
-                                        <Link href="/careers#apply" className="mega-menu-item" onClick={handleSubLinkClick}>
-                                            <div className="mega-menu-icon">
-                                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>
-                                            </div>
-                                            <div className="mega-menu-text">
-                                                <h5>Apply as Freelance Engineer</h5>
-                                                <p>Direct talent network application.</p>
-                                            </div>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </nav>
-
-                    {/* Right: Action CTA Popup Modal Trigger & Burger Toggle */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <button 
-                            onClick={openContactModal} 
-                            className="btn btn-primary header-cta-btn" 
-                            style={{ padding: '9px 20px', fontSize: '13.5px', borderRadius: '8px', cursor: 'pointer' }}
-                        >
-                            Start a Project
-                        </button>
-                        
-                        <button 
-                            className="menu-toggle" 
-                            onClick={toggleMenu}
-                            aria-label="Open Navigation Menu"
-                            aria-expanded={isOpen}
-                        >
-                            <span className="burger-bar" style={{ transform: isOpen ? 'rotate(45deg) translateY(6px)' : 'none' }}></span>
-                            <span className="burger-bar" style={{ transform: isOpen ? 'rotate(-45deg) translateY(-6px)' : 'none' }}></span>
-                        </button>
-                    </div>
-                </div>
-            </header>
-
-            {/* Slide-out Navigation Drawer (Mobile & Accordion) */}
-            <div className={`nav-drawer ${isOpen ? 'open' : ''}`} aria-hidden={!isOpen}>
-                <div className="drawer-overlay" onClick={closeMenu}></div>
-                <div className="drawer-content">
-                    <button className="close-menu" onClick={closeMenu} aria-label="Close Navigation Menu">
-                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    </button>
-                    
-                    <div className="drawer-body">
-                        <nav className="drawer-menu">
-                            <ul>
-                                <li style={{ borderBottom: '1px solid var(--border-color-light)' }}>
-                                    <Link href="/" className={`drawer-link ${pathname === '/' ? 'active' : ''}`} onClick={closeMenu}>
-                                        Home
-                                    </Link>
-                                </li>
-
-                                {/* Mobile Accordion: Services */}
-                                <li className={`drawer-accordion ${mobileAccordion === 'services' ? 'open' : ''}`}>
-                                    <button className="drawer-accordion-btn" onClick={() => toggleAccordion('services')}>
-                                        <span>Services</span>
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ transform: mobileAccordion === 'services' ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s ease' }}>
-                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                        </svg>
-                                    </button>
-                                    <div className="drawer-accordion-content">
-                                        <Link href="/services/web-development" className="drawer-sub-link" onClick={closeMenu}>Web & Web3 Platforms</Link>
-                                        <Link href="/services/mobile-apps" className="drawer-sub-link" onClick={closeMenu}>Mobile Apps</Link>
-                                        <Link href="/services/ui-ux-design" className="drawer-sub-link" onClick={closeMenu}>UI/UX Product Design</Link>
-                                        <Link href="/services/cloud-devops" className="drawer-sub-link" onClick={closeMenu}>Cloud & DevOps</Link>
-                                        <Link href="/services/ai-solutions" className="drawer-sub-link" onClick={closeMenu}>AI & Machine Learning</Link>
-                                        <Link href="/services/seo-growth" className="drawer-sub-link" onClick={closeMenu}>SEO & Organic Growth</Link>
-                                        <Link href="/services" className="drawer-sub-link" style={{ fontWeight: 600, color: 'var(--primary-hover)' }} onClick={closeMenu}>Explore All Services →</Link>
-                                    </div>
-                                </li>
-
-                                {/* Mobile Accordion: Company & Trust */}
-                                <li className={`drawer-accordion ${mobileAccordion === 'company' ? 'open' : ''}`}>
-                                    <button className="drawer-accordion-btn" onClick={() => toggleAccordion('company')}>
-                                        <span>Company & Trust</span>
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ transform: mobileAccordion === 'company' ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s ease' }}>
-                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                        </svg>
-                                    </button>
-                                    <div className="drawer-accordion-content">
-                                        <Link href="/about" className="drawer-sub-link" onClick={closeMenu}>Vision & Values</Link>
-                                        <Link href="/process" className="drawer-sub-link" onClick={closeMenu}>How We Work (Process)</Link>
-                                        <Link href="/trust" className="drawer-sub-link" onClick={closeMenu}>Trust & Compliance</Link>
-                                        <Link href="/case-studies" className="drawer-sub-link" onClick={closeMenu}>Client Case Studies</Link>
-                                    </div>
-                                </li>
-
-                                {/* Mobile Accordion: Ecosystem & Lab */}
-                                <li className={`drawer-accordion ${mobileAccordion === 'ecosystem' ? 'open' : ''}`}>
-                                    <button className="drawer-accordion-btn" onClick={() => toggleAccordion('ecosystem')}>
-                                        <span>Ecosystem &amp; Lab</span>
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ transform: mobileAccordion === 'ecosystem' ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s ease' }}>
-                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                        </svg>
-                                    </button>
-                                    <div className="drawer-accordion-content">
-                                        <a href="https://theclownfounder.vercel.app/" target="_blank" rel="noopener noreferrer" className="drawer-sub-link" onClick={closeMenu}>The ClownFounder ↗ (AI OS)</a>
-                                        <a href="https://clowneaser.vercel.app/" target="_blank" rel="noopener noreferrer" className="drawer-sub-link" onClick={closeMenu}>ClownEaser ↗ (AI CSS Studio)</a>
-                                        <a href="https://theclownmart.vercel.app/" target="_blank" rel="noopener noreferrer" className="drawer-sub-link" onClick={closeMenu}>The ClownMart ↗ (E-Commerce)</a>
-                                        <a href="https://clownkosh.vercel.app/" target="_blank" rel="noopener noreferrer" className="drawer-sub-link" onClick={closeMenu}>ClownKosh ↗ (PDF Library)</a>
-                                    </div>
-                                </li>
-
-                                {/* Mobile Accordion: Careers & Network */}
-                                <li className={`drawer-accordion ${mobileAccordion === 'careers' ? 'open' : ''}`}>
-                                    <button className="drawer-accordion-btn" onClick={() => toggleAccordion('careers')}>
-                                        <span>Careers & Freelancers</span>
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ transform: mobileAccordion === 'careers' ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s ease' }}>
-                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                        </svg>
-                                    </button>
-                                    <div className="drawer-accordion-content">
-                                        <Link href="/careers" className="drawer-sub-link" onClick={closeMenu}>Freelancer &amp; Talent Hub ($)</Link>
-                                        <Link href="/careers#gigs" className="drawer-sub-link" onClick={closeMenu}>Open Gigs in USD ($)</Link>
-                                        <Link href="/careers#apply" className="drawer-sub-link" onClick={closeMenu}>Apply as Freelance Engineer</Link>
-                                    </div>
-                                </li>
-
-                                <li style={{ borderTop: '1px solid var(--border-color-light)', paddingTop: '12px' }}>
-                                    <button onClick={openContactModal} className="drawer-link" style={{ background: 'none', border: 'none', textAlign: 'left', width: '100%', cursor: 'pointer', fontFamily: 'inherit', fontSize: 'inherit' }}>
-                                        Start a Project
-                                    </button>
-                                </li>
-                            </ul>
-                        </nav>
-                        
-                        <div style={{ marginTop: '16px' }} className="mobile-only-cta">
-                            <button onClick={openContactModal} className="btn btn-primary" style={{ display: 'flex', width: '100%', padding: '14px', justifyContent: 'center', cursor: 'pointer', borderRadius: '8px' }}>
-                                Get in Touch
-                            </button>
+                                <p className="text-xs text-[#9E9B93] mt-0.5 leading-snug">
+                                  {item.desc}
+                                </p>
+                              </Link>
+                            ))}
+                          </div>
                         </div>
+                      ))}
                     </div>
-
-                    <div className="drawer-footer">
-                        <p className="drawer-label">Get in Touch</p>
-                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@clownbros.com&cc=singhmohit101103@gmail.com&su=new%20contact%20lead" target="_blank" rel="noopener noreferrer" className="drawer-email" style={{ display: 'block', marginBottom: '8px' }}>
-                            singhmohit101103@gmail.com
-                        </a>
-                        <a href="tel:7303061282" className="drawer-email" style={{ display: 'block', marginBottom: '24px' }}>
-                            +91 73030 61282
-                        </a>
-                        <div className="drawer-socials" style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-                            <a href="https://instagram.com/clownbros" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="Instagram" style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
-                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                            </a>
-                            <a href="https://youtube.com/@clownbros" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="YouTube" style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
-                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.95 1.96C5.12 19.5 12 19.5 12 19.5s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
-                            </a>
-                            <a href="https://linkedin.com/company/clownbros" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="LinkedIn" style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
-                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-                            </a>
-                            <a href="https://x.com/clownbros" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="X (formerly Twitter)" style={{ color: 'var(--text-muted)', display: 'flex', alignItems: 'center' }}>
-                                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                            </a>
-                        </div>
+                    <div className="mt-5 pt-4 border-t border-white/10 flex items-center justify-between">
+                      <span className="font-mono-tech text-xs text-[#9E9B93]">
+                        End-to-end product architecture &amp; engineering
+                      </span>
+                      <Link
+                        href="/services"
+                        onClick={() => setActiveDropdown(null)}
+                        className="font-display text-xs font-medium text-[var(--accent-orange)] hover:text-[#F2EFE7] inline-flex items-center gap-1 transition-colors"
+                      >
+                        Explore All Capabilities <ArrowUpRight className="w-3.5 h-3.5" />
+                      </Link>
                     </div>
+                  </div>
                 </div>
+              )}
             </div>
-        </>
-    );
+
+            <Link
+              href="/case-studies"
+              className={`link-editorial font-display text-sm font-medium tracking-wide transition-colors ${
+                pathname === '/case-studies'
+                  ? 'text-[var(--accent-orange)]'
+                  : 'text-[var(--text-ink)] hover:text-[var(--accent-orange)]'
+              }`}
+            >
+              Work
+            </Link>
+
+            {/* Company / About Dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => openMenu('studio')}
+              onMouseLeave={scheduleClose}
+            >
+              <button
+                type="button"
+                onClick={() => setActiveDropdown(activeDropdown === 'studio' ? null : 'studio')}
+                aria-expanded={activeDropdown === 'studio'}
+                className={`flex items-center gap-1.5 py-2 font-display text-sm font-medium tracking-wide transition-colors ${
+                  ['/about', '/process', '/trust', '/careers'].includes(pathname) ||
+                  activeDropdown === 'studio'
+                    ? 'text-[var(--accent-orange)]'
+                    : 'text-[var(--text-ink)] hover:text-[var(--accent-orange)]'
+                }`}
+              >
+                <span>Company</span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                    activeDropdown === 'studio' ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
+
+              {activeDropdown === 'studio' && (
+                <div
+                  className="absolute left-1/2 -translate-x-1/2 top-full pt-3 w-[320px]"
+                  onMouseEnter={() => openMenu('studio')}
+                  onMouseLeave={scheduleClose}
+                >
+                  <div className="bg-[var(--bg-ink)] text-[#F2EFE7] border border-white/15 rounded-2xl p-4 shadow-2xl flex flex-col gap-1">
+                    {STUDIO_LINKS.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setActiveDropdown(null)}
+                        className="group block p-2.5 rounded-xl hover:bg-white/8 transition-colors"
+                      >
+                        <div className="font-display text-sm font-medium text-[#F2EFE7] group-hover:text-[var(--accent-orange)] flex items-center justify-between">
+                          {item.title}
+                          <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                        <p className="text-xs text-[#9E9B93] mt-0.5">{item.desc}</p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <Link
+              href="/contact"
+              className={`link-editorial font-display text-sm font-medium tracking-wide transition-colors ${
+                pathname === '/contact'
+                  ? 'text-[var(--accent-orange)]'
+                  : 'text-[var(--text-ink)] hover:text-[var(--accent-orange)]'
+              }`}
+            >
+              Contact
+            </Link>
+          </nav>
+
+          {/* Right: 8-Theme Switcher + CTA + Mobile Trigger */}
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <ThemeSwitcher />
+
+            <button
+              type="button"
+              onClick={() => setIsContactModalOpen(true)}
+              className="hidden md:inline-flex btn-studio-primary !py-2.5 !px-5 !text-xs"
+            >
+              <span>Start a Project</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsMobileOpen(true)}
+              aria-label="Open Navigation Menu"
+              aria-expanded={isMobileOpen}
+              className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-full border border-[var(--border-hairline)] text-[var(--text-ink)] hover:bg-[var(--bg-ink)] hover:text-[#F2EFE7] transition-colors shrink-0"
+            >
+              <span className="sr-only">Menu</span>
+              <div className="flex flex-col gap-1.5 w-4">
+                <span className="h-[1.5px] w-full bg-current block" />
+                <span className="h-[1.5px] w-3/4 bg-current block ml-auto" />
+              </div>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Full-Screen Responsive Mobile Menu */}
+      <div
+        className={`fixed inset-0 z-[70] bg-[var(--bg-ink)] text-[#F2EFE7] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          isMobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        aria-hidden={!isMobileOpen}
+      >
+        <div className="studio-container h-full flex flex-col justify-between py-6 overflow-y-auto">
+          <div className="flex items-center justify-between pb-6 border-b border-white/12">
+            <Link
+              href="/"
+              onClick={() => setIsMobileOpen(false)}
+              className="flex items-center gap-2.5 font-display text-lg font-bold tracking-[0.06em] uppercase text-[#F2EFE7]"
+            >
+              <img
+                src="/images/clownbros-mark-light.png"
+                alt="ClownBros"
+                className="h-8 w-auto object-contain"
+              />
+              <span>CLOWNBROS</span>
+            </Link>
+            <button
+              type="button"
+              onClick={() => setIsMobileOpen(false)}
+              aria-label="Close Navigation Menu"
+              className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-[#F2EFE7] hover:bg-[var(--accent-orange)] hover:border-[var(--accent-orange)] transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div className="py-8 flex flex-col gap-6 my-auto">
+            <Link
+              href="/"
+              onClick={() => setIsMobileOpen(false)}
+              className="font-display text-3xl font-semibold tracking-tight hover:text-[var(--accent-orange)] transition-colors"
+            >
+              Home
+            </Link>
+
+            <div className="border-y border-white/12 py-4">
+              <button
+                type="button"
+                onClick={() => setMobileSection(mobileSection === 'services' ? null : 'services')}
+                className="w-full flex items-center justify-between font-display text-3xl font-semibold tracking-tight"
+              >
+                <span>Services</span>
+                <ChevronDown
+                  className={`w-6 h-6 transition-transform duration-300 ${
+                    mobileSection === 'services' ? 'rotate-180 text-[var(--accent-orange)]' : ''
+                  }`}
+                />
+              </button>
+              {mobileSection === 'services' && (
+                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 pl-2">
+                  <Link href="/services" onClick={() => setIsMobileOpen(false)} className="text-sm font-medium text-[var(--accent-orange)]">
+                    All Capabilities →
+                  </Link>
+                  <Link href="/services/web-development" onClick={() => setIsMobileOpen(false)} className="text-sm text-[#F2EFE7]/80 hover:text-[#F2EFE7]">
+                    Web Development
+                  </Link>
+                  <Link href="/services/mobile-apps" onClick={() => setIsMobileOpen(false)} className="text-sm text-[#F2EFE7]/80 hover:text-[#F2EFE7]">
+                    Mobile Apps
+                  </Link>
+                  <Link href="/services/ui-ux-design" onClick={() => setIsMobileOpen(false)} className="text-sm text-[#F2EFE7]/80 hover:text-[#F2EFE7]">
+                    UI/UX Design
+                  </Link>
+                  <Link href="/services/cloud-devops" onClick={() => setIsMobileOpen(false)} className="text-sm text-[#F2EFE7]/80 hover:text-[#F2EFE7]">
+                    Cloud &amp; DevOps
+                  </Link>
+                  <Link href="/services/ai-solutions" onClick={() => setIsMobileOpen(false)} className="text-sm text-[#F2EFE7]/80 hover:text-[#F2EFE7]">
+                    AI Solutions
+                  </Link>
+                  <Link href="/services/seo-growth" onClick={() => setIsMobileOpen(false)} className="text-sm text-[#F2EFE7]/80 hover:text-[#F2EFE7]">
+                    SEO &amp; Growth
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            <Link
+              href="/case-studies"
+              onClick={() => setIsMobileOpen(false)}
+              className="font-display text-3xl font-semibold tracking-tight hover:text-[var(--accent-orange)] transition-colors"
+            >
+              Case Studies
+            </Link>
+
+            <div className="border-y border-white/12 py-4">
+              <button
+                type="button"
+                onClick={() => setMobileSection(mobileSection === 'studio' ? null : 'studio')}
+                className="w-full flex items-center justify-between font-display text-3xl font-semibold tracking-tight"
+              >
+                <span>Company</span>
+                <ChevronDown
+                  className={`w-6 h-6 transition-transform duration-300 ${
+                    mobileSection === 'studio' ? 'rotate-180 text-[var(--accent-orange)]' : ''
+                  }`}
+                />
+              </button>
+              {mobileSection === 'studio' && (
+                <div className="mt-4 grid grid-cols-2 gap-3 pl-2">
+                  {STUDIO_LINKS.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setIsMobileOpen(false)}
+                      className="text-sm text-[#F2EFE7]/80 hover:text-[#F2EFE7]"
+                    >
+                      {item.title}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <Link
+              href="/contact"
+              onClick={() => setIsMobileOpen(false)}
+              className="font-display text-3xl font-semibold tracking-tight hover:text-[var(--accent-orange)] transition-colors"
+            >
+              Contact
+            </Link>
+          </div>
+
+          <div className="pt-6 border-t border-white/12 flex flex-col gap-4">
+            <div className="flex flex-wrap items-center justify-between gap-2 font-mono-tech text-xs text-[#9E9B93]">
+              <a href="mailto:hello@clownbros.com" className="hover:text-[#F2EFE7]">
+                hello@clownbros.com
+              </a>
+              <a href="tel:7303061282" className="hover:text-[#F2EFE7]">
+                +91 73030 61282
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
-
-

@@ -1,475 +1,196 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import Link from 'next/link';
+import { ArrowUpRight, ArrowDown } from 'lucide-react';
+import { gsap, useGSAP, prefersReducedMotion } from '@/lib/gsap';
+import HeroPipeline from '@/components/home/HeroPipeline';
+import HeroAmbientBg from '@/components/HeroAmbientBg';
+import ProofSection from '@/components/home/ProofSection';
+import SelectedWorks from '@/components/home/SelectedWorks';
+import ServiceDirectory from '@/components/home/ServiceDirectory';
+import BuildRoom from '@/components/home/BuildRoom';
+import FaqSection from '@/components/home/FaqSection';
+import StudioCTA from '@/components/StudioCTA';
+import ContactModal from '@/components/ContactModal';
 
 export default function Home() {
-    const [quote, setQuote] = useState({ 
-        text: 'Every ambitious idea deserves an enterprise-grade digital foundation — without the agency bloat.', 
-        author: 'ClownBros Core Engineering Philosophy' 
-    });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
 
-    useEffect(() => {
-        fetch('https://dummyjson.com/quotes/random')
-            .then(res => res.json())
-            .then(data => {
-                if (data && data.quote) {
-                    setQuote({ text: data.quote, author: data.author });
-                }
-            })
-            .catch(err => console.error("Failed to fetch quote", err));
-    }, []);
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return;
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      tl.from('.hero-mask-line', {
+        yPercent: 105,
+        duration: 0.85,
+        stagger: 0.1,
+      }).from(
+        '.hero-fade-in',
+        {
+          y: 18,
+          opacity: 0,
+          duration: 0.65,
+          stagger: 0.08,
+        },
+        '-=0.45'
+      );
+    },
+    { scope: heroRef }
+  );
 
-    return (
-        <main>
-            {/* Hero Section */}
-            <section className="hero-section" id="hero">
-                <div className="container">
-                    <div className="hero-grid" style={{ marginBottom: '80px' }}>
-                        {/* Left Column: Text Content */}
-                        <div className="reveal-left visible">
-                            <div className="hero-tagline animate-fade-in" style={{ marginBottom: '16px' }}>
-                                <span className="pill-badge">EST. 2026 — MODERN ENGINEERING STUDIO</span>
-                            </div>
-                            
-                            <h1 className="hero-title editorial-hero-title animate-fade-in delay-1" style={{ marginBottom: '20px' }}>
-                                From Concept to Impact. <br />
-                                <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>We engineer high-performance digital products.</span>
-                            </h1>
-                            
-                            <p className="hero-lead editorial-hero-lead animate-fade-in delay-2" style={{ marginBottom: '28px' }}>
-                                ClownBros is a modern technology &amp; design studio. We craft lightning-fast web applications, mobile platforms, and scalable digital architectures for ambitious startups and expanding brands.
-                            </p>
-                            
-                            <div className="hero-actions animate-fade-in delay-3" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-                                <Link href="/services" className="btn btn-primary">Explore Capabilities</Link>
-                                <Link href="/contact" className="btn btn-secondary">Schedule Discovery Call</Link>
-                            </div>
-                        </div>
- 
-                        {/* Right Column: Featured Workspace Visual */}
-                        <div className="reveal-right visible float-element svg-wrap-hero">
-                            <svg viewBox="0 0 600 500" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style={{ maxWidth: '100%', maxHeight: '100%' }}>
-                              <defs>
-                                <linearGradient id="workGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                  <stop offset="0%" stopColor="#FFFFFF" />
-                                  <stop offset="60%" stopColor="#DCC7A1" />
-                                  <stop offset="100%" stopColor="#C8AF7E" />
-                                </linearGradient>
-                                <linearGradient id="workGlassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                  <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.85" />
-                                  <stop offset="100%" stopColor="#F3EEE5" stopOpacity="0.3" />
-                                </linearGradient>
-                                <linearGradient id="workDarkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                  <stop offset="0%" stopColor="#3A3631" />
-                                  <stop offset="100%" stopColor="#26231F" />
-                                </linearGradient>
-                              </defs>
- 
-                              {/* Ground shadow */}
-                              <ellipse cx="300" cy="420" rx="180" ry="30" fill="#26231F" opacity="0.04" filter="blur(10px)" />
- 
-                              <g>
-                                {/* Base Ring grid */}
-                                <ellipse cx="300" cy="300" rx="200" ry="100" fill="none" stroke="#E6DED2" strokeWidth="1.5" opacity="0.7" />
-                                <ellipse cx="300" cy="300" rx="150" ry="75" fill="none" stroke="#DCC7A1" strokeWidth="1" strokeDasharray="6,4" opacity="0.5" />
- 
-                                {/* Primary 3D Isometric Screen Dashboard */}
-                                <g transform="translate(0, -30)">
-                                  {/* Back screen glass sheet */}
-                                  <path d="M 180 200 L 380 100 L 460 180 L 260 280 Z" fill="url(#workGlassGrad)" stroke="#FFFFFF" strokeWidth="2" opacity="0.9" />
-                                  {/* Top Header of screen */}
-                                  <path d="M 180 200 L 380 100 L 400 120 L 200 220 Z" fill="#E6DED2" stroke="#E6DED2" strokeWidth="0.5" opacity="0.8" />
-                                  {/* Screen layout sections */}
-                                  <path d="M 200 220 L 250 195 L 290 235 L 240 260 Z" fill="#26231F" opacity="0.06" />
-                                  {/* Small Card 1 */}
-                                  <path d="M 270 185 L 340 150 L 370 180 L 300 215 Z" fill="#FFFFFF" stroke="#E6DED2" strokeWidth="1" />
-                                  <line x1="285" y1="184.5" x2="335" y2="159.5" stroke="#DCC7A1" strokeWidth="2.5" />
-                                  <line x1="285" y1="194.5" x2="315" y2="179.5" stroke="#26231F" strokeWidth="1.5" opacity="0.3" />
- 
-                                  {/* Small Card 2 with chart */}
-                                  <path d="M 330 155 L 400 120 L 430 150 L 360 185 Z" fill="#FFFFFF" stroke="#E6DED2" strokeWidth="1" />
-                                  <g transform="translate(10, 0)">
-                                    {/* Bar 1 */}
-                                    <path d="M 345 162.5 L 350 160 L 350 150 L 345 152.5 Z" fill="#DCC7A1" />
-                                    <path d="M 350 160 L 355 157.5 L 355 147.5 L 350 150 Z" fill="#C8AF7E" />
-                                    {/* Bar 2 */}
-                                    <path d="M 360 155 L 365 152.5 L 365 137.5 L 360 140 Z" fill="#DCC7A1" />
-                                    <path d="M 365 152.5 L 370 150 L 370 135 L 365 137.5 Z" fill="#C8AF7E" />
-                                    {/* Bar 3 */}
-                                    <path d="M 375 147.5 L 380 145 L 380 125 L 375 127.5 Z" fill="#26231F" />
-                                    <path d="M 380 145 L 385 142.5 L 385 122.5 L 380 125 Z" fill="#3A3631" />
-                                  </g>
-                                </g>
- 
-                                {/* Floating Front Panel 1 (Left - Analytics) */}
-                                <g transform="translate(-70, 40)">
-                                  <path d="M 180 200 L 260 160 L 290 190 L 210 230 Z" fill="#26231F" opacity="0.06" filter="blur(4px)" />
-                                  <path d="M 180 180 L 260 140 L 290 170 L 210 210 Z" fill="url(#workGlassGrad)" stroke="#FFFFFF" strokeWidth="1.5" />
-                                  <ellipse cx="235" cy="175" rx="20" ry="10" fill="none" stroke="#E6DED2" strokeWidth="4" />
-                                  <path d="M 225 180 A 20 10 0 0 1 245 170" fill="none" stroke="url(#workGoldGrad)" strokeWidth="4.5" strokeLinecap="round" />
-                                  <line x1="200" y1="195" x2="235" y2="177.5" stroke="#C8AF7E" strokeWidth="2.5" />
-                                  <line x1="200" y1="202" x2="218" y2="193" stroke="#26231F" strokeWidth="1.5" opacity="0.3" />
-                                </g>
- 
-                                {/* Floating Front Panel 2 (Right - Automation Node) */}
-                                <g transform="translate(100, -80)">
-                                  <path d="M 240 220 L 320 180 L 350 210 L 270 250 Z" fill="#26231F" opacity="0.05" filter="blur(4px)" />
-                                  <path d="M 240 200 L 320 160 L 350 190 L 270 230 Z" fill="url(#workDarkGrad)" stroke="#C8AF7E" strokeWidth="1" />
-                                  <circle cx="260" cy="195" r="2.5" fill="#DCC7A1" />
-                                  <line x1="268" y1="195" x2="305" y2="176.5" stroke="#FFFFFF" strokeWidth="2" opacity="0.9" />
-                                  <circle cx="270" cy="210" r="2.5" fill="#DCC7A1" />
-                                  <line x1="278" y1="210" x2="315" y2="191.5" stroke="#FFFFFF" strokeWidth="2" opacity="0.9" />
-                                  <circle cx="330" cy="180" r="3.5" fill="#4A8F63" />
-                                </g>
- 
-                                {/* Floating Spheres & Code Node */}
-                                <g transform="translate(40, -140)">
-                                  <circle cx="210" cy="210" r="8" fill="url(#workGoldGrad)" />
-                                  <path d="M 210 210 L 150 240" stroke="#DCC7A1" strokeWidth="1.5" strokeDasharray="3,3" />
-                                  <circle cx="150" cy="240" r="4" fill="#26231F" />
-                                </g>
- 
-                                <g transform="translate(230, -50)">
-                                  <circle cx="210" cy="210" r="12" fill="url(#workGlassGrad)" stroke="#FFFFFF" strokeWidth="1" />
-                                  <circle cx="210" cy="210" r="4" fill="#C8AF7E" />
-                                </g>
-                              </g>
-                            </svg>
-                        </div>
-                    </div>
- 
-                    {/* Agency Philosophy - 2-Column Split */}
-                    <div className="scroll-reveal editorial-card philosophy-grid" style={{ backgroundColor: 'var(--dark-section)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-card)', overflow: 'hidden', position: 'relative' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                            <span className="section-tagline" style={{ color: 'var(--primary)', marginBottom: '0px' }}>Daily Inspiration</span>
-                            <h2 className="editorial-h2" style={{ color: '#FFFFFF', margin: 0 }}>
-                                &ldquo;{quote.text}&rdquo;
-                            </h2>
-                            <p style={{ color: 'var(--footer-text)', fontSize: '16px', fontStyle: 'italic', marginTop: '8px', margin: 0 }}>
-                                — {quote.author}
-                            </p>
-                        </div>
-                        <div className="float-element svg-wrap-philosophy">
-                            <svg viewBox="0 0 500 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style={{ maxWidth: '100%', maxHeight: '100%' }}>
-                              <defs>
-                                <linearGradient id="conceptGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                  <stop offset="0%" stopColor="#FFFFFF" />
-                                  <stop offset="60%" stopColor="#DCC7A1" />
-                                  <stop offset="100%" stopColor="#C8AF7E" />
-                                </linearGradient>
-                                <linearGradient id="conceptGlassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                  <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.8" />
-                                  <stop offset="100%" stopColor="#F3EEE5" stopOpacity="0.25" />
-                                </linearGradient>
-                                <linearGradient id="conceptDarkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                  <stop offset="0%" stopColor="#3A3631" />
-                                  <stop offset="100%" stopColor="#26231F" />
-                                </linearGradient>
-                              </defs>
+  return (
+    <main className="overflow-x-clip">
+      <ContactModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
-                              {/* Ground shadow */}
-                              <ellipse cx="250" cy="320" rx="120" ry="20" fill="#26231F" opacity="0.05" filter="blur(8px)" />
+      {/* SECTION 02 — HERO (Full Viewport Box Layout, Theme s1) */}
+      <section
+        ref={heroRef}
+        style={{ backgroundColor: 'var(--bg-s1)' }}
+        className="text-[var(--text-ink)] pt-[88px] sm:pt-[92px] pb-3 sm:pb-4 px-3 sm:px-5 lg:h-[100dvh] flex flex-col"
+      >
+        <div
+          style={{
+            background:
+              'linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-cobalt) 50%, var(--accent-orange) 100%)',
+          }}
+          className="flex-1 w-full max-w-[1440px] mx-auto p-[2px] rounded-[26px] sm:rounded-[34px] flex flex-col shadow-sm"
+        >
+          <div
+            style={{ backgroundColor: 'var(--bg-s1)' }}
+            className="relative overflow-hidden flex-1 w-full rounded-[24px] sm:rounded-[32px] flex flex-col justify-between px-5 sm:px-8 lg:px-12 py-6 sm:py-8 lg:py-8"
+          >
+            <HeroAmbientBg />
 
-                              <g>
-                                {/* Base Ring */}
-                                <ellipse cx="250" cy="240" rx="130" ry="65" fill="none" stroke="#E6DED2" strokeWidth="1.5" opacity="0.6" />
-                                <ellipse cx="250" cy="240" rx="90" ry="45" fill="none" stroke="#DCC7A1" strokeWidth="1" strokeDasharray="4,4" opacity="0.5" />
+          {/* Main Headline + Supporting Copy & CTAs */}
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-10 items-end my-auto">
+            <div className="lg:col-span-8 min-w-0">
+              <h1 className="font-display text-[clamp(2rem,4.9vw,4.35rem)] font-semibold tracking-tight leading-[0.98] text-[var(--text-ink)]">
+                <span className="block overflow-hidden">
+                  <span className="hero-mask-line block">We build what</span>
+                </span>
+                <span className="block overflow-hidden">
+                  <span className="hero-mask-line block">
+                    your business{' '}
+                    <span className="font-serif-editorial italic font-normal text-[var(--accent-orange)]">
+                      runs on.
+                    </span>
+                  </span>
+                </span>
+              </h1>
+            </div>
 
-                                {/* Architectural 3D Arches */}
-                                <g transform="translate(-30, -30)">
-                                  <path d="M 180 250 L 180 180 C 180 150, 220 130, 240 150 L 240 220" fill="none" stroke="url(#conceptGoldGrad)" strokeWidth="12" strokeLinecap="round" opacity="0.85" />
-                                </g>
+            <div className="lg:col-span-4 space-y-4 min-w-0">
+              <p className="hero-fade-in text-sm sm:text-base text-[var(--text-muted)] leading-relaxed">
+                Digital products, powerful software and intelligent systems. Designed with purpose. Engineered for reality.
+              </p>
+              <div className="hero-fade-in flex flex-wrap items-center gap-2.5">
+                <a href="#selected-works" className="btn-studio-primary !py-3 !px-5 !text-xs sm:!text-sm">
+                  <span>Explore Our Work</span>
+                  <ArrowUpRight className="w-4 h-4" />
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(true)}
+                  className="btn-studio-outline !py-3 !px-5 !text-xs sm:!text-sm"
+                >
+                  Start a Project
+                </button>
+              </div>
+            </div>
+          </div>
 
-                                <g transform="translate(30, 0)">
-                                  <path d="M 200 250 L 200 170 C 200 130, 250 110, 270 130 L 270 210" fill="none" stroke="url(#conceptGlassGrad)" strokeWidth="14" strokeLinecap="round" opacity="0.9" />
-                                </g>
+          {/* Interactive System Visualization + Scroll Indicator */}
+          <div className="relative z-10 mt-5 lg:mt-4 space-y-3 sm:space-y-4">
+            <div className="hero-fade-in">
+              <HeroPipeline />
+            </div>
 
-                                {/* Stacked Stairs / Growth Block */}
-                                <g transform="translate(10, 20)">
-                                  <path d="M 210 220 L 240 235 L 270 220 L 240 205 Z" fill="#E6DED2" stroke="#E6DED2" strokeWidth="0.5" />
-                                  <path d="M 210 220 L 240 235 L 240 245 L 210 230 Z" fill="#F3EEE5" />
-                                  <path d="M 240 235 L 270 220 L 270 230 L 240 245 Z" fill="#E6DED2" opacity="0.8" />
-                                  
-                                  <g transform="translate(5, -15)">
-                                    <path d="M 210 220 L 240 235 L 270 220 L 240 205 Z" fill="url(#conceptGoldGrad)" stroke="#C8AF7E" strokeWidth="0.5" />
-                                    <path d="M 210 220 L 240 235 L 240 245 L 210 230 Z" fill="#DCC7A1" />
-                                    <path d="M 240 235 L 270 220 L 270 230 L 240 245 Z" fill="#C8AF7E" />
-                                  </g>
+            <div className="flex items-center justify-between text-[11px] font-mono-tech text-[var(--text-muted)] pt-1">
+              <a
+                href="#proof"
+                className="inline-flex items-center gap-2 hover:text-[var(--text-ink)] transition-colors"
+              >
+                <ArrowDown className="w-3.5 h-3.5 text-[var(--accent-orange)]" />
+                <span>SCROLL TO INSPECT</span>
+              </a>
+              <span className="hidden sm:inline">NEXT.JS / TYPESCRIPT / AI SYSTEMS / CLOUD</span>
+            </div>
+          </div>
+          </div>
+        </div>
+      </section>
 
-                                  <g transform="translate(10, -30)">
-                                    <path d="M 210 220 L 240 235 L 270 220 L 240 205 Z" fill="url(#conceptDarkGrad)" stroke="#26231F" strokeWidth="0.5" />
-                                    <path d="M 210 220 L 240 235 L 240 245 L 210 230 Z" fill="#3A3631" />
-                                    <path d="M 240 235 L 270 220 L 270 230 L 240 245 Z" fill="#26231F" />
-                                  </g>
-                                </g>
+      {/* SECTION 03 — PROOF, NOT PROMISES (Theme s2) */}
+      <ProofSection />
 
-                                {/* Floating Spheres and Sparkles */}
-                                <g transform="translate(0, -90)">
-                                  <circle cx="250" cy="180" r="14" fill="url(#conceptGoldGrad)" />
-                                  <circle cx="250" cy="180" r="22" fill="none" stroke="#DCC7A1" strokeWidth="1" strokeDasharray="3,3" />
-                                </g>
+      {/* SECTION 04 — SELECTED WORKS (Sticky Stack, Theme s3) */}
+      <SelectedWorks />
 
-                                <g transform="translate(-80, -80)">
-                                  <circle cx="250" cy="180" r="6" fill="url(#conceptGlassGrad)" stroke="#FFFFFF" strokeWidth="0.5" />
-                                </g>
+      {/* SECTION 05 — WHAT WE ENGINEER (Theme s4) */}
+      <ServiceDirectory />
 
-                                <g transform="translate(90, -40)">
-                                  <circle cx="250" cy="180" r="8" fill="url(#conceptDarkGrad)" />
-                                  <path d="M 250 180 L 250 230" stroke="#C8AF7E" strokeWidth="1.5" strokeDasharray="3,3" />
-                                </g>
+      {/* SECTION 06 — INSIDE THE BUILD ROOM (Contrasting Dark Section) */}
+      <BuildRoom />
 
-                                {/* Small decorative sparkles */}
-                                <circle cx="160" cy="130" r="2" fill="#DCC7A1" />
-                                <circle cx="340" cy="120" r="3" fill="#C8AF7E" />
-                                <circle cx="310" cy="220" r="2.5" fill="#26231F" opacity="0.4" />
-                              </g>
-                            </svg>
-                        </div>
-                    </div>
+      {/* SECTION 07 — STUDIO PHILOSOPHY (Theme s5) */}
+      <section
+        style={{ backgroundColor: 'var(--bg-s5)' }}
+        className="text-[var(--text-ink)] py-20 sm:py-28"
+      >
+        <div className="studio-container">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+            <div className="lg:col-span-5">
+              <span className="font-mono-tech text-xs uppercase tracking-[0.16em] text-[var(--accent-orange)] block mb-3">
+                07 — Studio Philosophy
+              </span>
+              <h2 className="font-display text-3xl sm:text-5xl font-semibold tracking-tight leading-[1.06]">
+                Serious engineering,{' '}
+                <span className="font-serif-editorial italic font-normal text-[var(--accent-cobalt)]">
+                  without the agency theater.
+                </span>
+              </h2>
+            </div>
+
+            <div className="lg:col-span-7 space-y-8">
+              <p className="font-serif-editorial text-2xl sm:text-3xl leading-snug text-[var(--text-ink)]">
+                &ldquo;Software should feel effortless to the user and legible to the next engineer who opens the repository.&rdquo;
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6 border-t border-[var(--border-hairline)]">
+                <div>
+                  <h3 className="font-display text-base font-semibold">Builders, Not Account Managers</h3>
+                  <p className="mt-2 text-sm text-[var(--text-muted)] leading-relaxed">
+                    You talk directly to the engineers and designers shipping your product. No telephone-game handoffs or inflated retainers.
+                  </p>
                 </div>
-            </section>
-
-            {/* Introductory editorial statement (Aesop/Ralph Lauren feel) */}
-            <section className="secondary-bg scroll-reveal" style={{ borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
-                <div className="container">
-                    <div className="overview-grid">
-                        <div>
-                            <span className="section-tagline">Company Overview</span>
-                            <h2 className="editorial-h2" style={{ color: 'var(--text-heading)' }}>
-                                Builders first. Long-term partners always.
-                            </h2>
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-                            <p style={{ fontSize: '18px', color: 'var(--text-body)', lineHeight: 1.7 }}>
-                                We replace agency layers and junior account managers with direct technical execution. We engineer full digital systems — connecting bespoke Figma UI/UX, clean TypeScript codebases, automated cloud CI/CD pipelines, and conversion-focused architectures under one transparent partnership.
-                            </p>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '24px', marginTop: '8px' }}>
-                                <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-                                    <h3 className="editorial-h2" style={{ color: 'var(--primary-hover)', marginBottom: '6px', fontSize: '32px' }}>&lt; 400ms</h3>
-                                    <p style={{ fontSize: '14px', color: 'var(--text-muted)', margin: 0 }}>Target Core Web Vitals &amp; Sub-second speed</p>
-                                </div>
-                                <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-                                    <h3 className="editorial-h2" style={{ color: 'var(--primary-hover)', marginBottom: '6px', fontSize: '32px' }}>100%</h3>
-                                    <p style={{ fontSize: '14px', color: 'var(--text-muted)', margin: 0 }}>Source code, assets &amp; IP ownership transfer</p>
-                                </div>
-                                <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-                                    <h3 className="editorial-h2" style={{ color: 'var(--primary-hover)', marginBottom: '6px', fontSize: '32px' }}>1-Week</h3>
-                                    <p style={{ fontSize: '14px', color: 'var(--text-muted)', margin: 0 }}>Iterative agile sprints with live staging access</p>
-                                </div>
-                                <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-                                    <h3 className="editorial-h2" style={{ color: 'var(--primary-hover)', marginBottom: '6px', fontSize: '32px' }}>30-Day</h3>
-                                    <p style={{ fontSize: '14px', color: 'var(--text-muted)', margin: 0 }}>Post-launch bug warranty &amp; dedicated support</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div>
+                  <h3 className="font-display text-base font-semibold">Long-Term Partnerships</h3>
+                  <p className="mt-2 text-sm text-[var(--text-muted)] leading-relaxed">
+                    Whether we ship your MVP in 6 weeks or modernize a legacy stack, we leave behind clean architecture and full documentation.
+                  </p>
                 </div>
-            </section>
+              </div>
 
-            {/* Proprietary In-House Ventures & Ecosystem Section */}
-            <section className="secondary-bg scroll-reveal" style={{ borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
-                <div className="container">
-                    <div className="section-header flex-header" style={{ maxWidth: 'none', marginBottom: '48px' }}>
-                        <div>
-                            <span className="section-tagline">PROPRIETARY LAB &amp; VENTURES</span>
-                            <h2 className="section-title" style={{ margin: '8px 0 0 0' }}>The Clown Ecosystem</h2>
-                            <p style={{ color: 'var(--text-body)', fontSize: '17px', marginTop: '12px', maxWidth: '640px' }}>
-                                We don&apos;t just engineer for clients — we build, launch, and operate proprietary digital products under the Clown umbrella.
-                            </p>
-                        </div>
-                        <div style={{ alignSelf: 'flex-end' }}>
-                            <span className="pill-badge" style={{ borderColor: 'var(--primary)', color: 'var(--text-heading)' }}>
-                                4 Active In-House Platforms
-                            </span>
-                        </div>
-                    </div>
+              <div className="pt-2 flex flex-wrap gap-3">
+                <Link href="/about" className="btn-studio-outline !py-2.5 !px-5 !text-xs">
+                  Read About Us <ArrowUpRight className="w-3.5 h-3.5" />
+                </Link>
+                <Link href="/trust" className="btn-studio-outline !py-2.5 !px-5 !text-xs">
+                  Trust &amp; Security Center <ArrowUpRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-                    <div className="services-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
-                        {/* 1. The ClownFounder */}
-                        <div className="editorial-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', overflow: 'hidden' }}>
-                            <div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                                    <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#818cf8', background: 'rgba(99, 102, 241, 0.1)', padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(99, 102, 241, 0.25)' }}>
-                                        Autonomous AI OS
-                                    </span>
-                                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></span>
-                                </div>
-                                <h3 className="editorial-h3" style={{ margin: '0 0 10px 0', fontSize: '22px' }}>The ClownFounder</h3>
-                                <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.55, marginBottom: '16px' }}>
-                                    Autonomous AI Executive Team with founder-in-the-loop approvals. Parallel sales, engineering, QA, finance, and support units that handle operations and morning executive briefs.
-                                </p>
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '20px' }}>
-                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>Multi-Agent AI</span>
-                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>Next.js</span>
-                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>Command Center</span>
-                                </div>
-                            </div>
-                            <a 
-                                href="https://theclownfounder.vercel.app/" 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                className="btn btn-secondary" 
-                                style={{ width: '100%', textAlign: 'center', justifyContent: 'center', fontSize: '13.5px', padding: '10px 16px' }}
-                            >
-                                Explore Live Platform ↗
-                            </a>
-                        </div>
+      {/* SECTION 08 — FAQs (Theme s6) */}
+      <FaqSection />
 
-                        {/* 2. ClownEaser */}
-                        <div className="editorial-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', overflow: 'hidden' }}>
-                            <div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                                    <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6366f1', background: 'rgba(99, 102, 241, 0.1)', padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(99, 102, 241, 0.25)' }}>
-                                        Dev Tooling &amp; AI
-                                    </span>
-                                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></span>
-                                </div>
-                                <h3 className="editorial-h3" style={{ margin: '0 0 10px 0', fontSize: '22px' }}>ClownEaser</h3>
-                                <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.55, marginBottom: '16px' }}>
-                                    Headless computed CSS token parser and Elementor AI CSS Studio. Extracts typography, container spacing, and colors directly into Elementor Global Kit 3.x schema.
-                                </p>
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '20px' }}>
-                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>AST Extraction</span>
-                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>Elementor 3.x</span>
-                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>AI CSS Studio</span>
-                                </div>
-                            </div>
-                            <a 
-                                href="https://clowneaser.vercel.app/" 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                className="btn btn-secondary" 
-                                style={{ width: '100%', textAlign: 'center', justifyContent: 'center', fontSize: '13.5px', padding: '10px 16px' }}
-                            >
-                                Launch Token Studio ↗
-                            </a>
-                        </div>
-
-                        {/* 3. The ClownMart */}
-                        <div className="editorial-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', overflow: 'hidden' }}>
-                            <div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                                    <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#ea580c', background: 'rgba(234, 88, 12, 0.1)', padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(234, 88, 12, 0.25)' }}>
-                                        Headless Commerce
-                                    </span>
-                                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></span>
-                                </div>
-                                <h3 className="editorial-h3" style={{ margin: '0 0 10px 0', fontSize: '22px' }}>The ClownMart</h3>
-                                <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.55, marginBottom: '16px' }}>
-                                    Information-dense, high-velocity modern marketplace specializing in premium retail footwear. Engineered with sub-second catalog search, instant filtering, and responsive cart flows.
-                                </p>
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '20px' }}>
-                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>Next.js 15</span>
-                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>Edge Caching</span>
-                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>Cart Architecture</span>
-                                </div>
-                            </div>
-                            <a 
-                                href="https://theclownmart.vercel.app/" 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                className="btn btn-secondary" 
-                                style={{ width: '100%', textAlign: 'center', justifyContent: 'center', fontSize: '13.5px', padding: '10px 16px' }}
-                            >
-                                View Live Marketplace ↗
-                            </a>
-                        </div>
-
-                        {/* 4. ClownKosh */}
-                        <div className="editorial-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', overflow: 'hidden' }}>
-                            <div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                                    <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#0d9488', background: 'rgba(13, 148, 136, 0.1)', padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(13, 148, 136, 0.25)' }}>
-                                        PWA &amp; Doc Systems
-                                    </span>
-                                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></span>
-                                </div>
-                                <h3 className="editorial-h3" style={{ margin: '0 0 10px 0', fontSize: '22px' }}>ClownKosh</h3>
-                                <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.55, marginBottom: '16px' }}>
-                                    Distraction-free personal digital library and PDF reader Progressive Web App. Features client-side indexing, offline storage, document shelf management, and responsive reading views.
-                                </p>
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '20px' }}>
-                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>Offline PWA</span>
-                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>PDF.js Engine</span>
-                                    <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', background: 'var(--background)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>IndexedDB</span>
-                                </div>
-                            </div>
-                            <a 
-                                href="https://clownkosh.vercel.app/" 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                className="btn btn-secondary" 
-                                style={{ width: '100%', textAlign: 'center', justifyContent: 'center', fontSize: '13.5px', padding: '10px 16px' }}
-                            >
-                                Open Digital Library ↗
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section>
- 
-            {/* Featured Services Preview Section */}
-            <section className="scroll-reveal">
-                <div className="container">
-                    <div className="section-header flex-header" style={{ maxWidth: 'none', marginBottom: '80px' }}>
-                        <div>
-                            <span className="section-tagline">Featured Capabilities</span>
-                            <h2 className="section-title" style={{ margin: 0 }}>What We Build</h2>
-                        </div>
-                        <Link href="/services" className="btn btn-secondary" style={{ fontSize: '15px', padding: '12px 24px' }}>View All Services</Link>
-                    </div>
- 
-                    <div className="services-grid">
-                        <div className="editorial-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '340px' }}>
-                            <div>
-                                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>01 / Web &amp; Web Apps</span>
-                                <h3 className="editorial-h3" style={{ margin: '16px 0 12px 0' }}>High-Performance Web Platforms</h3>
-                                <p style={{ fontSize: '16px', color: 'var(--text-body)' }}>Custom Next.js &amp; React fullstack portals, headless eCommerce storefronts, interactive web applications, and optimized corporate sites.</p>
-                            </div>
-                            <Link href="/services" style={{ color: 'var(--text-heading)', fontWeight: 600, fontSize: '15px', textDecoration: 'none', marginTop: '24px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                                Explore Capabilities <span style={{ color: 'var(--primary)' }}>&rarr;</span>
-                            </Link>
-                        </div>
- 
-                        <div className="editorial-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '340px' }}>
-                            <div>
-                                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>02 / Mobile Engineering</span>
-                                <h3 className="editorial-h3" style={{ margin: '16px 0 12px 0' }}>Cross-Platform Mobile Apps</h3>
-                                <p style={{ fontSize: '16px', color: 'var(--text-body)' }}>Native iOS &amp; Android software engineered with Flutter and React Native, offering offline sync, real-time WebSockets, and seamless UX.</p>
-                            </div>
-                            <Link href="/services" style={{ color: 'var(--text-heading)', fontWeight: 600, fontSize: '15px', textDecoration: 'none', marginTop: '24px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                                Explore Capabilities <span style={{ color: 'var(--primary)' }}>&rarr;</span>
-                            </Link>
-                        </div>
- 
-                        <div className="editorial-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '340px' }}>
-                            <div>
-                                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--primary-hover)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>03 / Product Design</span>
-                                <h3 className="editorial-h3" style={{ margin: '16px 0 12px 0' }}>UI/UX &amp; Design Systems</h3>
-                                <p style={{ fontSize: '16px', color: 'var(--text-body)' }}>High-fidelity Figma prototypes, comprehensive design tokens, conversion-focused wireframing, and rigorous user journey testing.</p>
-                            </div>
-                            <Link href="/services" style={{ color: 'var(--text-heading)', fontWeight: 600, fontSize: '15px', textDecoration: 'none', marginTop: '24px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                                Explore Capabilities <span style={{ color: 'var(--primary)' }}>&rarr;</span>
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </section>
- 
-            {/* Dark contrast block for call-to-action (Aesop / Soho House inspired) */}
-            <section className="dark-bg scroll-reveal" style={{ padding: '96px 0' }}>
-                <div className="container" style={{ textAlign: 'center' }}>
-                    <span className="section-tagline" style={{ color: 'var(--primary)' }}>Partner With Us</span>
-                    <h2 className="editorial-hero-title" style={{ margin: '16px 0 24px 0', color: '#FFFFFF' }}>
-                        Ready to engineer your next digital breakthrough?
-                    </h2>
-                    <p className="editorial-large-text" style={{ maxWidth: '680px', margin: '0 auto 40px auto', color: 'var(--footer-text)' }}>
-                        Schedule a complimentary 30-minute discovery &amp; architecture session. We&apos;ll deliver a tailored feature breakdown, tech stack recommendation, and fixed-milestone roadmap within 24 hours.
-                    </p>
-                    <Link href="/contact" className="btn btn-primary">Schedule Discovery Call</Link>
-                </div>
-            </section>
-        </main>
-    );
+      {/* SECTION 09 — FINAL CTA (Theme s2) */}
+      <StudioCTA />
+    </main>
+  );
 }

@@ -1,519 +1,360 @@
 'use client';
 
-import React, { useState } from 'react';
-import Link from 'next/link';
+import React, { useState, useEffect } from 'react';
+import { ArrowUpRight, X, CheckCircle2 } from 'lucide-react';
+import HeroFrame from '@/components/HeroFrame';
+import { useScrollLock } from '@/lib/useScrollLock';
 
 interface Gig {
-    id: string;
-    title: string;
-    category: string;
-    type: string; // e.g. "Contract / 15-30 hrs/wk", "Project Retainer"
-    rate: string; // e.g. "$18 - $30 / hr"
-    location: string;
-    skills: string[];
-    description: string;
-    featured?: boolean;
+  id: string;
+  title: string;
+  category: string;
+  type: string;
+  rate: string;
+  location: string;
+  skills: string[];
+  description: string;
+  featured?: boolean;
 }
 
-const FALLBACK_gigs: Gig[] = [
-    {
-        id: 'gig-1',
-        title: 'Next.js & React Frontend Developer',
-        category: 'Frontend',
-        type: 'Contract / 15-30 hrs/wk',
-        rate: '$18 - $30 / hr',
-        location: 'Remote (Global)',
-        skills: ['Next.js 15', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Web Vitals'],
-        description: 'Building modern, high-performance web app frontends and landing pages for client startups.',
-        featured: true
-    }
+const FALLBACK_GIGS: Gig[] = [
+  {
+    id: 'gig-1',
+    title: 'Next.js & React Frontend Developer',
+    category: 'Frontend',
+    type: 'Contract / 15-30 hrs/wk',
+    rate: '$18 - $30 / hr',
+    location: 'Remote (Global)',
+    skills: ['Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP', 'Web Vitals'],
+    description: 'Building modern, high-performance web app frontends and editorial interfaces.',
+    featured: true,
+  },
 ];
 
+const CATEGORIES = ['All', 'Frontend', 'Mobile', 'Backend', 'Design', 'AI/ML', 'DevOps'];
+const SKILL_TAGS = ['React', 'Next.js', 'TypeScript', 'Node.js', 'Flutter', 'Figma', 'Python', 'AWS', 'Docker', 'PostgreSQL'];
+
 export default function CareersPage() {
-    const [gigs, setGigs] = React.useState<Gig[]>(FALLBACK_gigs);
-    const [loading, setLoading] = React.useState(true);
+  const [gigs, setGigs] = useState<Gig[]>(FALLBACK_GIGS);
+  const [loading, setLoading] = useState(true);
+  const [activeFilter, setActiveFilter] = useState('All');
+  const [selectedGig, setSelectedGig] = useState<Gig | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  useScrollLock(isModalOpen);
 
-    React.useEffect(() => {
-        let isMounted = true;
-        const fetchLiveGigs = async () => {
-            try {
-                const res = await fetch('/api/careers', { cache: 'no-store' });
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data.success && Array.isArray(data.jobs) && data.jobs.length > 0) {
-                        const mapped: Gig[] = data.jobs.map((j: any) => ({
-                            id: j.id,
-                            title: j.title,
-                            category: j.category || 'General',
-                            type: j.type || 'Contract',
-                            rate: j.rate || 'Competitive',
-                            location: j.location || 'Remote (Global)',
-                            skills: Array.isArray(j.skills) ? j.skills : [],
-                            description: j.description || '',
-                            featured: Boolean(j.featured)
-                        }));
-                        if (isMounted) setGigs(mapped);
-                    }
-                }
-            } catch (e) {
-                console.warn('Using fallback gigs:', e);
-            } finally {
-                if (isMounted) setLoading(false);
-            }
-        };
-        fetchLiveGigs();
-        return () => { isMounted = false; };
-    }, []);
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    portfolio: '',
+    track: 'Frontend Development',
+    experience: '1-3 years',
+    hourlyRate: '$20 - $35 / hr',
+    availability: '20-30 hours/week',
+    pitch: '',
+  });
+  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitResult, setSubmitResult] = useState<{ success: boolean; message: string } | null>(null);
 
-    const [activeFilter, setActiveFilter] = useState('All');
-    const [selectedGig, setSelectedGig] = useState<Gig | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    // Disable background scrolling when modal is open
-    React.useEffect(() => {
-        if (isModalOpen) {
-            document.body.style.overflow = 'hidden';
-            document.documentElement.style.overflow = 'hidden';
-            document.documentElement.classList.add('lenis-stopped');
-        } else {
-            document.body.style.overflow = '';
-            document.documentElement.style.overflow = '';
-            document.documentElement.classList.remove('lenis-stopped');
+  useEffect(() => {
+    let mounted = true;
+    fetch('/api/careers', { cache: 'no-store' })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (mounted && data?.success && Array.isArray(data.jobs) && data.jobs.length > 0) {
+          setGigs(data.jobs);
         }
-        return () => {
-            document.body.style.overflow = '';
-            document.documentElement.style.overflow = '';
-            document.documentElement.classList.remove('lenis-stopped');
-        };
-    }, [isModalOpen]);
-
-    // Form state
-    const [formData, setFormData] = useState({
-        fullName: '',
-        email: '',
-        portfolio: '',
-        track: 'Frontend Development',
-        experience: '0-2 years (Fresher)',
-        hourlyRate: '$18 - $30 / hr',
-        availability: '20-30 hours/week',
-        pitch: ''
-    });
-    const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitResult, setSubmitResult] = useState<{ success: boolean; message: string } | null>(null);
-
-    const categories = ['All', 'Frontend', 'Mobile', 'Backend', 'Design', 'AI/ML', 'DevOps'];
-    const availableSkillTags = ['React', 'Next.js', 'TypeScript', 'Node.js', 'Flutter', 'Figma', 'Python', 'AWS', 'GraphQL', 'Docker', 'Tailwind', 'PostgreSQL'];
-
-    const filteredGigs = activeFilter === 'All' 
-        ? gigs 
-        : gigs.filter(g => g.category.toLowerCase() === activeFilter.toLowerCase());
-
-    const openApplyModal = (gig?: Gig) => {
-        if (gig) {
-            setSelectedGig(gig);
-            setFormData(prev => ({ ...prev, track: gig.title }));
-        } else {
-            setSelectedGig(null);
-        }
-        setIsModalOpen(true);
-        setSubmitResult(null);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
+    return () => {
+      mounted = false;
     };
+  }, []);
 
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
+  const filteredGigs =
+    activeFilter === 'All'
+      ? gigs
+      : gigs.filter((g) => g.category.toLowerCase() === activeFilter.toLowerCase());
 
-    const toggleSkill = (skill: string) => {
-        setSelectedSkills(prev => 
-            prev.includes(skill) ? prev.filter(s => s !== skill) : [...prev, skill]
-        );
-    };
+  const openApply = (gig?: Gig) => {
+    setSelectedGig(gig || null);
+    if (gig) setFormData((prev) => ({ ...prev, track: gig.title }));
+    setSubmitResult(null);
+    setIsModalOpen(true);
+  };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-        setSubmitResult(null);
-
-        try {
-            const res = await fetch('/api/careers', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...formData, selectedSkills, jobId: selectedGig?.id })
-            });
-            const data = await res.json();
-            if (data.success) {
-                setSubmitResult({ success: true, message: data.message });
-                setFormData({
-                    fullName: '',
-                    email: '',
-                    portfolio: '',
-                    track: 'Frontend Development',
-                    experience: '0-2 years (Fresher)',
-                    hourlyRate: '$18 - $30 / hr',
-                    availability: '20-30 hours/week',
-                    pitch: ''
-                });
-                setSelectedSkills([]);
-            } else {
-                setSubmitResult({ success: false, message: data.error || 'Submission failed.' });
-            }
-        } catch (err) {
-            setSubmitResult({ success: false, message: 'Network error. Please try again.' });
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
-    return (
-        <main className="careers-page">
-            {/* Hero Section */}
-            <section className="page-hero" style={{ backgroundColor: 'var(--background-secondary)', borderBottom: '1px solid var(--border-color)' }}>
-                <div className="container">
-                    <div style={{ maxWidth: '820px', margin: '0 auto', textAlign: 'center' }}>
-                        <div className="career-badge" style={{ marginBottom: '20px' }}>
-                            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#4A8F63' }}></span>
-                            Global Remote Freelance &amp; Talent Network
-                        </div>
-                        <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(36px, 5vw, 64px)', fontWeight: 600, color: 'var(--text-heading)', lineHeight: 1.15, marginBottom: '24px' }}>
-                            Kickstart Your Freelance Engineering Career. <br />
-                            <span style={{ fontStyle: 'italic', color: 'var(--primary-hover)' }}>Competitive Hourly Rates in USD ($).</span>
-                        </h1>
-                        <p style={{ fontSize: '20px', color: 'var(--text-body)', lineHeight: 1.6, marginBottom: '36px' }}>
-                            We partner with ambitious freelance developers, UI/UX designers, and AI engineers globally. Collaborate on high-performance web &amp; mobile builds with guaranteed weekly payouts in USD ($), 100% remote autonomy, and structured code reviews.
-                        </p>
-                        
-                        <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                            <a href="#gigs" className="btn btn-primary" style={{ padding: '14px 32px', borderRadius: '10px' }}>
-                                Explore Open Gigs ($)
-                            </a>
-                            <button onClick={() => openApplyModal()} className="btn btn-secondary" style={{ padding: '14px 32px', borderRadius: '10px', background: '#FFFFFF', border: '1px solid var(--border-color)' }}>
-                                Join Talent Network
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Stats Highlights */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px', marginTop: '64px', paddingTop: '40px', borderTop: '1px solid var(--border-color)' }}>
-                        <div style={{ textAlign: 'center' }}>
-                            <div style={{ fontFamily: 'var(--font-heading)', fontSize: '42px', fontWeight: 700, color: 'var(--text-heading)' }}>$18 - $45</div>
-                            <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Target Hourly Rate Bandwidth (USD)</div>
-                        </div>
-                        <div style={{ textAlign: 'center' }}>
-                            <div style={{ fontFamily: 'var(--font-heading)', fontSize: '42px', fontWeight: 700, color: 'var(--text-heading)' }}>100%</div>
-                            <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Remote Autonomy &amp; Flexibility</div>
-                        </div>
-                        <div style={{ textAlign: 'center' }}>
-                            <div style={{ fontFamily: 'var(--font-heading)', fontSize: '42px', fontWeight: 700, color: 'var(--text-heading)' }}>Weekly ($)</div>
-                            <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Guaranteed Direct Wire/Stripe Payouts</div>
-                        </div>
-                        <div style={{ textAlign: 'center' }}>
-                            <div style={{ fontFamily: 'var(--font-heading)', fontSize: '42px', fontWeight: 700, color: 'var(--text-heading)' }}>0-2 Yrs+</div>
-                            <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Mentorship &amp; Modern Tech Stack</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Why Freelance With Us */}
-            <section style={{ padding: '90px 0', backgroundColor: 'var(--background)' }}>
-                <div className="container">
-                    <div className="section-header" style={{ marginBottom: '50px', textAlign: 'center' }}>
-                        <span className="subtitle">THE FREELANCER ADVANTAGE</span>
-                        <h2 className="title">Why Top Engineers &amp; Designers Partner With ClownBros</h2>
-                    </div>
-
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
-                        <div className="value-card" style={{ padding: '32px', background: '#FFFFFF', borderRadius: '18px', border: '1px solid var(--border-color)' }}>
-                            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(220, 199, 161, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', color: 'var(--dark-section)' }}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                            </div>
-                            <h3 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '12px' }}>Guaranteed Weekly Payouts ($)</h3>
-                            <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.6 }}>
-                                No chasing client invoices. ClownBros handles all client billing and guarantees your payout every Friday directly in USD ($).
-                            </p>
-                        </div>
-
-                        <div className="value-card" style={{ padding: '32px', background: '#FFFFFF', borderRadius: '18px', border: '1px solid var(--border-color)' }}>
-                            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(220, 199, 161, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', color: 'var(--dark-section)' }}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                            </div>
-                            <h3 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '12px' }}>High-Impact Projects</h3>
-                            <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.6 }}>
-                                Work on modern, clean codebases with modern tech stacks (Next.js 15, React 19, Flutter, AI agents) rather than maintaining legacy spaghetti code.
-                            </p>
-                        </div>
-
-                        <div className="value-card" style={{ padding: '32px', background: '#FFFFFF', borderRadius: '18px', border: '1px solid var(--border-color)' }}>
-                            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(220, 199, 161, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', color: 'var(--dark-section)' }}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                            </div>
-                            <h3 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '12px' }}>Zero Micromanagement</h3>
-                            <p style={{ fontSize: '15px', color: 'var(--text-body)', lineHeight: 1.6 }}>
-                                We partner with ambitious freshers & developers and get out of their way. Set your own hours, focus on code quality, and work asynchronously.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Filterable Gigs Directory */}
-            <section id="gigs" style={{ padding: '90px 0', backgroundColor: 'var(--background-secondary)', borderTop: '1px solid var(--border-color)' }}>
-                <div className="container">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '20px', marginBottom: '40px' }}>
-                        <div>
-                            <span className="subtitle">OPEN FREELANCE CONTRACTS</span>
-                            <h2 className="title">Active Gigs & Project Roles</h2>
-                        </div>
-
-                        {/* Filter Tabs */}
-                        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                            {categories.map((cat) => (
-                                <button
-                                    key={cat}
-                                    className={`filter-pill ${activeFilter === cat ? 'active' : ''}`}
-                                    onClick={() => setActiveFilter(cat)}
-                                >
-                                    {cat}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Gig List Grid */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '24px' }}>
-                        {filteredGigs.map((gig) => (
-                            <div key={gig.id} className="gig-card">
-                                <div>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                                        <span className="gig-tag">{gig.category}</span>
-                                        {gig.featured && (
-                                            <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', color: '#D49B34', textTransform: 'uppercase', background: 'rgba(212, 155, 52, 0.15)', padding: '2px 8px', borderRadius: '4px' }}>
-                                                HIGH PRIORITY
-                                            </span>
-                                        )}
-                                    </div>
-                                    <h3 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '8px' }}>
-                                        {gig.title}
-                                    </h3>
-                                    <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '14px', display: 'flex', gap: '12px' }}>
-                                        <span>📍 {gig.location}</span>
-                                        <span>⏱️ {gig.type}</span>
-                                    </div>
-                                    <p style={{ fontSize: '14px', color: 'var(--text-body)', lineHeight: 1.5, marginBottom: '20px' }}>
-                                        {gig.description}
-                                    </p>
-
-                                    {/* Skill pills */}
-                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '24px' }}>
-                                        {gig.skills.map(s => (
-                                            <span key={s} style={{ fontSize: '12px', background: '#FFFFFF', border: '1px solid var(--border-color)', padding: '3px 8px', borderRadius: '6px', color: 'var(--text-body)' }}>
-                                                {s}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div style={{ paddingTop: '16px', borderTop: '1px solid var(--border-color-light)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <div>
-                                        <span style={{ fontSize: '11px', textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block' }}>ESTIMATED RATE</span>
-                                        <span style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-heading)' }}>{gig.rate}</span>
-                                    </div>
-                                    <button 
-                                        onClick={() => openApplyModal(gig)}
-                                        className="btn btn-primary"
-                                        style={{ padding: '8px 18px', fontSize: '13px', borderRadius: '6px' }}
-                                    >
-                                        Apply Now
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* Selection Process Timeline */}
-            <section style={{ padding: '90px 0', backgroundColor: 'var(--dark-section)', color: '#FFFFFF' }}>
-                <div className="container">
-                    <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 60px' }}>
-                        <span className="subtitle" style={{ color: 'var(--primary)' }}>TRANSPARENT ONBOARDING</span>
-                        <h2 className="title" style={{ color: '#FFFFFF' }}>How Our Freelancer Onboarding Works</h2>
-                    </div>
-
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '30px', position: 'relative' }}>
-                        <div style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '28px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                            <div className="timeline-step-number" style={{ marginBottom: '16px' }}>1</div>
-                            <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#FFFFFF', marginBottom: '8px' }}>Quick Application</h3>
-                            <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.5 }}>
-                                Submit your portfolio, GitHub, and primary skills. No tedious 10-page resume required.
-                            </p>
-                        </div>
-
-                        <div style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '28px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                            <div className="timeline-step-number" style={{ marginBottom: '16px' }}>2</div>
-                            <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#FFFFFF', marginBottom: '8px' }}>Portfolio Review</h3>
-                            <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.5 }}>
-                                Our tech leads review your live projects and code quality within 48 hours.
-                            </p>
-                        </div>
-
-                        <div style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '28px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                            <div className="timeline-step-number" style={{ marginBottom: '16px' }}>3</div>
-                            <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#FFFFFF', marginBottom: '8px' }}>Paid Micro-Trial</h3>
-                            <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.5 }}>
-                                Execute a small paid mini-task to evaluate workflow, communication, and speed.
-                            </p>
-                        </div>
-
-                        <div style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '28px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                            <div className="timeline-step-number" style={{ marginBottom: '16px' }}>4</div>
-                            <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#FFFFFF', marginBottom: '8px' }}>Network Onboarding</h3>
-                            <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.5 }}>
-                                Get matched with client projects, receive weekly payouts, and grow your rate over time.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Freelancer Application Modal Form */}
-            {isModalOpen && (
-                <div className="modal-backdrop" onClick={closeModal}>
-                    <div className="modal-card" data-lenis-prevent onClick={(e) => e.stopPropagation()}>
-                        <button className="modal-close-btn" onClick={closeModal} aria-label="Close modal">
-                            ✕
-                        </button>
-
-                        <div style={{ marginBottom: '24px' }}>
-                            <span className="career-badge" style={{ marginBottom: '10px' }}>Direct Talent Application</span>
-                            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '26px', color: 'var(--text-heading)', fontWeight: 600 }}>
-                                {selectedGig ? `Apply for: ${selectedGig.title}` : 'Join ClownBros Freelancer Network'}
-                            </h2>
-                            <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                                Fill out your details below. We guarantee a response within 48 hours.
-                            </p>
-                        </div>
-
-                        {submitResult?.success ? (
-                            <div style={{ background: 'rgba(74, 143, 99, 0.15)', border: '1px solid #4A8F63', padding: '24px', borderRadius: '12px', textAlign: 'center' }}>
-                                <div style={{ fontSize: '32px', marginBottom: '12px' }}>🎉</div>
-                                <h3 style={{ fontSize: '18px', fontWeight: 600, color: 'var(--text-heading)', marginBottom: '8px' }}>Application Submitted!</h3>
-                                <p style={{ fontSize: '14px', color: 'var(--text-body)', lineHeight: 1.5 }}>
-                                    {submitResult.message}
-                                </p>
-                                <button onClick={closeModal} className="btn btn-primary" style={{ marginTop: '20px', padding: '10px 24px' }}>
-                                    Close Window
-                                </button>
-                            </div>
-                        ) : (
-                            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                {submitResult?.success === false && (
-                                    <div style={{ background: 'rgba(199, 91, 86, 0.15)', border: '1px solid #C75B56', padding: '12px', borderRadius: '8px', fontSize: '13px', color: '#C75B56' }}>
-                                        {submitResult.message}
-                                    </div>
-                                )}
-
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                                    <div>
-                                        <label style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-heading)', display: 'block', marginBottom: '6px' }}>Full Name *</label>
-                                        <input 
-                                            type="text" 
-                                            required
-                                            value={formData.fullName}
-                                            onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                                            placeholder="e.g. Alex Morgan"
-                                            style={{ width: '100%', padding: '10px 14px', border: '1px solid var(--border-color)', borderRadius: '8px', fontSize: '14px' }}
-                                        />
-                                    </div>
-                                    <div>
-                                        <label style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-heading)', display: 'block', marginBottom: '6px' }}>Email Address *</label>
-                                        <input 
-                                            type="email" 
-                                            required
-                                            value={formData.email}
-                                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                            placeholder="alex@example.com"
-                                            style={{ width: '100%', padding: '10px 14px', border: '1px solid var(--border-color)', borderRadius: '8px', fontSize: '14px' }}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                                    <div>
-                                        <label style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-heading)', display: 'block', marginBottom: '6px' }}>Portfolio / GitHub URL</label>
-                                        <input 
-                                            type="url" 
-                                            value={formData.portfolio}
-                                            onChange={(e) => setFormData({ ...formData, portfolio: e.target.value })}
-                                            placeholder="https://github.com/yourusername"
-                                            style={{ width: '100%', padding: '10px 14px', border: '1px solid var(--border-color)', borderRadius: '8px', fontSize: '14px' }}
-                                        />
-                                    </div>
-                                    <div>
-                                        <label style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-heading)', display: 'block', marginBottom: '6px' }}>Target Hourly Rate</label>
-                                        <input 
-                                            type="text" 
-                                            value={formData.hourlyRate}
-                                            onChange={(e) => setFormData({ ...formData, hourlyRate: e.target.value })}
-                                            placeholder="e.g. $25/hr"
-                                            style={{ width: '100%', padding: '10px 14px', border: '1px solid var(--border-color)', borderRadius: '8px', fontSize: '14px' }}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-heading)', display: 'block', marginBottom: '6px' }}>Select Primary Tech Skills</label>
-                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                                        {availableSkillTags.map(tag => {
-                                            const isSelected = selectedSkills.includes(tag);
-                                            return (
-                                                <button
-                                                    type="button"
-                                                    key={tag}
-                                                    onClick={() => toggleSkill(tag)}
-                                                    style={{
-                                                        padding: '6px 12px',
-                                                        borderRadius: '20px',
-                                                        fontSize: '12px',
-                                                        border: '1px solid',
-                                                        borderColor: isSelected ? 'var(--dark-section)' : 'var(--border-color)',
-                                                        background: isSelected ? 'var(--dark-section)' : '#FFFFFF',
-                                                        color: isSelected ? '#FFFFFF' : 'var(--text-body)',
-                                                        cursor: 'pointer'
-                                                    }}
-                                                >
-                                                    {isSelected ? `✓ ${tag}` : `+ ${tag}`}
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-heading)', display: 'block', marginBottom: '6px' }}>Brief Bio & Top Recent Achievement</label>
-                                    <textarea 
-                                        rows={3}
-                                        value={formData.pitch}
-                                        onChange={(e) => setFormData({ ...formData, pitch: e.target.value })}
-                                        placeholder="Highlight a project you built or a complex bug you resolved recently..."
-                                        style={{ width: '100%', padding: '10px 14px', border: '1px solid var(--border-color)', borderRadius: '8px', fontSize: '14px', fontFamily: 'inherit' }}
-                                    />
-                                </div>
-
-                                <button 
-                                    type="submit" 
-                                    className="btn btn-primary"
-                                    disabled={isSubmitting}
-                                    style={{ width: '100%', padding: '14px', borderRadius: '8px', marginTop: '8px', fontSize: '15px' }}
-                                >
-                                    {isSubmitting ? 'Submitting Application...' : 'Send Application'}
-                                </button>
-                            </form>
-                        )}
-                    </div>
-                </div>
-            )}
-        </main>
+  const toggleSkill = (skill: string) => {
+    setSelectedSkills((prev) =>
+      prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
     );
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitResult(null);
+    try {
+      const res = await fetch('/api/careers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          selectedSkills,
+          jobId: selectedGig?.id || null,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setSubmitResult({ success: true, message: data.message });
+        setFormData({
+          fullName: '',
+          email: '',
+          portfolio: '',
+          track: 'Frontend Development',
+          experience: '1-3 years',
+          hourlyRate: '$20 - $35 / hr',
+          availability: '20-30 hours/week',
+          pitch: '',
+        });
+        setSelectedSkills([]);
+      } else {
+        setSubmitResult({ success: false, message: data.error || 'Submission failed.' });
+      }
+    } catch {
+      setSubmitResult({ success: false, message: 'Network error submitting application.' });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <main>
+      <HeroFrame>
+        <span className="font-mono-tech text-xs uppercase tracking-[0.16em] text-[#F15A3B] block mb-4">
+          Talent &amp; Freelancer Network
+        </span>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
+          <div className="lg:col-span-8">
+            <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.03]">
+              Build with builders,{' '}
+              <span className="font-serif-editorial italic font-normal text-[#F15A3B]">
+                from anywhere.
+              </span>
+            </h1>
+          </div>
+          <div className="lg:col-span-4 space-y-5">
+            <p className="text-base text-[#6B6A65] leading-relaxed">
+              Remote-first engineering and design contracts paid in USD. Async-friendly, clear specs, and zero micromanagement.
+            </p>
+            <button type="button" onClick={() => openApply()} className="btn-studio-primary">
+              <span>Apply to Network</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </HeroFrame>
+
+      {/* Open Roles */}
+      <section
+        id="gigs"
+        style={{ backgroundColor: 'var(--bg-s4)' }}
+        className="text-[var(--text-ink)] py-16 sm:py-24"
+      >
+        <div className="studio-container">
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
+            <h2 className="font-display text-2xl sm:text-3xl font-semibold">Open Opportunities</h2>
+            <div className="flex flex-nowrap md:flex-wrap overflow-x-auto no-scrollbar gap-2 w-full md:w-auto -mx-1 px-1 pb-1">
+              {CATEGORIES.map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setActiveFilter(cat)}
+                  className={`shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-full font-display text-xs font-medium border transition-colors ${
+                    activeFilter === cat
+                      ? 'bg-[#171817] text-[#F2EFE7] border-[#171817]'
+                      : 'bg-transparent text-[#171817] border-[#171817]/20 hover:border-[#171817]'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {loading ? (
+            <div className="font-mono-tech text-xs text-[#6B6A65] py-12">Loading roles...</div>
+          ) : (
+            <div className="divide-y divide-[#171817]/12 border-y border-[#171817]/12">
+              {filteredGigs.map((gig) => (
+                <div
+                  key={gig.id}
+                  className="py-8 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center"
+                >
+                  <div className="lg:col-span-6">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="font-mono-tech text-[11px] uppercase tracking-widest text-[#F15A3B]">
+                        {gig.category}
+                      </span>
+                      <span className="font-mono-tech text-[11px] text-[#6B6A65]">
+                        {gig.location}
+                      </span>
+                    </div>
+                    <h3 className="font-display text-xl sm:text-2xl font-semibold">{gig.title}</h3>
+                    <p className="mt-2 text-sm text-[#6B6A65]">{gig.description}</p>
+                  </div>
+
+                  <div className="lg:col-span-4 space-y-2">
+                    <div className="font-mono-tech text-xs text-[#171817]">
+                      {gig.rate} &middot; {gig.type}
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {gig.skills.slice(0, 4).map((s) => (
+                        <span
+                          key={s}
+                          className="font-mono-tech text-[10px] px-2.5 py-0.5 rounded-full border border-[#171817]/15"
+                        >
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="lg:col-span-2 flex lg:justify-end">
+                    <button
+                      type="button"
+                      onClick={() => openApply(gig)}
+                      className="btn-studio-outline !py-2.5 !px-5 !text-xs"
+                    >
+                      Apply <ArrowUpRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Application Modal */}
+      {isModalOpen && (
+        <div
+          className="fixed inset-0 z-[90] bg-[#171817]/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+          onClick={() => setIsModalOpen(false)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div
+            data-lenis-prevent
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-2xl bg-[#F2EFE7] text-[#171817] border border-[#171817]/15 rounded-2xl p-6 sm:p-10 shadow-2xl my-auto max-h-[90vh] overflow-y-auto"
+          >
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(false)}
+              aria-label="Close application form"
+              className="absolute top-5 right-5 w-9 h-9 rounded-full border border-[#171817]/15 flex items-center justify-center hover:bg-[#171817] hover:text-[#F2EFE7]"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <span className="font-mono-tech text-xs uppercase tracking-widest text-[#F15A3B]">
+              Talent Application
+            </span>
+            <h2 className="font-display text-2xl font-semibold mt-1 mb-6">
+              {selectedGig ? `Apply: ${selectedGig.title}` : 'Join the ClownBros Network'}
+            </h2>
+
+            {submitResult && (
+              <div
+                className={`mb-5 p-4 rounded-xl border text-sm flex items-start gap-2.5 ${
+                  submitResult.success
+                    ? 'bg-[#171817] text-[#F2EFE7] border-[#171817]'
+                    : 'bg-[#F15A3B]/10 text-[#171817] border-[#F15A3B]'
+                }`}
+              >
+                {submitResult.success && <CheckCircle2 className="w-4 h-4 text-[#F15A3B] shrink-0 mt-0.5" />}
+                <span>{submitResult.message}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <input
+                  type="text"
+                  required
+                  placeholder="Full Name *"
+                  value={formData.fullName}
+                  onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                  className="w-full bg-white/70 border border-[#171817]/15 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#F15A3B]"
+                />
+                <input
+                  type="email"
+                  required
+                  placeholder="Email *"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full bg-white/70 border border-[#171817]/15 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#F15A3B]"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <input
+                  type="url"
+                  placeholder="GitHub / Portfolio URL"
+                  value={formData.portfolio}
+                  onChange={(e) => setFormData({ ...formData, portfolio: e.target.value })}
+                  className="w-full bg-white/70 border border-[#171817]/15 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#F15A3B]"
+                />
+                <input
+                  type="text"
+                  required
+                  placeholder="Primary Track *"
+                  value={formData.track}
+                  onChange={(e) => setFormData({ ...formData, track: e.target.value })}
+                  className="w-full bg-white/70 border border-[#171817]/15 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#F15A3B]"
+                />
+              </div>
+
+              <div>
+                <div className="font-mono-tech text-[11px] uppercase tracking-wider text-[#6B6A65] mb-2">
+                  Core Skills
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {SKILL_TAGS.map((s) => (
+                    <button
+                      key={s}
+                      type="button"
+                      onClick={() => toggleSkill(s)}
+                      className={`px-3 py-1 rounded-full text-xs border transition-colors ${
+                        selectedSkills.includes(s)
+                          ? 'bg-[#171817] text-[#F2EFE7] border-[#171817]'
+                          : 'border-[#171817]/20 text-[#171817]'
+                      }`}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <textarea
+                rows={3}
+                placeholder="Tell us about something challenging you built recently..."
+                value={formData.pitch}
+                onChange={(e) => setFormData({ ...formData, pitch: e.target.value })}
+                className="w-full bg-white/70 border border-[#171817]/15 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#F15A3B] resize-none"
+              />
+
+              <button type="submit" disabled={isSubmitting} className="btn-studio-primary w-full justify-center">
+                {isSubmitting ? 'Submitting...' : 'Submit Application'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+    </main>
+  );
 }

@@ -2,138 +2,146 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { ArrowUpRight } from 'lucide-react';
 
 export default function Footer() {
-    const [email, setEmail] = useState('');
-    const [status, setStatus] = useState<{ type: 'success' | 'error' | 'idle'; message: string }>({
-        type: 'idle',
-        message: ''
-    });
-    const [isSubmitting, setIsSubmitting] = useState(false);
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'done'>('idle');
 
-    const handleSubscribe = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!email) return;
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setStatus('submitting');
+    setTimeout(() => {
+      setStatus('done');
+      setEmail('');
+    }, 600);
+  };
 
-        setIsSubmitting(true);
-        setStatus({ type: 'idle', message: '' });
-
-        setTimeout(() => {
-            setIsSubmitting(false);
-            setEmail('');
-            setStatus({
-                type: 'success',
-                message: 'Thank you for subscribing! Welcome to our editorial newsletter.'
-            });
-        }, 1200);
-    };
-
-    return (
-        <footer className="main-footer">
-            <div className="container">
-                <div className="footer-top">
-                    {/* Newsletter Block */}
-                    <div className="footer-newsletter">
-                        <h2 className="footer-brand-title">STAY AHEAD<span>.</span></h2>
-                        <p className="newsletter-sub">
-                            Get insights on digital transformations, modern development, and cloud tools once a month.
-                        </p>
-                        <form onSubmit={handleSubscribe} className="newsletter-form">
-                            <div className="input-pill-wrapper">
-                                <input 
-                                    type="email" 
-                                    className="newsletter-input" 
-                                    placeholder="Your work email..." 
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
-                                    disabled={isSubmitting}
-                                />
-                                <button 
-                                    type="submit" 
-                                    className="btn-newsletter" 
-                                    aria-label="Subscribe to newsletter"
-                                    disabled={isSubmitting}
-                                >
-                                    {isSubmitting ? (
-                                        <div style={{ width: '16px', height: '16px', border: '2px solid black', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-                                    ) : (
-                                        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none">
-                                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                                            <polyline points="12 5 19 12 12 19"></polyline>
-                                        </svg>
-                                    )}
-                                </button>
-                            </div>
-                        </form>
-                        {status.type !== 'idle' && (
-                            <div className="newsletter-msg" style={{ color: status.type === 'success' ? '#DCC7A1' : '#C75B56' }}>
-                                {status.message}
-                            </div>
-                        )}
-                        <div className="footer-socials" style={{ display: 'flex', gap: '20px', marginTop: '24px', alignItems: 'center' }}>
-                            <a href="https://instagram.com/clownbros" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="Instagram" style={{ color: 'var(--footer-text)', display: 'flex', alignItems: 'center' }}>
-                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                            </a>
-                            <a href="https://youtube.com/@clownbros" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="YouTube" style={{ color: 'var(--footer-text)', display: 'flex', alignItems: 'center' }}>
-                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.95 1.96C5.12 19.5 12 19.5 12 19.5s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
-                            </a>
-                            <a href="https://linkedin.com/company/clownbros" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="LinkedIn" style={{ color: 'var(--footer-text)', display: 'flex', alignItems: 'center' }}>
-                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-                            </a>
-                            <a href="https://x.com/clownbros" target="_blank" rel="noopener noreferrer" className="social-link" aria-label="X (formerly Twitter)" style={{ color: 'var(--footer-text)', display: 'flex', alignItems: 'center' }}>
-                                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                            </a>
-                        </div>
-                    </div>
-
-                    {/* Footer Navigation Links */}
-                    <div className="footer-nav-grid">
-                        <div className="footer-nav-col">
-                            <h4>Services</h4>
-                            <ul>
-                                <li><Link href="/services/web-development">Web & Web3 Platforms</Link></li>
-                                <li><Link href="/services/mobile-apps">Mobile App Development</Link></li>
-                                <li><Link href="/services/ui-ux-design">UI/UX Interface Design</Link></li>
-                                <li><Link href="/services/cloud-devops">Cloud Infrastructure & DevOps</Link></li>
-                                <li><Link href="/services/ai-solutions">AI & Machine Learning</Link></li>
-                                <li><Link href="/services/seo-growth">SEO & Growth</Link></li>
-                            </ul>
-                        </div>
-                        <div className="footer-nav-col">
-                            <h4>Company & Trust</h4>
-                            <ul>
-                                <li><Link href="/about">Vision & Values</Link></li>
-                                <li><Link href="/process">How We Work (Process)</Link></li>
-                                <li><Link href="/trust">Trust & Security Center</Link></li>
-                                <li><Link href="/case-studies">Client Case Studies</Link></li>
-                                <li><Link href="/contact">Start a Project</Link></li>
-                            </ul>
-                        </div>
-                        <div className="footer-nav-col">
-                            <h4>Careers & Legal</h4>
-                            <ul>
-                                <li><Link href="/careers">Freelancer Portal</Link></li>
-                                <li><Link href="/careers#gigs">Open Freelance Gigs</Link></li>
-                                <li><Link href="/trust">Privacy & NDAs</Link></li>
-                                <li><Link href="/trust">Terms & SLA</Link></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Divider */}
-                <hr className="footer-divider" />
-
-                <div className="footer-bottom">
-                    <div className="footer-copyright">
-                        <p>&copy; {new Date().getFullYear()} ClownBros Digital Ltd. All rights reserved. Partnering with startups and enterprises globally.</p>
-                    </div>
-                    <div className="footer-meta-info">
-                        <p>Designed with luxury organic layout standards inspired by modern editorial styles.</p>
-                    </div>
-                </div>
+  return (
+    <footer className="bg-[var(--bg-ink)] text-[#F2EFE7] border-t border-white/12">
+      <div className="studio-container pt-20 pb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-16 border-b border-white/12">
+          <div className="lg:col-span-5 flex flex-col justify-between gap-8">
+            <div>
+              <Link href="/" className="inline-block">
+                <img
+                  src="/images/clownbros-logo-light.png"
+                  alt="ClownBros — We Code. We Create. We Elevate."
+                  className="h-24 sm:h-28 w-auto object-contain"
+                />
+              </Link>
+              <p className="mt-5 text-sm text-[#9E9B93] max-w-sm leading-relaxed">
+                Playful brand. Serious engineering. Unconventional execution. Independent digital engineering studio building products, software, and AI systems.
+              </p>
             </div>
-        </footer>
-    );
+
+            <div>
+              <div className="font-mono-tech text-[11px] uppercase tracking-[0.14em] text-[#9E9B93] mb-3">
+                Engineering Dispatch
+              </div>
+              <form onSubmit={handleSubscribe} className="flex items-center gap-2 max-w-sm">
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@company.com"
+                  aria-label="Email for engineering dispatch"
+                  className="min-w-0 flex-1 bg-white/8 border border-white/15 rounded-full px-4 py-2.5 text-sm text-[#F2EFE7] placeholder:text-[#9E9B93] focus:outline-none focus:border-[var(--accent-orange)] transition-colors"
+                />
+                <button
+                  type="submit"
+                  disabled={status === 'submitting'}
+                  className="shrink-0 px-4 py-2.5 rounded-full bg-[var(--accent-orange)] text-[#F2EFE7] font-display text-xs font-medium hover:opacity-90 transition-opacity disabled:opacity-60"
+                >
+                  {status === 'submitting' ? '...' : 'Join'}
+                </button>
+              </form>
+              {status === 'done' && (
+                <p className="mt-2 font-mono-tech text-xs text-[var(--accent-orange)]">
+                  Subscribed — monthly engineering notes only.
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
+            <div>
+              <h3 className="font-mono-tech text-[11px] uppercase tracking-[0.14em] text-[#9E9B93] mb-4">
+                Capabilities
+              </h3>
+              <ul className="space-y-2.5 text-sm">
+                <li><Link href="/services" className="text-[#F2EFE7]/85 hover:text-[var(--accent-orange)] transition-colors">All Services</Link></li>
+                <li><Link href="/services/web-development" className="text-[#F2EFE7]/85 hover:text-[var(--accent-orange)] transition-colors">Web Development</Link></li>
+                <li><Link href="/services/mobile-apps" className="text-[#F2EFE7]/85 hover:text-[var(--accent-orange)] transition-colors">Mobile Apps</Link></li>
+                <li><Link href="/services/ui-ux-design" className="text-[#F2EFE7]/85 hover:text-[var(--accent-orange)] transition-colors">UI/UX Design</Link></li>
+                <li><Link href="/services/cloud-devops" className="text-[#F2EFE7]/85 hover:text-[var(--accent-orange)] transition-colors">Cloud &amp; DevOps</Link></li>
+                <li><Link href="/services/ai-solutions" className="text-[#F2EFE7]/85 hover:text-[var(--accent-orange)] transition-colors">AI Solutions</Link></li>
+                <li><Link href="/services/seo-growth" className="text-[#F2EFE7]/85 hover:text-[var(--accent-orange)] transition-colors">SEO &amp; Growth</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-mono-tech text-[11px] uppercase tracking-[0.14em] text-[#9E9B93] mb-4">
+                Company
+              </h3>
+              <ul className="space-y-2.5 text-sm">
+                <li><Link href="/case-studies" className="text-[#F2EFE7]/85 hover:text-[var(--accent-orange)] transition-colors">Case Studies</Link></li>
+                <li><Link href="/about" className="text-[#F2EFE7]/85 hover:text-[var(--accent-orange)] transition-colors">About</Link></li>
+                <li><Link href="/process" className="text-[#F2EFE7]/85 hover:text-[var(--accent-orange)] transition-colors">Process</Link></li>
+                <li><Link href="/trust" className="text-[#F2EFE7]/85 hover:text-[var(--accent-orange)] transition-colors">Trust &amp; Security</Link></li>
+                <li><Link href="/careers" className="text-[#F2EFE7]/85 hover:text-[var(--accent-orange)] transition-colors">Careers</Link></li>
+                <li><Link href="/contact" className="text-[#F2EFE7]/85 hover:text-[var(--accent-orange)] transition-colors">Contact</Link></li>
+              </ul>
+            </div>
+
+            <div className="col-span-2 sm:col-span-1">
+              <h3 className="font-mono-tech text-[11px] uppercase tracking-[0.14em] text-[#9E9B93] mb-4">
+                Direct Line
+              </h3>
+              <ul className="space-y-2.5 text-sm">
+                <li>
+                  <a href="mailto:hello@clownbros.com" className="text-[#F2EFE7]/85 hover:text-[var(--accent-orange)] transition-colors">
+                    hello@clownbros.com
+                  </a>
+                </li>
+                <li>
+                  <a href="tel:7303061282" className="text-[#F2EFE7]/85 hover:text-[var(--accent-orange)] transition-colors">
+                    +91 73030 61282
+                  </a>
+                </li>
+                <li className="pt-2 flex flex-wrap gap-3 font-mono-tech text-xs">
+                  <a href="https://github.com/clownbros" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-[#9E9B93] hover:text-[#F2EFE7]">
+                    GitHub <ArrowUpRight className="w-3 h-3" />
+                  </a>
+                  <a href="https://linkedin.com/company/clownbros" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-[#9E9B93] hover:text-[#F2EFE7]">
+                    LinkedIn <ArrowUpRight className="w-3 h-3" />
+                  </a>
+                  <a href="https://x.com/clownbros" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-[#9E9B93] hover:text-[#F2EFE7]">
+                    X <ArrowUpRight className="w-3 h-3" />
+                  </a>
+                  <a href="https://instagram.com/clownbros" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-0.5 text-[#9E9B93] hover:text-[#F2EFE7]">
+                    Instagram <ArrowUpRight className="w-3 h-3" />
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-[#9E9B93]">
+          <p>&copy; {new Date().getFullYear()} ClownBros Digital Ltd. Remote / Global Engineering.</p>
+          <div className="flex items-center gap-6">
+            <Link href="/trust" className="hover:text-[#F2EFE7] transition-colors">
+              Privacy &amp; NDAs
+            </Link>
+            <Link href="/trust" className="hover:text-[#F2EFE7] transition-colors">
+              IP &amp; Terms
+            </Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
 }
