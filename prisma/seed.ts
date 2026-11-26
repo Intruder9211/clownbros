@@ -31,7 +31,10 @@ async function main() {
 
     // 2. Seed Default Admin User
     const defaultAdminEmail = process.env.ADMIN_EMAIL || 'admin@clownbros.com';
-    const defaultPassword = process.env.ADMIN_INITIAL_PASSWORD || 'ClownBros#2026!Secure';
+    const defaultPassword = process.env.ADMIN_INITIAL_PASSWORD;
+    if (!defaultPassword) {
+        throw new Error('ADMIN_INITIAL_PASSWORD environment variable must be set before seeding.');
+    }
     const passwordHash = await bcrypt.hash(defaultPassword, 12);
 
     const admin = await prisma.adminUser.upsert({
@@ -44,7 +47,7 @@ async function main() {
             role: Role.SUPERADMIN
         }
     });
-    console.log(`✅ Default admin created: ${admin.email} (Initial password: ${defaultPassword})`);
+    console.log(`✅ Default admin created/verified: ${admin.email}`);
 
     // 3. Seed Core Services
     const services = [

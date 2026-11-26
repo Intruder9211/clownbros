@@ -1,26 +1,77 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { buildAdminLeadEmail, buildClientConfirmationEmail } from '@/lib/emailTemplates';
+import {
+  checkRateLimit,
+  getClientIp,
+  isValidEmail,
+  isValidPhone,
+  parseJsonBody,
+  sanitizeMultiline,
+  sanitizeSingleLine,
+  verifySameOrigin,
+} from '@/lib/security';
 import nodemailer from 'nodemailer';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
-    const { name, email, phone, details, budget, projectTypes } = await request.json();
-
-    if (!name || !email || !phone || !details) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    if (!verifySameOrigin(request)) {
+      return NextResponse.json({ error: 'Invalid request origin.' }, { status: 403 });
     }
 
-    const typesStr = projectTypes && projectTypes.length > 0 ? projectTypes.join(', ') : 'None selected';
-    const budgetStr = budget ? budget : null;
+    const ip = getClientIp(request);
+    const rateLimit = checkRateLimit(`contact:${ip}`, {
+      maxRequests: 5,
+      windowMs: 10 * 60 * 1000, // 5 submissions per 10 minutes per IP
+    });
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please wait a few minutes before trying again.' },
+        { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfterSeconds) } }
+      );
+    }
+
+    const parsed = await parseJsonBody<Record<string, unknown>>(request, 16 * 1024);
+    if (!parsed.ok) {
+      return parsed.response;
+    }
+
+    const body = parsed.data;
+    const name = sanitizeSingleLine(body.name, 100);
+    const email = sanitizeSingleLine(body.email, 254).toLowerCase();
+    const phone = sanitizeSingleLine(body.phone, 32);
+    const details = sanitizeMultiline(body.details, 4000);
+    const budget = body.budget ? sanitizeSingleLine(body.budget, 64) : null;
+
+    if (!name || !email || !phone || !details) {
+      return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
+    }
+
+    if (!isValidEmail(email)) {
+      return NextResponse.json({ error: 'Please provide a valid email address.' }, { status: 400 });
+    }
+
+    if (!isValidPhone(phone)) {
+      return NextResponse.json({ error: 'Please provide a valid phone number.' }, { status: 400 });
+    }
+
+    const rawTypes = Array.isArray(body.projectTypes) ? body.projectTypes : [];
+    const safeProjectTypes = rawTypes
+      .slice(0, 10)
+      .map((item) => sanitizeSingleLine(item, 60))
+      .filter(Boolean);
+
+    const typesStr = safeProjectTypes.length > 0 ? safeProjectTypes.join(', ') : 'None selected';
+    const budgetStr = budget || null;
 
     // Save lead into Neon Database so it appears in ClownBros Dashboard
     try {
       await db.inquiry.create({
         data: {
           name,
-          email: email.toLowerCase().trim(),
+          email,
           phone: phone || null,
           budget: budgetStr,
           serviceNeeded: typesStr,
@@ -29,12 +80,12 @@ export async function POST(request: Request) {
         },
       });
     } catch (dbErr) {
-      console.error('Failed to save inquiry to database:', dbErr);
+      console.error('Failed to save inquiry to database:', dbErr instanceof Error ? dbErr.message : 'DB error');
     }
 
     // SMTP Email notification
     const smtpHost = process.env.SMTP_HOST;
-    const smtpPort = parseInt(process.env.SMTP_PORT || '587');
+    const smtpPort = parseInt(process.env.SMTP_PORT || '587', 10);
     const smtpSecure = process.env.SMTP_SECURE === 'true';
     const smtpUser = process.env.SMTP_USER;
     const smtpPass = process.env.SMTP_PASS;
@@ -47,34 +98,52 @@ export async function POST(request: Request) {
         auth: { user: smtpUser, pass: smtpPass },
       });
 
-      // Send to Admin
+      const emailPayload = {
+        name,
+        email,
+        phone,
+        typesStr,
+        budgetStr,
+        details,
+      };
+
+      const adminTemplate = buildAdminLeadEmail(emailPayload);
+      const clientTemplate = buildClientConfirmationEmail(emailPayload);
+
+      // Safe header display name (strip quotes/backslashes as extra defense)
+      const safeFromName = name.replace(/["\\]/g, '');
+
+      // Send to Admin (Receiver)
       const adminMail = transporter.sendMail({
-        from: '"' + name + '" <' + smtpUser + '>',
+        from: `"${safeFromName}" <${smtpUser}>`,
         to: process.env.ADMIN_NOTIFICATION_EMAIL || 'singhmohit101103@gmail.com',
         replyTo: email,
-        subject: 'New Contact Lead - ' + name,
-        text: 'Name: ' + name + '\nEmail: ' + email + '\nPhone: ' + phone + '\nTypes: ' + typesStr + '\nBudget: ' + (budgetStr || 'N/A') + '\n\nDetails:\n' + details,
+        subject: adminTemplate.subject,
+        text: adminTemplate.text,
+        html: adminTemplate.html,
       });
 
-      // Send Thank you to Client
+      // Send Thank you to Client (Sender)
       const clientMail = transporter.sendMail({
-        from: '"ClownBros Team" <' + smtpUser + '>',
+        from: `"ClownBros Team" <${smtpUser}>`,
         to: email,
-        subject: 'Thank you for contacting ClownBros!',
-        text: `Hi ${name},\n\nThank you for reaching out to us! We have received your project details and our team will get back to you shortly.\n\nBest regards,\nThe ClownBros Team\n\n--- Your Details ---\nService: ${typesStr}\nMessage: ${details}`,
+        subject: clientTemplate.subject,
+        text: clientTemplate.text,
+        html: clientTemplate.html,
       });
 
-      // We don't await the emails to ensure the API responds extremely fast (under 2s)
-      // The emails will process in the background.
-      Promise.all([adminMail, clientMail]).catch(err => {
-        console.error('Failed to send background emails:', err);
+      // Process emails in the background so API responds quickly
+      Promise.all([adminMail, clientMail]).catch((err) => {
+        console.error('Failed to send background emails:', err instanceof Error ? err.message : 'Mail error');
       });
     }
 
     return NextResponse.json({ success: true, message: 'Inquiry received successfully' });
   } catch (error: unknown) {
-    console.error('Error processing contact inquiry:', error);
-    const message = error instanceof Error ? error.message : 'Failed to submit inquiry';
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error('Error processing contact inquiry:', error instanceof Error ? error.message : 'Unknown error');
+    return NextResponse.json(
+      { error: 'Unable to process your inquiry right now. Please try again later.' },
+      { status: 500 }
+    );
   }
 }
