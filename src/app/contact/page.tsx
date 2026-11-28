@@ -136,14 +136,19 @@ export default function ContactPage() {
                   hello@clownbros.com
                 </a>
               </div>
-              <div>
-                <span className="font-mono-tech text-[11px] uppercase tracking-widest text-[#6B6A65] block">
-                  Direct Phone / WhatsApp
-                </span>
-                <a href="tel:7303061282" className="font-display font-medium hover:text-[#F15A3B]">
-                  +91 73030 61282
-                </a>
-              </div>
+              {process.env.NEXT_PUBLIC_CONTACT_PHONE && (
+                <div>
+                  <span className="font-mono-tech text-[11px] uppercase tracking-widest text-[#6B6A65] block">
+                    Direct Phone / WhatsApp
+                  </span>
+                  <a
+                    href={`tel:${process.env.NEXT_PUBLIC_CONTACT_PHONE.replace(/\s+/g, '')}`}
+                    className="font-display font-medium hover:text-[#F15A3B]"
+                  >
+                    {process.env.NEXT_PUBLIC_CONTACT_PHONE}
+                  </a>
+                </div>
+              )}
             </div>
           </div>
 

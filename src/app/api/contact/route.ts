@@ -12,6 +12,7 @@ import {
   verifySameOrigin,
 } from '@/lib/security';
 import nodemailer from 'nodemailer';
+import type { Transporter } from 'nodemailer';
 
 export const dynamic = 'force-dynamic';
 
@@ -81,6 +82,10 @@ export async function POST(request: Request) {
       });
     } catch (dbErr) {
       console.error('Failed to save inquiry to database:', dbErr instanceof Error ? dbErr.message : 'DB error');
+      return NextResponse.json(
+        { error: 'Unable to save your inquiry right now. Please try again or email us directly.' },
+        { status: 503 }
+      );
     }
 
     // SMTP Email notification
@@ -91,7 +96,7 @@ export async function POST(request: Request) {
     const smtpPass = process.env.SMTP_PASS;
 
     if (smtpHost && smtpUser && smtpPass) {
-      const transporter = nodemailer.createTransport({
+      const transporter: Transporter = nodemailer.createTransport({
         host: smtpHost,
         port: smtpPort,
         secure: smtpSecure,
@@ -113,29 +118,31 @@ export async function POST(request: Request) {
       // Safe header display name (strip quotes/backslashes as extra defense)
       const safeFromName = name.replace(/["\\]/g, '');
 
-      // Send to Admin (Receiver)
-      const adminMail = transporter.sendMail({
-        from: `"${safeFromName}" <${smtpUser}>`,
-        to: process.env.ADMIN_NOTIFICATION_EMAIL || 'singhmohit101103@gmail.com',
-        replyTo: email,
-        subject: adminTemplate.subject,
-        text: adminTemplate.text,
-        html: adminTemplate.html,
-      });
-
-      // Send Thank you to Client (Sender)
-      const clientMail = transporter.sendMail({
-        from: `"ClownBros Team" <${smtpUser}>`,
-        to: email,
-        subject: clientTemplate.subject,
-        text: clientTemplate.text,
-        html: clientTemplate.html,
-      });
-
-      // Process emails in the background so API responds quickly
-      Promise.all([adminMail, clientMail]).catch((err) => {
-        console.error('Failed to send background emails:', err instanceof Error ? err.message : 'Mail error');
-      });
+      // FIX: await emails so they are not dropped on serverless function exit.
+      // Trade-off: adds ~1-2s latency but guarantees delivery.
+      // TODO: migrate to a durable queue (Resend, Inngest) for zero-latency + retries.
+      try {
+        await Promise.all([
+          transporter.sendMail({
+            from: `"${safeFromName}" <${smtpUser}>`,
+            to: process.env.ADMIN_NOTIFICATION_EMAIL || process.env.SMTP_USER,
+            replyTo: email,
+            subject: adminTemplate.subject,
+            text: adminTemplate.text,
+            html: adminTemplate.html,
+          }),
+          transporter.sendMail({
+            from: `"ClownBros Team" <${smtpUser}>`,
+            to: email,
+            subject: clientTemplate.subject,
+            text: clientTemplate.text,
+            html: clientTemplate.html,
+          }),
+        ]);
+      } catch (mailErr) {
+        // Email failure is non-fatal — lead is already saved to DB.
+        console.error('Email delivery failed:', mailErr instanceof Error ? mailErr.message : 'Mail error');
+      }
     }
 
     return NextResponse.json({ success: true, message: 'Inquiry received successfully' });

@@ -15,7 +15,9 @@ async function main() {
             companyName: 'ClownBros Digital Ltd.',
             tagline: 'Modern Engineering Studio',
             primaryEmail: 'hello@clownbros.com',
-            supportEmail: 'singhmohit101103@gmail.com',
+            // FIX: Real PII removed from source control.
+            // Set COMPANY_SUPPORT_EMAIL in .env to override.
+            supportEmail: process.env.COMPANY_SUPPORT_EMAIL || 'support@clownbros.com',
             address: 'Global / Remote HQ',
             instagramUrl: 'https://instagram.com/clownbros',
             youtubeUrl: 'https://youtube.com/@clownbros',

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Space_Grotesk, Inter, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import dynamic from "next/dynamic";
 import "./globals.css";
@@ -65,11 +66,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Reading x-nonce opts the layout into dynamic rendering so Next.js
+  // automatically attaches the per-request CSP nonce to hydration scripts.
+  await headers();
+
   return (
     <html
       lang="en"

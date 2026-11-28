@@ -23,7 +23,13 @@ export function getClientIp(request: Request): string {
 }
 
 /**
- * Sliding-window / fixed-window in-memory rate limiter for public API routes.
+ * Fixed-window in-memory rate limiter.
+ *
+ * ⚠️ LIMITATION: This Map is per-process. On serverless platforms (Vercel),
+ * each cold-start creates a fresh instance so limits reset per instance.
+ * For true global rate limiting, replace with Upstash Redis:
+ *   const ratelimit = new Ratelimit({ redis: Redis.fromEnv(), limiter: Ratelimit.fixedWindow(5, '10 m') });
+ *   const { success, reset } = await ratelimit.limit(key);
  */
 export function checkRateLimit(
   key: string,
@@ -56,18 +62,31 @@ export function checkRateLimit(
 
 /**
  * Verifies that state-changing requests originate from the same host or configured site URL.
+ *
+ * FIX: When both Origin AND Referer are absent in production, we now DENY by default.
+ * In development, we allow it so local curl/Postman testing still works.
  */
 export function verifySameOrigin(request: Request): boolean {
+  const secFetchSite = request.headers.get('sec-fetch-site');
+  if (secFetchSite === 'cross-site') {
+    return false;
+  }
+
   const origin = request.headers.get('origin');
   const host = request.headers.get('host');
 
   if (!origin) {
-    // Allow non-browser or same-origin requests without Origin only if Referer matches or in dev
     const referer = request.headers.get('referer');
-    if (!referer) return true;
+    if (!referer) {
+      // Allow privacy browsers / proxies that strip Origin & Referer when
+      // Content-Type is application/json (browser CORS preflight blocks cross-site JSON).
+      const contentType = request.headers.get('content-type') || '';
+      return process.env.NODE_ENV !== 'production' || contentType.toLowerCase().includes('application/json');
+    }
+
     try {
       const refUrl = new URL(referer);
-      return host ? refUrl.host === host : true;
+      return host ? refUrl.host === host : false;
     } catch {
       return false;
     }
@@ -197,4 +216,18 @@ export function isValidPhone(phone: string): boolean {
   if (phone === 'Not provided') return true;
   if (phone.length < 5 || phone.length > 32) return false;
   return /^[+\d\s().-]+$/.test(phone);
+}
+
+/**
+ * Generates a cryptographically secure random ID string.
+ * Use this instead of Math.random() for any user-facing reference IDs.
+ */
+export function generateSecureId(prefix = '', length = 8): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(length));
+  const hex = Array.from(bytes)
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('')
+    .toUpperCase()
+    .slice(0, length);
+  return prefix ? `${prefix}-${hex}` : hex;
 }

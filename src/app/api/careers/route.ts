@@ -3,6 +3,7 @@ import { db } from '@/lib/db';
 import {
   checkRateLimit,
   getClientIp,
+  generateSecureId,
   isValidEmail,
   isValidHttpUrl,
   parseJsonBody,
@@ -28,26 +29,37 @@ export async function GET(request: Request) {
       );
     }
 
-    const jobs = await db.job.findMany({
-      where: { isActive: true },
-      orderBy: { order: 'asc' },
-      select: {
-        id: true,
-        slug: true,
-        title: true,
-        category: true,
-        type: true,
-        rate: true,
-        location: true,
-        skills: true,
-        description: true,
-        responsibilities: true,
-        requirements: true,
-        featured: true,
-      },
-    });
+    // Pagination support — ?limit=20&offset=0
+    const url = new URL(request.url);
+    const limit = Math.min(Math.max(parseInt(url.searchParams.get('limit') ?? '50', 10), 1), 100);
+    const offset = Math.max(parseInt(url.searchParams.get('offset') ?? '0', 10), 0);
+
+    const [jobs, total] = await Promise.all([
+      db.job.findMany({
+        where: { isActive: true },
+        orderBy: { order: 'asc' },
+        take: limit,
+        skip: offset,
+        select: {
+          id: true,
+          slug: true,
+          title: true,
+          category: true,
+          type: true,
+          rate: true,
+          location: true,
+          skills: true,
+          description: true,
+          responsibilities: true,
+          requirements: true,
+          featured: true,
+        },
+      }),
+      db.job.count({ where: { isActive: true } }),
+    ]);
+
     return NextResponse.json(
-      { success: true, jobs },
+      { success: true, jobs, total, limit, offset },
       {
         headers: {
           'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
@@ -122,6 +134,8 @@ export async function POST(request: Request) {
       .filter(Boolean);
 
     let application = null;
+    let dbSaveError = false;
+
     try {
       let targetJobId: string | null = null;
       if (rawJobId) {
@@ -163,14 +177,25 @@ export async function POST(request: Request) {
       });
     } catch (dbErr) {
       console.error('Failed to save application in database:', dbErr instanceof Error ? dbErr.message : 'DB error');
+      dbSaveError = true;
     }
+
+    // FIX: If DB save failed, return 503 so the user knows to try again.
+    // Do NOT silently return a fake reference ID on data loss.
+    if (dbSaveError || !application) {
+      return NextResponse.json(
+        { success: false, error: 'Could not save your application. Please try again or email us directly.' },
+        { status: 503 }
+      );
+    }
+
+    // FIX: Use crypto-secure ID, not Math.random()
+    const refId = generateSecureId('FL', 8);
 
     return NextResponse.json({
       success: true,
       message: 'Application received successfully! Our talent team will review your portfolio within 24-48 hours.',
-      applicationId: application?.id
-        ? 'FL-' + application.id.slice(-6).toUpperCase()
-        : 'FL-' + Math.floor(100000 + Math.random() * 900000),
+      applicationId: refId,
     });
   } catch (error) {
     console.error('Error handling freelancer application:', error instanceof Error ? error.message : 'Unknown error');

@@ -2,8 +2,10 @@ import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { checkRateLimit, getClientIp } from '@/lib/security';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// FIX: Ecosystem items rarely change — use ISR (5-minute cache) instead of no-store.
+// This saves a DB round-trip on every single page load from every visitor.
+export const dynamic = 'force-static';
+export const revalidate = 300; // 5 minutes
 
 export async function GET(request: Request) {
   try {
@@ -38,7 +40,8 @@ export async function GET(request: Request) {
       { success: true, items },
       {
         headers: {
-          'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+          // Allow CDN / browser to cache for 5 min; stale-while-revalidate for 10 min
+          'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
         },
       }
     );

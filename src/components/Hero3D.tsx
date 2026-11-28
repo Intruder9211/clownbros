@@ -3,6 +3,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 function TorusKnotMesh() {
   const meshRef = useRef<THREE.Mesh>(null);
@@ -83,29 +84,33 @@ export default function Hero3D() {
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: 0,
-        pointerEvents: 'none',
-        overflow: 'hidden',
-      }}
-    >
-      {isVisible && (
-        <Canvas
-          camera={{ position: [0, 0, 5], fov: 60 }}
-          gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-          dpr={[1, 1.5]}
-        >
-          <ambientLight intensity={0.5} />
-          <TorusKnotMesh />
-        </Canvas>
-      )}
-    </div>
+    // ErrorBoundary wraps the Three.js canvas so a WebGL crash doesn't
+    // bring down the entire page — it silently hides the decorative 3D scene.
+    <ErrorBoundary label="3D Scene">
+      <div
+        ref={containerRef}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 0,
+          pointerEvents: 'none',
+          overflow: 'hidden',
+        }}
+      >
+        {isVisible && (
+          <Canvas
+            camera={{ position: [0, 0, 5], fov: 60 }}
+            gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+            dpr={[1, 1.5]}
+          >
+            <ambientLight intensity={0.5} />
+            <TorusKnotMesh />
+          </Canvas>
+        )}
+      </div>
+    </ErrorBoundary>
   );
 }
